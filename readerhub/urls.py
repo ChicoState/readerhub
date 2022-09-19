@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from app1 import views as app1_views
+from personalization import views as personalization_views
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -25,6 +26,8 @@ urlpatterns = [
     path('join/', app1_views.join),
     path('login/', app1_views.user_login),
     path('logout/', app1_views.user_logout),
+    path('personalization/add_profile/', personalization_views.add_profile),
+    path('personalization/profile/', personalization_views.profile),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed to save images to static
