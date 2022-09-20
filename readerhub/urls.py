@@ -26,8 +26,9 @@ urlpatterns = [
     path('join/', app1_views.join),
     path('login/', app1_views.user_login),
     path('logout/', app1_views.user_logout),
+    path('personalization/', personalization_views.personalization),
     path('personalization/add_profile/', personalization_views.add_profile),
-    path('personalization/profile/', personalization_views.profile),
+    path('personalization/edit_profile/<int:id>/', personalization_views.edit_profile),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed to save images to static

@@ -2,3 +2,6 @@
   opacity: .98;
   border-style:solid;
 }
+body {
+  background-color: grey;
+  }

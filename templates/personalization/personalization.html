@@ -6,7 +6,7 @@
   {% include "bootstrap.html" %}
   {% load static %}
   <script src="{%static 'personalization/personalization.js' %}"></script>
-  <link rel="stylesheet" href="{%static 'CSS/profile.css' %}"/>
+  <link rel="stylesheet" href="{%static 'CSS/personalization.css' %}"/>
 </head>
 <body>
   {% include "nav.html" %}
@@ -46,7 +46,7 @@
     <p class="text-center title"><b>About me:</b></p>
     <p class="psteps">{{ profile.about_user|linebreaksbr }}</p>
   </div>
-
+<td><a class="btn btn-warning" href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
 </div>
 {% endfor %}
 
