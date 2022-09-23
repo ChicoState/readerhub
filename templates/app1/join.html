@@ -1,0 +1,23 @@
+<html>
+  <head>
+    {% include "bootstrap.html" %}
+    {% load static %}
+    <link rel="stylesheet" href="{%static 'CSS/join.css' %}"/>
+  </head>
+  <body>
+    <div class="container">
+      <br>
+      <div class = "jumbotron bg-dark text-white">
+        <h1>Join</h1>
+        <form method="POST">{% csrf_token %}
+          <table class = "text-white">
+            {{ join_form.as_table }}
+            <tr><td>
+              <input type="submit" class="btn btn-primary btn-lg" value = "Join"/>
+            </td></tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
