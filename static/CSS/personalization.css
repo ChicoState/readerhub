@@ -1,0 +1,33 @@
+.rounded{
+  max-width: 75px;
+  max-height: 75px;
+  margin: 0 auto;
+}
+
+h3 {
+  margin: 2rem 0rem 1rem;
+  font-family: Roboto;
+}
+body {
+  background-color: grey;
+  }
+
+
+.another-btn {
+  border-style: solid;
+  border-color: white;
+  opacity: .98;
+}
+
+.first-btn{
+  border-style: solid;
+  border-color: white;
+
+  font-size: 35px;
+  opacity: .98;
+  padding: 2% 0;
+}
+p {
+  font-family: Roboto;
+  font-size: 25px;
+}

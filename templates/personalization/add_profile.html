@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        {% include "bootstrap.html" %}
+        {% load static %}
+        <title>Create your profile</title>
+        <link rel="stylesheet" href="{%static 'CSS/add_profile.css' %}"/>
+    </head>
+    <body>
+        {% include "nav.html" %}
+        <div class="row justify-content-center b">
+        <div class="col-auto">
+        <br>
+        <div class="jumbotron bg-dark text-white">
+            <h1>Create Personal Profile</h1>
+            <form method="POST" action = "" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table class = "text-white">
+                    {{ form_data.as_table }}
+                    <tr>
+                        <td></td>
+                        <td>
+                          <input type="submit" class="btn btn-success btn-lg" name="add_profile" value="Create Profile">
+                          <a href="/personalization/" class="btn btn-secondary">Cancel</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+          </div>
+          </div>
+        </div>
+    </body>
+</html>
