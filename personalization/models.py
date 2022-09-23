@@ -3,10 +3,12 @@ from django.contrib.auth.models import User
 
 
 
-class PersonalInfo(models.Model):
+class PersonalInfo(models.Model):#one per user
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	about_user = models.CharField(max_length=65536, null = True)
 	personal_image = models.ImageField(null = True, blank = True)
 	favorite_books = models.CharField(max_length=65536, null = True)
 
-	#a follow model that just stores user id of people you follow
+class Follows(models.Model):#no implementation need to be able to follow with click
+	current_user = models.ForeignKey(User, on_delete=models.CASCADE)
+	follows = models.CharField(max_length=65536, null = True)
