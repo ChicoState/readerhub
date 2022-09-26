@@ -4,6 +4,7 @@
 
 - Python 3.8.10 (Should work with Python 3+)
 - Django 4.1.1
+- pillow 7.0.0
 
 ## Running Django project locally
 
