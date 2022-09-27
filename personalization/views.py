@@ -15,45 +15,21 @@ import requests
 
 @login_required(login_url='/login/')
 def personalization(request):
-	if (request.method == "GET" and "delete" in request.GET): #to delete, which is not implemented
-            id = request.GET["delete"]
-            RecipeEntry.objects.filter(id=id).delete()
-            return redirect("/personalization/")
-	else:
-            table_data = PersonalInfo.objects.filter(user=request.user) #the user personal info
-            context = {
-                "table_data": table_data,
-            }
-            return render(request, 'personalization/personalization.html', context)
+	try: #display profile created with form
+		profile = PersonalInfo.objects.get(user=request.user) #the user personal info
+		context = {
+			"profile": profile,
+		}
+		return render(request, 'personalization/personalization.html', context)
+	except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
+		PersonalInfo(user = request.user).save()
+		profile = PersonalInfo.objects.get(user=request.user)
+		context = {
+			"profile": profile,
+		}
+		return render(request, 'personalization/personalization.html', context)
 
 
-#redundant with edit_profile, make default profile and remove add_profile view and html
-@login_required(login_url='/login/')
-def add_profile(request):
-    if (request.method == "POST"):
-        if ("add_profile" in request.POST):
-            add_form = PersonalInfoForm(request.POST, request.FILES)
-            if (add_form.is_valid()):  #user inputted values for form
-                favorite_books = add_form.cleaned_data["favorite_books"]
-                about_user = add_form.cleaned_data["about_user"]
-                personal_image = add_form.cleaned_data["personal_image"]
-                user = User.objects.get(id=request.user.id)
-				#save form information to model
-                PersonalInfo(user=user, favorite_books = favorite_books, about_user = about_user, personal_image = personal_image).save()
-                return redirect("/personalization/")
-            else:
-                context = {
-                    "form_data": add_form,
-                }
-                return render(request, 'personalization/add_profile.html', context)
-        else:
-			# Cancel
-            return redirect("/personalization/")
-    else:
-        context = {
-            "form_data": PersonalInfoForm(),
-        }
-        return render(request, 'personalization/add_profile.html', context)
 
 def edit_profile(request, id):
 	if (request.method == "GET"):
@@ -80,7 +56,7 @@ def edit_profile(request, id):
 				context = {
                     "form_data": form
 				}
-				return render(request, 'personalization/add_profile.html', context)
+				return render(request, 'personalization/edit_profile.html', context)
 		else:
 			#Cancel
 			return redirect("/personalization/")
