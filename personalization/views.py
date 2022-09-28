@@ -9,7 +9,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from PIL import Image
 from django import forms
 from django.core.files.uploadedfile import SimpleUploadedFile
+from readerhub import settings
 import requests
+import os
 
 
 
@@ -37,6 +39,7 @@ def edit_profile(request, id):
 		personalInfo = PersonalInfo.objects.get(id=id)
 		form = PersonalInfoForm(instance=personalInfo)
 		user = personalInfo.user
+	#	print(personalInfo.personal_image)
 		context = {
 		"form_data": form,
 		"user": user, #to display username in html
@@ -47,9 +50,16 @@ def edit_profile(request, id):
 		if ("edit" in request.POST):
 			form = PersonalInfoForm(request.POST, request.FILES)
 			if (form.is_valid()):
+				personalInfoTemp = PersonalInfo.objects.get(id=id) #getting object for image deletion
 				personalInfo = form.save(commit=False)
 				personalInfo.user = request.user
 				personalInfo.id = id
+				if not personalInfo.personal_image: #no new image chosen
+					if personalInfoTemp.personal_image: #make sure this is not first time putting image
+						personalInfo.personal_image = personalInfoTemp.personal_image #save image old if new one is not chosen
+				else:
+					if personalInfoTemp.personal_image:
+						os.remove(personalInfoTemp.personal_image.path) #removes old image file from django when image is changed
 				personalInfo.save()
 				return redirect("/personalization/")
 			else:
