@@ -57,9 +57,9 @@ def edit_profile(request, id):
 				if not personalInfo.personal_image: #no new image chosen
 					if personalInfoTemp.personal_image: #make sure this is not first time putting image
 						personalInfo.personal_image = personalInfoTemp.personal_image #save image old if new one is not chosen
-				else:
-					if personalInfoTemp.personal_image:
-						os.remove(personalInfoTemp.personal_image.path) #removes old image file from django when image is changed
+				else: #new image is chosen
+					if personalInfoTemp.personal_image: #an old image exists
+						os.remove(personalInfoTemp.personal_image.path) #removes old image file from images when image is changed
 				personalInfo.save()
 				return redirect("/personalization/")
 			else:
