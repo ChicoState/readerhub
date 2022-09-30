@@ -7,14 +7,20 @@ from django.contrib.auth.decorators import login_required
 from app1.forms import JoinForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
+from personalization.models import PersonalInfo
 
 #def about(request):
 #    return render(request, 'app1/about.html')
 
 @login_required(login_url='/login/')
-def home(request):
-    return render(request, "app1/home.html");
+def home(request): #homepage for mvp displaying all people
+    for x in PersonalInfo.objects.all():
+        print("TEST")
+    allusers = PersonalInfo.objects.all()
+    context = {
+        "allusers": allusers,
+    }
+    return render(request, "app1/home.html", context);
 
 def join(request):
     if (request.method == "POST"):

@@ -1,9 +1,32 @@
 {% include "bootstrap.html" %}
 {% include "nav.html" %}
 {% load static %}
-<link rel="stylesheet" href="{%static 'CSS/join.css' %}"/>
-<h1> This is homepage </h1>
-<form method="GET" action="/personalization/add_profile">
-  <br><br><br><br><br><br><br><br><br><br>
-  <input type="submit" class="btn btn-success btn-lg first-btn" value="Create Profile">
+<link rel="stylesheet" href="{%static 'CSS/home.css' %}"/>
+{% for current_profile in allusers %}
+<div class = "wrap">
+  <div class="card bg-dark text-white" style="width: 25rem;">
+    {% if current_profile.personal_image %}
+    <img class="card-img-top yes-img" src="{{current_profile.personal_image.url }}" alt="Card image cap">
+    {% else %}
+    <img class="card-img-top no-img" src="{%static 'permanent_images/default_profile.png' %}" alt="Card image cap">
+    {% endif %}
+  <div class="card-body">
+    <h5 class="card-title text-center">{{current_profile.user}}</h5>
+    <p class="card-text"><i>{{current_profile.about_user}}</i></p>
+  </div>
+  <div class = "card-body">
+    <p class = "card-text" >{{current_profile.favorite_books}}</p>
+  </div>
+  <div class="card-body text-center">
+    <button type="button" class="btn btn-info">Follow</button>
+  </div>
+  </div>
+</div>
+{% endfor %}
+
+<br><br>
+<div class = "view text-center"
+<form method="GET" action="/personalization/">
+  <input type="submit" class="btn btn-primary btn-lg first-btn" value="View My Profile">
 </form>
+</div>
