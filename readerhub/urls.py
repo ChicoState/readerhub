@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from app1 import views as app1_views
 from personalization import views as personalization_views
+from posts import views as post_views
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -27,8 +28,10 @@ urlpatterns = [
     path('login/', app1_views.user_login),
     path('logout/', app1_views.user_logout),
     path('personalization/', personalization_views.personalization),
-    path('personalization/add_profile/', personalization_views.add_profile),
     path('personalization/edit_profile/<int:id>/', personalization_views.edit_profile),
+    path('posts/', post_views.posts),
+    path('posts/add_post/', post_views.add_post),
+    path('posts/edit_post/<int:id>/', post_views.edit_post),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed to save images to static
