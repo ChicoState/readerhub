@@ -1,0 +1,12 @@
+.paragraph-body{
+  font-size:20px;
+  text-indent: 40px;
+  margin-left:10%; margin-right:10%
+}
+
+.jumbotron {
+  opacity: .90;
+}
+body {
+  background-color: grey;
+}

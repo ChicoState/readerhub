@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from personalization.models import PersonalInfo
 
-#def about(request):
-#    return render(request, 'app1/about.html')
+def about(request):
+    return render(request, 'app1/about.html')
 
 @login_required(login_url='/login/')
 def home(request): #homepage for mvp displaying all people

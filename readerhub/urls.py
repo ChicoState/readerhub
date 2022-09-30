@@ -22,12 +22,12 @@ from django.conf import settings
 
 urlpatterns = [
     path('', app1_views.home),
+    path('about/', app1_views.about),
     path('admin/', admin.site.urls),
     path('join/', app1_views.join),
     path('login/', app1_views.user_login),
     path('logout/', app1_views.user_logout),
     path('personalization/', personalization_views.personalization),
-    path('personalization/add_profile/', personalization_views.add_profile),
     path('personalization/edit_profile/<int:id>/', personalization_views.edit_profile),
 ]
 
