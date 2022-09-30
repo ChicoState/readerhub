@@ -1,10 +1,10 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Edit Recipe Entry</title>
+        <title>Edit Profile</title>
         {% include "bootstrap.html" %}
         {% load static %}
-        <link rel="stylesheet" href="{%static 'CSS/edit.css' %}"/>
+        <link rel="stylesheet" href="{%static 'CSS/edit_profile.css' %}"/>
     </head>
     <body>
         {% include "nav.html" %}
@@ -12,7 +12,7 @@
         <div class="col-auto">
           <br>
         <div class="jumbotron bg-dark text-white">
-            <h1><b>Edit <i>{{user}}<i> Profile</b></h1>
+            <h1><b>Enter <i>{{user}}<i> Profile</b></h1>
             <form method="POST" action = "" enctype="multipart/form-data">
                 {% csrf_token %}
                 <table class = "text-white">

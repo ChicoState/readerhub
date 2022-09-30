@@ -5,23 +5,22 @@
   <title>Profile</title>
   {% include "bootstrap.html" %}
   {% load static %}
-  <script src="{%static 'personalization/personalization.js' %}"></script>
   <link rel="stylesheet" href="{%static 'CSS/personalization.css' %}"/>
 </head>
 <body>
   {% include "nav.html" %}
   <div class="row">
     <div class="col-12">
-    {% if not table_data %}
+    {% if not profile.about_user and not profile.personal_image and not profile.favorite_books%}
     <div class = "container" align = "center">
-    <form method="GET" action="/personalization/add_profile/">
+    <form method="GET" action="/personalization/edit_profile/{{ profile.id }}/">
       <br><br><br><br><br><br><br><br><br><br>
       <input type="submit" class="btn btn-success btn-lg first-btn" value="Create Profile">
     </form>
   </div>
   {% else %}
 
-  {% for profile in table_data %}
+
   <div class = "container">
     <br>
     <div class="card-columns mx-auto d-flex justify-content-center col-12">
@@ -48,7 +47,7 @@
   </div>
 <td><a class="btn btn-warning" href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
 </div>
-{% endfor %}
+
 
 
 </body>
