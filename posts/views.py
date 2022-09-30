@@ -51,7 +51,7 @@ def edit_post(request, id):
         context = {
             "form_data": form
         }
-        return render(request, "posts/edit.html", context)
+        return render(request, "posts/edit_post.html", context)
     elif (request.method == "POST"):
         if ("edit" in request.POST):
             form = PostForm(request.POST)
