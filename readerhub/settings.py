@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app1',
     'personalization',  #add new folders
+    'posts',
 ]
 
 MIDDLEWARE = [
