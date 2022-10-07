@@ -1,0 +1,6 @@
+psycopg2>=2.8
+asgiref==3.2.10
+Django==3.0.9
+sqlparse==0.2.4
+pillow == 7.0.0
+requests == 2.22.0
