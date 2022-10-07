@@ -1,3 +1,21 @@
 body {
   background-color: grey;
   }
+  /*.card{
+    border-style: solid;
+    border-color: white;
+  }*/
+  .card-body{
+    border: 2px solid white;
+  }
+
+  .card-img-top{
+    border: 2px solid white;
+  }
+  .wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+
+  }
