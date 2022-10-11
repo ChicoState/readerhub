@@ -1,5 +1,5 @@
-from django.apps import AppConfig
+from django.apps import BooksConfig
 
 
-class App1Config(AppConfig):
-    name = 'app1'
+class BooksConfig(BooksConfig):
+    name = 'books'
