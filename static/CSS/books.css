@@ -1,0 +1,25 @@
+body {
+  background-color: grey;
+  }
+.card-img-top{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+.card-text {
+    text-align: center;
+  }
+.cards {
+  display: flex;
+  flex-direction: row;
+}
+.card {
+  width: 25rem;
+  border:solid;
+}
+
+.search{
+  align-items: center;
+  margin-right: auto;
+}

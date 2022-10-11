@@ -14,8 +14,6 @@ def about(request):
 
 @login_required(login_url='/login/')
 def home(request): #homepage for mvp displaying all people
-    for x in PersonalInfo.objects.all():
-        print("TEST")
     allusers = PersonalInfo.objects.all()
     context = {
         "allusers": allusers,
