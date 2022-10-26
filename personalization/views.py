@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from personalization.models import PersonalInfo
 from personalization.forms import PersonalInfoForm
+from posts.models import Post
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -19,8 +20,10 @@ import os
 def personalization(request):
 	try: #display profile created with form
 		profile = PersonalInfo.objects.get(user=request.user) #the user personal info
+		posts = Post.objects.filter(user=request.user) #posts the user has made
 		context = {
 			"profile": profile,
+			"posts": posts, 
 		}
 		return render(request, 'personalization/personalization.html', context)
 	except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
