@@ -14,6 +14,11 @@ body{
     left:140px;
     top: 300px;
   }
+  .container2{
+    position:fixed;
+    left:70px;
+    top: 550px;
+  }
   .title {
     position:fixed;
     left:275px;
