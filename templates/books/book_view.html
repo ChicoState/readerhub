@@ -21,15 +21,12 @@
   <div class = "container">
     <p class = "paragraph">  {{book_description}} </p>
   </div>
-<<<<<<< HEAD
   <div class = "container2">
-      tags: 
+      tags:
       {%for subject in book_subjects%}
       <b>  <i>{{subject}}, </i> </b>
       {%endfor%}
   </div>
-=======
->>>>>>> origin/books
   {% if author_image == "no_photo"%}
     <img class="author_photo" src="https://www.freeiconspng.com/uploads/no-image-icon-0.png" alt="Author Image">
   {%else%}
