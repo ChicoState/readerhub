@@ -27,7 +27,10 @@
         <p class = "card-text" >{{book.0}}</p>
       </div>
       <div class="card-body text-center">
-        <button type="button" class="btn btn-info">Favorite</button>
+        <form method="POST" action="/books/">
+          <button input type="submit" class="btn btn-info" value="{{book_id}}" name = "favorite">Favorite</button>
+          {% csrf_token %}
+        </form>
         <br> <br>
         <a class="btn btn-danger btn-lg " href="/books/book_view/{{ book.2 }}/">View Book</a>
       </div>

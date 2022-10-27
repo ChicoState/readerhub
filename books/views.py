@@ -8,6 +8,7 @@ from app1.forms import JoinForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from personalization.models import PersonalInfo
+from personalization.models import FavoriteBooks
 from books.forms import BooksForm
 
 #import urllib library
@@ -43,15 +44,25 @@ def books(request):
                     book_cover.append("http://covers.openlibrary.org/b/id/"+str(book_json["docs"][num_display]["cover_i"])+"-L.jpg") #cover pic
                     book_title.append(book_json["docs"][num_display]["title"]) #title
                     book_temp_id = book_json["docs"][num_display]["key"] #getting id
+                    book_original_id = book_temp_id #need this for favorite book
                     book_temp_id = book_temp_id.replace("/", "%") #need to replace backslashes to pass through url or it messes up
                     book_id.append(book_temp_id)
                     num_display = num_display+1
                 book_preview = zip(book_title, book_cover, book_id) #combine the lists to be able to display with loop
                 context = {
                     "form_data": BooksForm(), #continue displaying form after searching
+                    "book_id": book_original_id,
                     "book_preview": book_preview,
                 }
                 return render(request,'books/books.html', context)
+        elif("favorite" in request.POST): #can also use request.POST.get("favorite")
+            cur_user = request.user
+            book_id = request.POST.get('favorite')
+            FavoriteBooks(favorite_user = cur_user, favorite_books = book_id).save()
+            context = {
+                "form_data": BooksForm(), #continue displaying form
+            }
+            return render(request,'books/books.html', context)
     else:
         context = {
             "form_data": BooksForm(), #display form
