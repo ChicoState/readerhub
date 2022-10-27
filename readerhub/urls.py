@@ -35,6 +35,7 @@ urlpatterns = [
     path('posts/add_post/', post_views.add_post),
     path('posts/edit_post/<int:id>/', post_views.edit_post),
     path('books/', books_views.books),
+    path('books/book_view/<str:info>/', books_views.book_view),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed to save images to static
