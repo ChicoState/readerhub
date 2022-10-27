@@ -45,6 +45,13 @@ def books(request):
                     book_temp_id = book_json["docs"][num_display]["key"] #getting id
                     book_temp_id = book_temp_id.replace("/", "%") #need to replace backslashes to pass through url or it messes up
                     book_id.append(book_temp_id)
+<<<<<<< HEAD
+=======
+
+
+                #    book_id.append(book_json["docs"][num_display]["key"])
+                #    print(book_json["docs"][num_display]["key"])
+>>>>>>> origin/books
                     num_display = num_display+1
                 book_preview = zip(book_title, book_cover, book_id) #combine the lists to be able to display with loop
                 context = {
@@ -66,12 +73,25 @@ def book_view(request, info):
         book_response = urlopen(book_url)
         book_json = json.loads(book_response.read()) #store json object from url response
 
+<<<<<<< HEAD
         if 'covers' not in book_json:
             book_cover = "no_book" #doesn't exist
+=======
+        #OPTIMIZE
+        if 'covers' not in book_json:
+            book_cover = "no_book" #doesn't exist. Doesnt work if it is string for some reason compared to author_photo
+>>>>>>> origin/books
         else:
             book_cover = "http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg"
 
 
+<<<<<<< HEAD
+=======
+    #    if 'data' not in data['to']:
+    #    raise ValueError("No data for target")
+
+        #OPTIMIZE
+>>>>>>> origin/books
         book_title = book_json["title"]
         if 'description' not in book_json:
             book_description = "There is no description available."
@@ -80,7 +100,11 @@ def book_view(request, info):
 
         book_subjects = []
         i = 0
+<<<<<<< HEAD
         for subject in book_json["subjects"]: #getting the first 4 subjects listed on page
+=======
+        for subject in book_json["subjects"]: #geting the firs 10 subjects listed on page
+>>>>>>> origin/books
             if i == 4:
                 break
             book_subjects.append(subject)
@@ -93,6 +117,10 @@ def book_view(request, info):
         author_json = json.loads(author_response.read()) #store json object from url response
         author_name = author_json["personal_name"]
 
+<<<<<<< HEAD
+=======
+        #OPTIMIZE
+>>>>>>> origin/books
         if 'photos' not in author_json:
             author_image = "no_photo"
         else:

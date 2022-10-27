@@ -14,11 +14,14 @@ body{
     left:140px;
     top: 300px;
   }
+<<<<<<< HEAD
   .container2{
     position:fixed;
     left:70px;
     top: 550px;
   }
+=======
+>>>>>>> origin/books
   .title {
     position:fixed;
     left:275px;
