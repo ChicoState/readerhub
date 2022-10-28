@@ -9,6 +9,11 @@
         {% include "nav.html" %}
         <div class="jumbotron">
             <h1>Compose Message</h1>
+            {% if dne %}
+            <div class="alert alert-danger" role="alert">
+                Error: The username "{{ dne }}" does not exist.
+            </div>
+            {% endif %}
             <form method="POST">
                 {% csrf_token %}
                 <table>

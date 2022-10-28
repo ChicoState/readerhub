@@ -34,7 +34,7 @@ def compose(request):
                 except User.DoesNotExist:
                     context = {
                         "form_data": form,
-                        "dne": True
+                        "dne": form.cleaned_data["recipient"],
                     }
                     return render(request, "messaging/compose.html", context)
                 newMsg.save()
@@ -49,19 +49,5 @@ def compose(request):
     else:
         context = {
             "form_data": MessageForm()
-        }
-        return render(request, "messaging/compose.html", context)
-
-
-# IN PROGRESS
-# NOTE: Try to get row id to optionally pass in compose url instead of having separate reply
-@login_required(login_url='/login/')
-def reply(request, id):
-    if (request.method == "GET"):
-        msg = Message.objects.get(id=id)
-        form = MessageForm()
-        form["recipient"].value = msg.sender
-        context = {
-            "form_data": form
         }
         return render(request, "messaging/compose.html", context)

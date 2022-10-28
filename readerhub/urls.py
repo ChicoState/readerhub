@@ -38,7 +38,6 @@ urlpatterns = [
     path('books/', books_views.books),
     path('inbox/', messaging_views.inbox),
     path('inbox/compose_message/', messaging_views.compose),
-    path('inbox/reply/', messaging_views.reply),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed to save images to static
