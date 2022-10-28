@@ -10,57 +10,57 @@
     <body>
         {% include "nav.html" %}
         <div class="jumbotron">
-            {% if not incoming and not outgoing %}
-                <p>There are no messages to display.</p>
-            {% else %}
-              {% if incoming %}
                   <h2>Incoming Messages</h2>
-                  <table id="inbox-incoming" class="table">
-                      <thead class="thead-dark">
-                          <tr>
-                              <th>From</th>
-                              <th>Content</th>
-                              <th>Sent at</th>
-                              <th>Actions</th>
-                          </tr>
-                      </thead>
-                      {% for row in incoming %}
-                          <tr>
-                              <td>{{ row.sender }}</td>
-                              <td>{{ row.content }}</td>
-                              <td>{{ row.sent_at }}</td>
-                              <td>
-                                  <a class="btn btn-primary" href="/inbox/reply/{{ row.id }}">Reply</a>
-                                  <a class="btn btn-primary" href="#" onclick="confirmDeleteModal({{ row.id }})">Delete</a>
-                              </td>
-                          </tr>
-                      {% endfor %}
-                  </table>
-              {% endif %}
-              {% if outgoing %}
+                  {% if incoming %}
+                    <table id="inbox-incoming" class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>From</th>
+                                <th>Content</th>
+                                <th>Sent at</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        {% for row in incoming %}
+                            <tr>
+                                <td>{{ row.sender }}</td>
+                                <td>{{ row.content }}</td>
+                                <td>{{ row.sent_at }}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="/inbox/reply/{{ row.id }}">Reply</a>
+                                    <a class="btn btn-primary" href="#" onclick="confirmDeleteModal({{ row.id }})">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>There are no incoming messages to display.</p>
+                {% endif %}
                   <h2>Outgoing Messages</h2>
-                  <table id="inbox-outgoing" class="table">
-                      <thead class="thead-dark">
-                          <tr>
-                              <th>To</th>
-                              <th>Content</th>
-                              <th>Sent at</th>
-                              <th>Actions</th>
-                          </tr>
-                      </thead>
-                      {% for row in incoming %}
-                          <tr>
-                              <td>{{ row.receiver }}</td>
-                              <td>{{ row.content }}</td>
-                              <td>{{ row.sent_at }}</td>
-                              <td>
-                                  <a class="btn btn-primary" href="#" onclick="confirmDeleteModal({{ row.id }})">Delete</a>
-                              </td>
-                          </tr>
-                      {% endfor %}
-                  </table>
-              {% endif %}
-            {% endif %}
+                  {% if outgoing %}
+                    <table id="inbox-outgoing" class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>To</th>
+                                <th>Content</th>
+                                <th>Sent at</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        {% for row in outgoing %}
+                            <tr>
+                                <td>{{ row.receiver }}</td>
+                                <td>{{ row.content }}</td>
+                                <td>{{ row.sent_at }}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="#" onclick="confirmDeleteModal({{ row.id }})">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>There are no outgoing messages to display.</p>
+                {% endif %}
             <form method="GET" action="/inbox/compose_message/">
                 <input type="submit" class="btn btn-primary" value="Compose Message">
             </form>
