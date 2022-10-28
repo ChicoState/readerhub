@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from personalization.models import PersonalInfo
-from personalization.forms import PersonalInfoForm
+from personalization.models import PersonalInfo, Follows
+from personalization.forms import PersonalInfoForm, FollowForm
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -70,3 +70,25 @@ def edit_profile(request, id):
 		else:
 			#Cancel
 			return redirect("/personalization/")
+
+def add_friend(request):
+    if request.method == 'POST':
+        form = FollowForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            follow = User.objects.get(username = form.cleaned_data['userName'])
+            Follows.objects.create(user_id=user.id, following_user_id=follow.id)
+            return redirect('/')
+    context = { 'form': FollowForm() }
+    return render(request, 'personalization/add_friend.html', context)
+
+def see_friends(request):
+    user = request.user
+    following = user.following.all()
+    followers = user.followers.all()
+    context = { 
+        'following': following,
+        'followers': followers,
+    }
+    return render(request, 'personalization/follows.html', context)
+
