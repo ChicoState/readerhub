@@ -111,6 +111,7 @@ def book_view(request, info):
 
 
         context = {
+            "form_data": BooksForm(),
             "book_cover": book_cover,
             "book_title": book_title,
             "book_description": book_description,
