@@ -19,6 +19,7 @@ from app1 import views as app1_views
 from personalization import views as personalization_views
 from posts import views as post_views
 from books import views as books_views
+from messaging import views as messaging_views
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -37,6 +38,9 @@ urlpatterns = [
     path('books/', books_views.books),
     path('addFriends/', personalization_views.add_friend),
     path('follows/', personalization_views.see_friends),
+    path('inbox/', messaging_views.inbox),
+    path('inbox/compose_message/', messaging_views.compose),
+    path('books/book_view/<str:info>/', books_views.book_view),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed to save images to static

@@ -1,0 +1,56 @@
+
+body{
+  background-color: Gainsboro;
+}
+
+  .paragraph{
+    font-size:17px;
+    text-indent: 40px;
+    margin-left:10%; margin-right:10%
+  }
+
+  .container{
+    position:fixed;
+    left:140px;
+    top: 300px;
+  }
+
+  .container2{
+    position:fixed;
+    left:70px;
+    top: 550px;
+  }
+
+  .title {
+    position:fixed;
+    left:275px;
+    top: 245px;
+    font-size: 30px;
+  }
+.cover{
+  border:solid;
+  border-color: dimgray;
+  float:left;
+  position:fixed;
+  left:70px;
+  top: 245px;
+  width: 10%
+  }
+
+.author_photo {
+  border:solid;
+  border-color: dimgray;
+  float:left;
+  border-radius: 50%;
+  position:fixed;
+  left:110px;
+  top: 600px;
+  width: 5%;
+}
+
+.name {
+  position:fixed;
+  left: 60px;
+  top: 700px;
+  font-size: 19px;
+}

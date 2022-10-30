@@ -17,47 +17,62 @@
       <br><br><br><br><br><br><br><br><br><br>
       <input type="submit" class="btn btn-success btn-lg first-btn" value="Create Profile">
     </form>
+    </div>
+    </div>
   </div>
   {% else %}
 
 
-  <div class = "container">
-    <br>
-    <div class="card-columns mx-auto d-flex justify-content-center col-12">
-      <div class="card text-center bg-dark text-white" style="width: 18rem;">
-        <h3 class="card-text">{{ profile.user }}</h3>
-          {% if profile.personal_image %}
-          <img class="card-img-top yes-img" src="{{profile.personal_image.url }}" alt="Card image cap">
-            {% else %}
-          <img class="card-img-top no-img" src="{%static 'permanent_images/default_profile.png' %}" alt="Card image cap">
-          {% endif %}
-      </div>
-    </div>
 
+<div class = "container">
+  <br>
+  <div class="card-columns mx-auto d-flex justify-content-center col-12">
+    <div class="card text-center bg-dark text-white" style="width: 18rem;">
+      <h3 class="card-text">{{ profile.user }}</h3>
+        {% if profile.personal_image %}
+        <img class="card-img-top yes-img" src="{{profile.personal_image.url }}" alt="Card image cap">
+          {% else %}
+        <img class="card-img-top no-img" src="{%static 'permanent_images/default_profile.png' %}" alt="Card image cap">
+          {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class = "container" style="float:left;  width: 25%;"> 
+  <div class="jumbotron bg-dark text-white">
+    <p class="text-center title"><b>Posts:</b></p>
+    <div class="row justify-content-center">
+      {% for i in posts %}
+       <h3>{{i.title}}</h3> 
+       <p style="font-size: 14px;">{{i.content}}</p>
+      {% endfor %}
+    </div>
+    <div class="centering text-center">
+      <a lass="btn btn-warning btn-lg " href="/posts/">See all</a>
+    </div>
+  </div>
+</div>
+
+<div class = "container" style="float:inline-start; width: 100%;">
   <div class="jumbotron bg-dark text-white">
     <p class="text-center title"><b>Favorite books:</b></p>
-    <div class="row justify-content-center">
-     <div class="col-5">  {{profile.favorite_books}}  </div>
-    </div>
+    <div class="col-5">  {{profile.favorite_books}}  </div>
   </div>
 
   <div class="jumbotron bg-dark text-white">
     <p class="text-center title"><b>About me:</b></p>
     <p class="psteps">{{ profile.about_user|linebreaksbr }}</p>
   </div>
+
   <div class="centering text-center">
-<td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
+    <td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
+  </div>
 </div>
-</div>
-
-
-
-</body>
-
-</html>
-
 
 
       {% endif %}
 
 </body>
+
+</html>
+
