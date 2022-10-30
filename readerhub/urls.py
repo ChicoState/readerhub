@@ -35,6 +35,8 @@ urlpatterns = [
     path('posts/add_post/', post_views.add_post),
     path('posts/edit_post/<int:id>/', post_views.edit_post),
     path('books/', books_views.books),
+    path('addFriends/', personalization_views.add_friend),
+    path('follows/', personalization_views.see_friends),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) #needed to save images to static
