@@ -36,6 +36,8 @@ urlpatterns = [
     path('posts/add_post/', post_views.add_post),
     path('posts/edit_post/<int:id>/', post_views.edit_post),
     path('books/', books_views.books),
+    path('addFriends/', personalization_views.add_friend),
+    path('follows/', personalization_views.see_friends),
     path('inbox/', messaging_views.inbox),
     path('inbox/compose_message/', messaging_views.compose),
     path('books/book_view/<str:info>/', books_views.book_view),
