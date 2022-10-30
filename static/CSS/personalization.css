@@ -3,7 +3,9 @@
   max-height: 75px;
   margin: 0 auto;
 }
-
+td {
+  color: white;
+}
 h3 {
   margin: 2rem 0rem 1rem;
   font-family: Roboto;
@@ -30,4 +32,27 @@ body {
 p {
   font-family: Roboto;
   font-size: 25px;
+}
+
+.book-card-img-top{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+.card-text {
+    text-align: center;
+  }
+.book-cards {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+.book-card {
+      border: 2px solid;
+       margin: 0 auto;
+       float: none;
+       margin-bottom: 10px;
+       width: 20rem
+
 }

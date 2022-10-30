@@ -35,6 +35,7 @@ def books(request):
                 book_cover = []
                 book_title = []
                 book_id = []
+                book_original_id = [] #needed for favoriting the book, need unaltered id
                 num_display = 0
                 #choosing to display 5 books
                 while num_display != 5:
@@ -44,14 +45,13 @@ def books(request):
                     book_cover.append("http://covers.openlibrary.org/b/id/"+str(book_json["docs"][num_display]["cover_i"])+"-L.jpg") #cover pic
                     book_title.append(book_json["docs"][num_display]["title"]) #title
                     book_temp_id = book_json["docs"][num_display]["key"] #getting id
-                    book_original_id = book_temp_id #need this for favorite book
+                    book_original_id.append(book_temp_id) #need this for favorite book
                     book_temp_id = book_temp_id.replace("/", "%") #need to replace backslashes to pass through url or it messes up
                     book_id.append(book_temp_id)
                     num_display = num_display+1
-                book_preview = zip(book_title, book_cover, book_id) #combine the lists to be able to display with loop
+                book_preview = zip(book_title, book_cover, book_id, book_original_id) #combine the lists to be able to display with loop
                 context = {
                     "form_data": BooksForm(), #continue displaying form after searching
-                    "book_id": book_original_id,
                     "book_preview": book_preview,
                 }
                 return render(request,'books/books.html', context)
