@@ -93,6 +93,19 @@
   </div>
 {% endif%}
 
+{% if following or followers %}
+    <div class="jumbotron bg-dark text-white">
+    <p class="text-center title"><b>Following:</b></p>
+    {% for usering in following %}
+        <li> {{ usering.following_user.username }}</li>
+    {% endfor %}
+    <p class="text-center title"><b>Followers:</b></p>
+    {% for userer in followers %}
+        <li> {{ userer.user.username }}</li>
+    {% endfor %}
+    </div>
+{% endif %}
+
 
 </div>
 
