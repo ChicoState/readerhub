@@ -9,6 +9,15 @@
     {% include "nav.html" %}
 </head>
 <body>
+<br>
+  <form method="POST" action = "/books/" enctype="multipart/form-data" align = "center">
+    <div class = "search">
+      {% csrf_token %}
+        {{form_data}}
+      <input type="submit" class="btn btn-info" name="search_books" value="Search">
+    </div>
+  </form>
+<br>
   {% if book_cover == 'no_book'%}
     <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" class = "cover" alt="Book Cover">
   {%else%}

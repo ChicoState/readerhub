@@ -28,13 +28,12 @@
       </div>
       <div class="card-body text-center">
         <form method="POST" action="/books/">
-          <button input type="submit" class="btn btn-info" value="{{book_id}}" name = "favorite">Favorite</button>
+          <button input type="submit" class="btn btn-info" value="{{book.3}}" name = "favorite">Favorite</button>
           {% csrf_token %}
         </form>
         <br> <br>
         <a class="btn btn-danger btn-lg " href="/books/book_view/{{ book.2 }}/">View Book</a>
       </div>
-
       </div>
     {%endfor%}
   </div>

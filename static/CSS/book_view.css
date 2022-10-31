@@ -2,6 +2,10 @@
 body{
   background-color: Gainsboro;
 }
+.search{
+  align-items: center;
+  margin-right: auto;
+}
 
   .paragraph{
     font-size:17px;

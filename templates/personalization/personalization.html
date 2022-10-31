@@ -11,7 +11,7 @@
   {% include "nav.html" %}
   <div class="row">
     <div class="col-12">
-    {% if not profile.about_user and not profile.personal_image and not profile.favorite_books%}
+    {% if not profile.about_user%}
     <div class = "container" align = "center">
     <form method="GET" action="/personalization/edit_profile/{{ profile.id }}/">
       <br><br><br><br><br><br><br><br><br><br>
@@ -38,35 +38,61 @@
   </div>
 </div>
 
-<div class = "container" style="float:left;  width: 25%;"> 
-  <div class="jumbotron bg-dark text-white">
-    <p class="text-center title"><b>Posts:</b></p>
-    <div class="row justify-content-center">
-      {% for i in posts %}
-       <h3>{{i.title}}</h3> 
-       <p style="font-size: 14px;">{{i.content}}</p>
-      {% endfor %}
-    </div>
-    <div class="centering text-center">
-      <a lass="btn btn-warning btn-lg " href="/posts/">See all</a>
-    </div>
-  </div>
-</div>
+
 
 <div class = "container" style="float:inline-start; width: 100%;">
-  <div class="jumbotron bg-dark text-white">
-    <p class="text-center title"><b>Favorite books:</b></p>
-    <div class="col-5">  {{profile.favorite_books}}  </div>
-  </div>
+
 
   <div class="jumbotron bg-dark text-white">
     <p class="text-center title"><b>About me:</b></p>
     <p class="psteps">{{ profile.about_user|linebreaksbr }}</p>
   </div>
-
-  <div class="centering text-center">
+  <div class="centering text-right">
     <td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
   </div>
+
+{% if favorite_preview%}
+  <div class="jumbotron bg-dark text-white">
+  <p class="text-center title"><b>Favorite books:</b></p>
+  <div class = "cards book-cards">
+    {%for book in favorite_preview%}
+      <div class="card bg-dark text-white book-card">
+        {% if book.1 == 'no_book'%}
+          <img class="card-img-top yes-img book-card-img-top" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" alt="Card image cap">
+        {%else%}
+          <img class="card-img-top yes-img book-card-img-top" src="{{book.1}}" alt="Card image cap">
+        {%endif%}
+      <div class = "card-body">
+        <p class = "card-text" >{{book.0}}</p>
+      </div>
+      </div>
+    {%endfor%}
+  </div>
+</div>
+{%endif%}
+
+{% if posts%}
+  <div class="jumbotron bg-dark text-white">
+  <table id="posts" class="table">
+      <thead class="thead-dark">
+          <tr>
+              <th>Title</th>
+              <th>Content</th>
+              <th>Last Modified</th>
+          </tr>
+      </thead>
+      {% for row in posts %}
+          <tr>
+              <td>{{ row.title }}</td>
+              <td>{{ row.content }}</td>
+              <td>{{ row.last_modified }}</td>
+          </tr>
+      {% endfor %}
+  </table>
+  </div>
+{% endif%}
+
+
 </div>
 
 
@@ -75,4 +101,3 @@
 </body>
 
 </html>
-
