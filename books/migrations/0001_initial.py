@@ -10,23 +10,18 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('personalization', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Post',
+            name='BookReview',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('content', models.TextField()),
-                ('last_modified', models.DateTimeField(auto_now=True)),
-                ('book_object', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='personalization.FavoriteBooks')),
+                ('book_id', models.CharField(max_length=100)),
+                ('text_review', models.CharField(max_length=65536)),
+                ('star_review', models.IntegerField()),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-                'ordering': ['-last_modified'],
-            },
         ),
     ]

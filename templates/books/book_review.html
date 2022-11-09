@@ -1,0 +1,30 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Books</title>
+  {% include "bootstrap.html" %}
+  {% load static %}
+  <link rel="stylesheet" href="{%static 'CSS/book_review.css' %}"/>
+    {% include "nav.html" %}
+</head>
+<body>
+
+<form method="POST" action = "" enctype="multipart/form-data" align = "center">
+  <table class = "text-white">
+    {% csrf_token %}
+    {{form_data.text_review}}
+
+    {% for radio in form_data.star_review %}
+
+    <div class="rating_radio">
+      <img src="{%static 'permanent_images/star.png' %}" width="20" height="20" />
+        {{ radio }}
+    </div>
+    {% endfor %}
+
+    <input type="submit" class="btn btn-info" name="submit_review" value="Submit Review">
+  </table>
+</form>
+</body>
+</html>

@@ -38,7 +38,7 @@ def personalization(request):
 			for book in favorite_books:
 				if max_books == 4:
 					break
-				book_url = 'https://openlibrary.org{}.json'.format(book.favorite_books)
+				book_url = 'https://openlibrary.org{}.json'.format(book.favorite_id)
 				book_response = urlopen(book_url)
 				book_json = json.loads(book_response.read()) #store json object from url response
 				if 'covers' not in book_json:
