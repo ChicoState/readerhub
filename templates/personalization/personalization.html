@@ -40,7 +40,7 @@
 
 
 
-<div class = "container" style="float:inline-start; width: 100%;">
+<div class = "container">
 
 
   <div class="jumbotron bg-dark text-white">
@@ -48,7 +48,7 @@
     <p class="psteps">{{ profile.about_user|linebreaksbr }}</p>
   </div>
   <div class="centering text-right">
-    <td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
+    <td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a><br><br>
   </div>
 
 {% if favorite_preview%}
@@ -73,6 +73,7 @@
 
 {% if posts%}
   <div class="jumbotron bg-dark text-white">
+  <p class="text-center title"><b>Posts:</b></p>
   <table id="posts" class="table">
       <thead class="thead-dark">
           <tr>
@@ -91,6 +92,19 @@
   </table>
   </div>
 {% endif%}
+
+{% if following or followers %}
+    <div class="jumbotron bg-dark text-white">
+    <p class="text-center title"><b>Following:</b></p>
+    {% for usering in following %}
+        <li> {{ usering.following_user.username }}</li>
+    {% endfor %}
+    <p class="text-center title"><b>Followers:</b></p>
+    {% for userer in followers %}
+        <li> {{ userer.user.username }}</li>
+    {% endfor %}
+    </div>
+{% endif %}
 
 
 </div>
