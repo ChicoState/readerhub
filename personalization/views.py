@@ -24,10 +24,14 @@ def personalization(request):
 	try: #display profile created with form
 		profile = PersonalInfo.objects.get(user=request.user) #the user personal info
 		posts = Post.objects.filter(user=request.user) #posts the user has made
+		following = request.user.following.all()
+		followers = request.user.followers.all()
 		if not FavoriteBooks.objects.filter(favorite_user=request.user):
 			context = {
 				"profile": profile,
 				"posts": posts,
+				"following": following,
+				"followers": followers,
 			}
 			return render(request, 'personalization/personalization.html', context)
 		else:
@@ -48,22 +52,22 @@ def personalization(request):
 				favorite_titles.append(book_json["title"])
 				max_books = max_books+ 1
 
-            favorite_preview = zip(favorite_titles, favorite_covers)#combine for displaying in for loop in html
-            context = {
-                "profile": profile,
-                "posts": posts,
-                "favorite_preview": favorite_preview,
-                "following": following,
-                "followers": followers,
-            }
-            return render(request, 'personalization/personalization.html', context)
-    except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
-        PersonalInfo(user = request.user).save()
-        profile = PersonalInfo.objects.get(user=request.user)
-        context = {
-            "profile": profile,
-        }
-        return render(request, 'personalization/personalization.html', context)
+			favorite_preview = zip(favorite_titles, favorite_covers)#combine for displaying in for loop in html
+			context = {
+				"profile": profile,
+				"posts": posts,
+				"favorite_preview": favorite_preview,
+				"following": following,
+				"followers": followers,
+			}
+			return render(request, 'personalization/personalization.html', context)
+	except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
+		PersonalInfo(user = request.user).save()
+		profile = PersonalInfo.objects.get(user=request.user)
+		context = {
+			"profile": profile,
+		}
+		return render(request, 'personalization/personalization.html', context)
 
 
 
