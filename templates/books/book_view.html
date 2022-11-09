@@ -45,5 +45,9 @@
   <div class = "name">
     Author: <u>{{author_name}}</u>
   </div>
+  <form method="POST" action="/books/book_review/">
+    <button input type="submit" class="btn btn-warning" value="book_id" name = "review">Leave a Review!</button>
+    {% csrf_token %}
+  </form>
 </body>
 </html>

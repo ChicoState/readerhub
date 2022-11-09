@@ -21,53 +21,53 @@ import json
 
 @login_required(login_url='/login/')
 def personalization(request):
-    try: #display profile created with form
-        profile = PersonalInfo.objects.get(user=request.user) #the user personal info
-        posts = Post.objects.filter(user=request.user) #posts the user has made
-        following = request.user.following.all()
-        followers = request.user.followers.all()
-        if not FavoriteBooks.objects.filter(favorite_user=request.user):
-            context = {
-                "profile": profile,
-                "posts": posts,
-                "following": following,
-                "followers": followers,
-            }
-            return render(request, 'personalization/personalization.html', context)
-        else:
-            favorite_books = FavoriteBooks.objects.filter(favorite_user	=request.user)
-            max_books = 0 #counting number of books being chosen to display
-            favorite_covers = []
-            favorite_titles = []
-            for book in favorite_books:
-                if max_books == 4:
-                    break
-                book_url = 'https://openlibrary.org{}.json'.format(book.favorite_books)
-                book_response = urlopen(book_url)
-                book_json = json.loads(book_response.read()) #store json object from url response
-                if 'covers' not in book_json:
-                    favorite_covers.append("no_book") #doesn't exist
-                else:
-                    favorite_covers.append("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
-                favorite_titles.append(book_json["title"])
-                max_books = max_books+ 1
+	try: #display profile created with form
+		profile = PersonalInfo.objects.get(user=request.user) #the user personal info
+		posts = Post.objects.filter(user=request.user) #posts the user has made
+		following = request.user.following.all()
+		followers = request.user.followers.all()
+		if not FavoriteBooks.objects.filter(favorite_user=request.user):
+			context = {
+				"profile": profile,
+				"posts": posts,
+				"following": following,
+				"followers": followers,
+			}
+			return render(request, 'personalization/personalization.html', context)
+		else:
+			favorite_books = FavoriteBooks.objects.filter(favorite_user	=request.user)
+			max_books = 0 #counting number of books being chosen to display
+			favorite_covers = []
+			favorite_titles = []
+			for book in favorite_books:
+				if max_books == 4:
+					break
+				book_url = 'https://openlibrary.org{}.json'.format(book.favorite_id)
+				book_response = urlopen(book_url)
+				book_json = json.loads(book_response.read()) #store json object from url response
+				if 'covers' not in book_json:
+					favorite_covers.append("no_book") #doesn't exist
+				else:
+					favorite_covers.append("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
+				favorite_titles.append(book_json["title"])
+				max_books = max_books+ 1
 
-            favorite_preview = zip(favorite_titles, favorite_covers)#combine for displaying in for loop in html
-            context = {
-                "profile": profile,
-                "posts": posts,
-                "favorite_preview": favorite_preview,
-                "following": following,
-                "followers": followers,
-            }
-            return render(request, 'personalization/personalization.html', context)
-    except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
-        PersonalInfo(user = request.user).save()
-        profile = PersonalInfo.objects.get(user=request.user)
-        context = {
-            "profile": profile,
-        }
-        return render(request, 'personalization/personalization.html', context)
+			favorite_preview = zip(favorite_titles, favorite_covers)#combine for displaying in for loop in html
+			context = {
+				"profile": profile,
+				"posts": posts,
+				"favorite_preview": favorite_preview,
+				"following": following,
+				"followers": followers,
+			}
+			return render(request, 'personalization/personalization.html', context)
+	except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
+		PersonalInfo(user = request.user).save()
+		profile = PersonalInfo.objects.get(user=request.user)
+		context = {
+			"profile": profile,
+		}
+		return render(request, 'personalization/personalization.html', context)
 
 
 

@@ -1,0 +1,8 @@
+body{
+  background-color: Gainsboro;
+}
+
+.rating_radio {
+  float: left;
+  padding: 10px
+}
