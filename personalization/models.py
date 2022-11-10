@@ -10,9 +10,12 @@ class PersonalInfo(models.Model):#one per user
 
 
 class Follows(models.Model):
-    user = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
-    following_user = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
-    #created = models.DateTimeField(auto_now_add=True, blank=True)
+	user = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+	following_user = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
+	#created = models.DateTimeField(auto_now_add=True, blank=True)
+
+	class Meta:
+		unique_together = ('user', 'following_user')
 
 class FavoriteBooks(models.Model): #many to one relationship with User
 	favorite_user = models.ForeignKey(User, on_delete=models.CASCADE, default = "")

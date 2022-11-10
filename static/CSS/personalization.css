@@ -1,19 +1,21 @@
-.rounded{
+.rounded {
   max-width: 75px;
   max-height: 75px;
   margin: 0 auto;
 }
+
 td {
   color: white;
 }
+
 h3 {
   margin: 2rem 0rem 1rem;
   font-family: Roboto;
 }
-body {
-  background-color: grey;
-  }
 
+body {
+  background-color: rgb(55, 71, 53);
+}
 
 .another-btn {
   border-style: solid;
@@ -21,7 +23,7 @@ body {
   opacity: .98;
 }
 
-.first-btn{
+.first-btn {
   border-style: solid;
   border-color: white;
 
@@ -29,30 +31,73 @@ body {
   opacity: .98;
   padding: 2% 0;
 }
+
 p {
   font-family: Roboto;
   font-size: 25px;
 }
 
-.book-card-img-top{
+.prof-container {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.profile-card {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 4%;
+  padding-bottom: 4%;
+  text-align: justify;
+  width: 10rem;
+  align-self: center;
+}
+
+.prof-h3 {
+  text-align: center;
+  margin: 1rem 0rem 1rem;
+}
+
+.prof-text {
+  padding-top: 4%;
+  padding-bottom: 4%;
+}
+
+.prof-text div {
+  background-color: antiquewhite;
+}
+
+.profile-card img {
+  display: block;
+  margin: 0 auto;
+}
+
+.prof-img {
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+}
+
+.book-card-img-top {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 50%;
 }
+
 .card-text {
-    text-align: center;
-  }
+  text-align: center;
+}
+
 .book-cards {
   text-align: center;
   display: flex;
   flex-direction: row;
 }
-.book-card {
-      border: 2px solid;
-       margin: 0 auto;
-       float: none;
-       margin-bottom: 10px;
-       width: 20rem
 
+.book-card {
+  border: 2px solid;
+  margin: 0 auto;
+  float: none;
+  margin-bottom: 10px;
+  width: 20rem
 }
