@@ -10,6 +10,8 @@ from django.contrib.auth.models import User
 from personalization.models import PersonalInfo
 from personalization.models import FavoriteBooks
 from books.forms import BooksForm
+from books.forms import BookReviewForm
+from books.models import BookReview
 
 #import urllib library
 from urllib.request import urlopen
@@ -58,7 +60,17 @@ def books(request):
         elif("favorite" in request.POST): #can also use request.POST.get("favorite")
             cur_user = request.user
             book_id = request.POST.get('favorite')
-            FavoriteBooks(favorite_user = cur_user, favorite_books = book_id).save()
+            book_url = 'https://openlibrary.org{}.json'.format(book_id)
+            book_response = urlopen(book_url)
+            book_json = json.loads(book_response.read()) #query to store title in FavoriteBooks
+            book_title = book_json["title"]
+            if 'covers' not in book_json:
+                book_cover = "no_book" #doesn't exist
+            else:
+                book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
+
+
+            FavoriteBooks(favorite_user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
             }
@@ -73,6 +85,7 @@ def book_view(request, info):
     if (request.method == "GET"):
         #info is book id passed through url
         info = info.replace("%", "/") #replace @ signs that were necessary to be passed in url back to backslashes
+        book_id = info
         book_url = 'https://openlibrary.org{}.json'.format(info)
         book_response = urlopen(book_url)
         book_json = json.loads(book_response.read()) #store json object from url response
@@ -116,7 +129,22 @@ def book_view(request, info):
             "book_title": book_title,
             "book_description": book_description,
             "book_subjects": book_subjects,
+            "book_id": book_id,
             "author_name": author_name,
             "author_image": author_image,
         }
         return render(request, 'books/book_view.html', context)
+def book_review(request):
+    if("review" in request.POST):  #review button was clicked
+        context = {
+            "form_data": BookReviewForm(), #display form
+        }
+        return render(request, 'books/book_review.html', context)
+    elif("submit_review" in request.POST):
+        form = BookReviewForm(request.POST)
+        if (form.is_valid()):
+            print(form.cleaned_data['star_review'])
+        #    new_review = form.save(commit=False)
+        #    new_review.user = request.user
+        #    new_review.book_id.save()
+        return render(request, 'books/book_review.html')

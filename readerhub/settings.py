@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'personalization',  #add new folders
     'posts',
     'messaging',
+    'books',
 ]
 
 MIDDLEWARE = [

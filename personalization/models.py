@@ -19,4 +19,9 @@ class Follows(models.Model):
 
 class FavoriteBooks(models.Model): #many to one relationship with User
 	favorite_user = models.ForeignKey(User, on_delete=models.CASCADE, default = "")
-	favorite_books = models.CharField(max_length = 100)
+	favorite_id = models.CharField(max_length = 100)
+	favorite_title = models.CharField(max_length = 100)
+	favorite_cover = models.CharField(max_length = 100)
+
+	def __str__(self):
+		return self.favorite_title

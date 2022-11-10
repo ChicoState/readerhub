@@ -24,7 +24,7 @@ def posts(request):
 def add_post(request):
     if (request.method == "POST"):
         if ("add" in request.POST):
-            form = PostForm(request.POST)
+            form = PostForm(request.POST, user = request.user)
             if (form.is_valid()):
                 newPost = form.save(commit=False)
                 newPost.user = request.user
@@ -39,7 +39,7 @@ def add_post(request):
             return redirect("/posts/")
     else:
         context = {
-            "form_data": PostForm()
+            "form_data": PostForm(user=request.user)
         }
         return render(request, "posts/add_post.html", context)
 
@@ -47,14 +47,14 @@ def add_post(request):
 def edit_post(request, id):
     if (request.method == "GET"):
         item = Post.objects.get(id=id)
-        form = PostForm(instance=item)
+        form = PostForm(instance=item, user = request.user)
         context = {
             "form_data": form
         }
         return render(request, "posts/edit_post.html", context)
     elif (request.method == "POST"):
         if ("edit" in request.POST):
-            form = PostForm(request.POST)
+            form = PostForm(request.POST, user = request.user)
             if (form.is_valid()):
                 post = form.save(commit=False)
                 post.user = request.user
