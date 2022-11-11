@@ -9,6 +9,7 @@ class PostForm(forms.ModelForm):
     content = forms.CharField(widget=forms.Textarea(attrs={'rows': '10', 'cols': '80'}))
 
     #gets current user being passed into PostForm and find all current books of that user
+    #everytime PostForm is referenced you need to pass it request.user even if it doesnt need because of this init
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         favorite_queryset = FavoriteBooks.objects.filter(favorite_user = self.user)
