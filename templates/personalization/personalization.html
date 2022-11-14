@@ -21,7 +21,6 @@
       </div>
     </div>
   </div>
-
   {% else %}
   <div class="container-fluid px-0 prof-container">
     <div class="row text-center no-gutters">
@@ -29,7 +28,8 @@
         {% if profile.personal_image %}
         <img class="prof-img rounded-circle" src="{{profile.personal_image.url }}" alt="Card image cap">
         {% else %}
-        <img class="prof-img rounded-circle" src="{%static 'permanent_images/default_profile.png' %}" alt="Card image cap">
+        <img class="prof-img rounded-circle" src="{%static 'permanent_images/default_profile.png' %}"
+          alt="Card image cap">
         {% endif %}
         <h3 class="text-center prof-h3">{{ profile.user }}</h3>
       </div>
@@ -45,7 +45,57 @@
   </div>
 
   <div class="container-fluid px-0 prof-container">
+    <div class="row text-center no-gutters">
+      <div class="col-md-3">
+        <p class="text-center title"><b>Posts</b></p>
+        {% if posts %}
 
+        {% for row in posts|slice:":5" %}
+        <div class="card">
+          <div class="row no-gutters">
+            <div class="col-auto" style="width: 50%;">
+              {% if row.book_object.favorite_cover == 'no_book' %}
+              <img class="" style="width: 50%" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png"
+                alt="Card image cap">
+              {%else%}
+              <img class="" style="width: 50%" src="{{ row.book_object.favorite_cover }}" alt="Card image cap">
+              {%endif%}
+            </div>
+            <div class="col" style="width: 50%;">
+              <div class="card-block">
+                <h4 class="card-title">{{ row.title }}</h4>
+                <p class="card-text posts-text text-truncate">{{ row.content }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+        {% endif %}
+      </div>
+      
+      <div class="col">
+        <p class="text-center title"><b>Your library</b></p>
+        {% if favorite_preview%}
+          <p class="text-left title"><b>Favorite books</b></p>
+          <div class="cards book-cards">
+            {%for book in favorite_preview%}
+            <div class="card bg-dark text-white book-card">
+              {% if book.1 == 'no_book'%}
+              <img class="card-img-top yes-img book-card-img-top"
+                src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" alt="Card image cap">
+              {%else%}
+              <img class="card-img-top yes-img book-card-img-top" src="{{book.1}}" alt="Card image cap">
+              {%endif%}
+              <div class="card-body">
+                <p class="card-text">{{book.0}}</p>
+              </div>
+            </div>
+            {%endfor%}
+          </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
   <!--<div class="container">
     <div class="card-columns mx-auto d-flex justify-content-left col-12">
@@ -95,7 +145,7 @@
     </div>
     {%endif%}
 
-    {% if posts%}
+    <!--{% if posts%}
     <div class="jumbotron bg-dark text-white">
       <p class="text-center title"><b>Posts:</b></p>
       <table id="posts" class="table">
@@ -115,7 +165,7 @@
         {% endfor %}
       </table>
     </div>
-    {% endif%}
+    {% endif%}-->
 
     {% if following or followers %}
     <div class="jumbotron bg-dark text-white">

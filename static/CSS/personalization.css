@@ -1,42 +1,3 @@
-.rounded {
-  max-width: 75px;
-  max-height: 75px;
-  margin: 0 auto;
-}
-
-td {
-  color: white;
-}
-
-h3 {
-  margin: 2rem 0rem 1rem;
-  font-family: Roboto;
-}
-
-body {
-  background-color: rgb(55, 71, 53);
-}
-
-.another-btn {
-  border-style: solid;
-  border-color: white;
-  opacity: .98;
-}
-
-.first-btn {
-  border-style: solid;
-  border-color: white;
-
-  font-size: 35px;
-  opacity: .98;
-  padding: 2% 0;
-}
-
-p {
-  font-family: Roboto;
-  font-size: 25px;
-}
-
 .prof-container {
   margin-left: 0;
   margin-right: 0;
@@ -75,6 +36,51 @@ p {
   width: 10rem;
   height: 10rem;
   object-fit: cover;
+}
+
+.posts-text {
+  font-size: 0.5em;
+}
+
+
+
+.rounded {
+  max-width: 75px;
+  max-height: 75px;
+  margin: 0 auto;
+}
+
+td {
+  color: white;
+}
+
+h3 {
+  margin: 2rem 0rem 1rem;
+  font-family: Roboto;
+}
+
+body {
+  background-color: rgb(55, 71, 53);
+}
+
+.another-btn {
+  border-style: solid;
+  border-color: white;
+  opacity: .98;
+}
+
+.first-btn {
+  border-style: solid;
+  border-color: white;
+
+  font-size: 35px;
+  opacity: .98;
+  padding: 2% 0;
+}
+
+p {
+  font-family: Roboto;
+  font-size: 25px;
 }
 
 .book-card-img-top {
