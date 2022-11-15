@@ -86,13 +86,15 @@ def book_view(request, info):
     book_id = info
 
     #save form data if a book was just reviewed
-    form = BookReviewForm(request.POST)
-    if (form.is_valid()):
-        new_review = form.save(commit=False)
-        new_review.user = request.user
-        new_review.book_id = book_id
-        new_review.star_review = form.cleaned_data['star_review']
-        new_review.save()
+    #make sure book doesn't already have review from user, important because the form always saves the first form data even if you come from any page
+    if not BookReview.objects.filter(user = request.user).exists():
+        form = BookReviewForm(request.POST)
+        if (form.is_valid()):
+            new_review = form.save(commit=False)
+            new_review.user = request.user
+            new_review.book_id = book_id
+            new_review.star_review = form.cleaned_data['star_review']
+            new_review.save()
 
     #check for review of current book, need to see if review has book id and current user
     text_review = ""
@@ -108,6 +110,8 @@ def book_view(request, info):
         my_review_exists = 1
     else:
         my_review_exists = 0
+
+
 
     #query for book information
     book_url = 'https://openlibrary.org{}.json'.format(info)
