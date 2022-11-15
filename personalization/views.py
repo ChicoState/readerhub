@@ -52,11 +52,10 @@ def personalization(request):
 				favorite_titles.append(book_json["title"])
 				max_books = max_books+ 1
 
-			favorite_preview = zip(favorite_titles, favorite_covers)#combine for displaying in for loop in html
 			context = {
 				"profile": profile,
 				"posts": posts,
-				"favorite_preview": favorite_preview,
+				"favorite_books": favorite_books,
 				"following": following,
 				"followers": followers,
 			}

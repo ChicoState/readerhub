@@ -38,8 +38,18 @@
   object-fit: cover;
 }
 
+.posts-card {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .posts-text {
   font-size: 0.5em;
+}
+
+.fav-book-cards {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 
@@ -87,7 +97,7 @@ p {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 20%;
 }
 
 .card-text {
