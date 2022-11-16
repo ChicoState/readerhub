@@ -45,9 +45,24 @@
   <div class = "name">
     Author: <u>{{author_name}}</u>
   </div>
+  <br><br><br><br><br><br><br><br><br><br>
+  {% if my_review_exists == 0 %}
   <form method="POST" action="/books/book_review/">
-    <button input type="submit" class="btn btn-warning" value="book_id" name = "review">Leave a Review!</button>
-    {% csrf_token %}
+    <div class = "btn_center">
+      <button input type="submit" class="btn btn-warning" value="{{book_id}}" name = "review">Leave a Review!</button>
+      {% csrf_token %}
+    </div>
   </form>
+  {% else %}
+  <div class="jumbotron my_review">
+    <div class = "text-center">
+      <b>Your Review</b> <br>
+      <i>Rating: {{star_review}}/5 </i><br><br>
+    </div>
+    <div class = "indent-text">
+      {{text_review}}
+    </div>
+  </div>
+  {% endif %}
 </body>
 </html>
