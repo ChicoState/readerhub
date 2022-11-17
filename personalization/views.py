@@ -36,12 +36,9 @@ def personalization(request):
 			return render(request, 'personalization/personalization.html', context)
 		else:
 			favorite_books = FavoriteBooks.objects.filter(favorite_user	=request.user)
-			max_books = 0 #counting number of books being chosen to display
 			favorite_covers = []
 			favorite_titles = []
 			for book in favorite_books:
-				if max_books == 4:
-					break
 				book_url = 'https://openlibrary.org{}.json'.format(book.favorite_id)
 				book_response = urlopen(book_url)
 				book_json = json.loads(book_response.read()) #store json object from url response
@@ -50,7 +47,6 @@ def personalization(request):
 				else:
 					favorite_covers.append("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 				favorite_titles.append(book_json["title"])
-				max_books = max_books+ 1
 
 			context = {
 				"profile": profile,
@@ -113,10 +109,12 @@ def add_friend(request):
         if form.is_valid():
             user = request.user
             follow = User.objects.get(username = form.cleaned_data['userName'])
-            Follows.objects.create(user_id=user.id, following_user_id=follow.id)
+            Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
             return redirect('/')
     context = { 'form': FollowForm() }
     return render(request, 'personalization/add_friend.html', context)
+
+
 
 def see_friends(request):
     user = request.user

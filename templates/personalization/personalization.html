@@ -42,6 +42,7 @@
           <p class="psteps" style="margin-bottom: 0;">{{ profile.about_user|linebreaksbr }}</p>
         </div>
       </div>
+      <!--Edit button-->
       <div class="col-sm-2 align-self-center">
         <td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
       </div>
@@ -50,16 +51,16 @@
 
   <div class="container-fluid px-0 prof-container">
     <div class="row text-center no-gutters">
-      <div class="col-md-3 posts-card">
+
+      <!--Dsiplay posts-->
+      <div class="col-md-3 posts-col">
         <p class="text-center title"><b>Posts</b></p>
         {% if posts %}
-
-        <!--Dsiplay posts-->
         {% for row in posts|slice:":5" %}
         <!--"|slice":5" insicates only show 5-->
-        <div class="card">
+        <div class="card posts-card">
           <div class="row no-gutters">
-            <div class="col-auto" style="width: 50%;">
+            <div class="col-auto posts-img">
               {% if row.book_object.favorite_cover == 'no_book' %}
               <img class="" style="width: 50%" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png"
                 alt="Card image cap">
@@ -102,10 +103,12 @@
         </div>
         {% endif %}
       </div>
+
     </div>
   </div>
 
-  <!--{% if following or followers %}
+  <!--Display following and followers-->
+  {% if following or followers %}
     <div class="jumbotron bg-dark text-white">
       <p class="text-center title"><b>Following:</b></p>
       {% for usering in following %}
@@ -116,7 +119,7 @@
       <li> {{ userer.user.username }}</li>
       {% endfor %}
     </div>
-  {% endif %}-->
+  {% endif %}
   
   {% endif %}
 
