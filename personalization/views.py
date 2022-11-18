@@ -20,22 +20,25 @@ import json
 
 
 @login_required(login_url='/login/')
-def personalization(request):
+def personalization(request, name):
+	user = User.objects.get(username=name)
+	req_username = user.username
 	try: #display profile created with form
-		profile = PersonalInfo.objects.get(user=request.user) #the user personal info
-		posts = Post.objects.filter(user=request.user) #posts the user has made
-		following = request.user.following.all()
-		followers = request.user.followers.all()
-		if not FavoriteBooks.objects.filter(favorite_user=request.user):
+		profile = PersonalInfo.objects.get(user=user) #the user personal info
+		posts = Post.objects.filter(user=user) #posts the user has made
+		following = user.following.all()
+		followers = user.followers.all()
+		if not FavoriteBooks.objects.filter(favorite_user=user):
 			context = {
 				"profile": profile,
 				"posts": posts,
 				"following": following,
 				"followers": followers,
+				"req_user": req_username,
 			}
 			return render(request, 'personalization/personalization.html', context)
 		else:
-			favorite_books = FavoriteBooks.objects.filter(favorite_user	=request.user)
+			favorite_books = FavoriteBooks.objects.filter(favorite_user	= user)
 			favorite_covers = []
 			favorite_titles = []
 			for book in favorite_books:
@@ -54,11 +57,12 @@ def personalization(request):
 				"favorite_books": favorite_books,
 				"following": following,
 				"followers": followers,
+				"req_user": req_username,
 			}
 			return render(request, 'personalization/personalization.html', context)
 	except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
-		PersonalInfo(user = request.user).save()
-		profile = PersonalInfo.objects.get(user=request.user)
+		PersonalInfo(user=user).save()
+		profile = PersonalInfo.objects.get(user=user)
 		context = {
 			"profile": profile,
 		}
@@ -93,7 +97,7 @@ def edit_profile(request, id):
 					if personalInfoTemp.personal_image: #an old image exists
 						os.remove(personalInfoTemp.personal_image.path) #removes old image file from images when image is changed
 				personalInfo.save()
-				return redirect("/personalization/")
+				return redirect('personalization', name=request.user.username)
 			else:
 				context = {
                     "form_data": form
@@ -101,7 +105,7 @@ def edit_profile(request, id):
 				return render(request, 'personalization/edit_profile.html', context)
 		else:
 			#Cancel
-			return redirect("/personalization/")
+			return redirect('personalization', name=request.user.username)
 
 def add_friend(request):
     if request.method == 'POST':

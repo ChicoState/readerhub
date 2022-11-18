@@ -42,9 +42,16 @@
           <p class="psteps" style="margin-bottom: 0;">{{ profile.about_user|linebreaksbr }}</p>
         </div>
       </div>
-      <!--Edit button-->
+      <!--Edit/follow button-->
       <div class="col-sm-2 align-self-center">
-        <td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
+        {% if user.get_username == req_user %}
+          <td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
+        {% else %} 
+          <!--<td><a class="btn btn-warning btn-lg " href="/personalization/{{ user.username }}/">Follow</a>-->
+          <form action="/personalization/{{ user.username }}/" method="post">
+            <input id="FollowForm" type="submit" name="your_name" value="{{ current_name }}">
+          </form>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -112,7 +119,7 @@
     <div class="jumbotron bg-dark text-white">
       <p class="text-center title"><b>Following:</b></p>
       {% for usering in following %}
-      <li> {{ usering.following_user.username }}</li>
+      <li> <a href="/personalization/{{ usering.following_user.username }}/">{{ usering.following_user.username }}</a></li>
       {% endfor %}
       <p class="text-center title"><b>Followers:</b></p>
       {% for userer in followers %}
