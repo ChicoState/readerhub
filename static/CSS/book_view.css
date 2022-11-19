@@ -7,55 +7,64 @@ body{
   margin-right: auto;
 }
 
-  .paragraph{
-    font-size:17px;
-    text-indent: 40px;
-    margin-left:10%; margin-right:10%
-  }
+.paragraph{
+  font-size:17px;
+  text-indent: 40px;
+  margin-left:10%; margin-right:10%
+}
 
-  .container{
-    position:fixed;
-    left:140px;
-    top: 300px;
-  }
+/*description*/
+.container{
+  margin:auto;
+  position:relative;
+  right:170px;
+  bottom:50px;
+}
 
-  .container2{
-    position:fixed;
-    left:70px;
-    top: 550px;
-  }
+/*subjects*/
+.container2{
+  margin:auto;
+  position:relative;
+  left:45px;
+  top: 50px;
+}
 
-  .title {
-    position:fixed;
-    left:275px;
-    top: 245px;
-    font-size: 30px;
-  }
+.title {
+  margin:auto;
+  position:relative;
+  left:120px;
+  top: 50px;
+  font-size: 30px;
+}
+
 .cover{
+  margin:auto;
   border:solid;
   border-color: dimgray;
   float:left;
-  position:fixed;
-  left:70px;
-  top: 245px;
+  position:relative;
+  left:100px;
+  top: 50px;
   width: 10%
-  }
+}
 
 .author_photo {
+  margin:auto;
   border:solid;
   border-color: dimgray;
   float:left;
   border-radius: 50%;
-  position:fixed;
-  left:110px;
-  top: 600px;
+  position:relative;
+  left:140px;
+  top: 80px;
   width: 5%;
 }
 
 .name {
-  position:fixed;
-  left: 60px;
-  top: 700px;
+  margin:auto;
+  position:relative;
+  left: 0px;
+  top: 180px;
   font-size: 19px;
 }
 
@@ -70,4 +79,19 @@ body{
 }
 .indent-text {
   text-indent: 40px
+}
+
+.aggregate_display {
+  text-align: center;
+  font-size: 30px;
+}
+
+.score_icon{
+  width: 3.5%;
+}
+
+.collapse { /*div for reviews*/
+  border: solid;
+  border-width: 1px;
+  border-color: gray;
 }

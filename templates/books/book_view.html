@@ -17,6 +17,31 @@
       <input type="submit" class="btn btn-info" name="search_books" value="Search">
     </div>
   </form>
+  <div class = "aggregate_display">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <b>General Score</b>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Follows Score</b><br>
+    {{general_aggregate}}/5
+    {% if general_icon == "low" %}
+      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    {% elif general_icon == "mid" %}
+      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    {% elif general_icon == "high" %}
+      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    {% endif %}
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    {{follows_aggregate}}/5
+
+    {% if follows_icon == "low" %}
+      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    {% elif follows_icon == "mid" %}
+      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    {% elif follows_icon == "high" %}
+      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    {% endif %}
+  </div>
 <br>
   {% if book_cover == 'no_book'%}
     <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" class = "cover" alt="Book Cover">
@@ -45,7 +70,6 @@
   <div class = "name">
     Author: <u>{{author_name}}</u>
   </div>
-  <br><br><br><br><br><br><br><br><br><br>
   {% if my_review_exists == 0 %}
   <form method="POST" action="/books/book_review/">
     <div class = "btn_center">
@@ -55,12 +79,39 @@
   </form>
   {% else %}
   <div class="jumbotron my_review">
-    <div class = "text-center">
-      <b>Your Review</b> <br>
-      <i>Rating: {{star_review}}/5 </i><br><br>
+  <p>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1">
+      Your Review
+    </button>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
+      Recent General Reviews
+    </button>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample3">
+      Recent Critic Reviews
+    </button>
+  </p>
+    <div class="collapse" id="collapseExample1">
+      <div class = "text-center">
+        <b>Your Review</b> <br>
+        <i>Rating: {{my_star_review}}/5 </i><br><br>
+      </div>
+      <div class = "indent-text">
+        {{my_text_review}}
+      </div>
     </div>
-    <div class = "indent-text">
-      {{text_review}}
+    <div class="collapse" id="collapseExample2">
+      <div class = "text-center">
+        <b>Recent Review</b> <br>
+        <i>Rating: {{general_star_review}}/5 </i><br><br>
+      </div>
+      <div class = "indent-text">
+        {{general_text_review}}
+      </div>
+    </div>
+    <div class="collapse" id="collapseExample3">
+      <div class = "text-center">
+      Critic review placeholder
+    </div>
     </div>
   </div>
   {% endif %}
