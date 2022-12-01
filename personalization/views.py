@@ -24,10 +24,24 @@ def personalization(request, name):
 	user = User.objects.get(username=name)
 	req_username = user.username
 	try: #display profile created with form
+		if request.method == 'POST':
+			user = request.user
+			follow = User.objects.get(username = name)
+			Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
+			return redirect('/personalization/%s' % user.username )
 		profile = PersonalInfo.objects.get(user=user) #the user personal info
 		posts = Post.objects.filter(user=user) #posts the user has made
 		following = user.following.all()
 		followers = user.followers.all()
+		already_follows = False
+		try:
+			Follows.objects.get(user_id=request.user.id, following_user_id=user.id)
+			already_follows = True
+		except:
+			already_follows = False
+		if posts:
+			for post in posts:
+				post.book_object.favorite_id = post.book_object.favorite_id.replace("/", "%")
 		if not FavoriteBooks.objects.filter(favorite_user=user):
 			context = {
 				"profile": profile,
@@ -35,6 +49,7 @@ def personalization(request, name):
 				"following": following,
 				"followers": followers,
 				"req_user": req_username,
+				"al_fol": already_follows,
 			}
 			return render(request, 'personalization/personalization.html', context)
 		else:
@@ -58,6 +73,7 @@ def personalization(request, name):
 				"following": following,
 				"followers": followers,
 				"req_user": req_username,
+				"al_fol": already_follows,
 			}
 			return render(request, 'personalization/personalization.html', context)
 	except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist

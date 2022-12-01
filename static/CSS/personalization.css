@@ -9,22 +9,20 @@
   padding-top: 4%;
   padding-bottom: 4%;
   text-align: justify;
-  width: 10rem;
   align-self: center;
 }
 
 .prof-h3 {
   text-align: center;
   margin: 1rem 0rem 1rem;
+  font-size: 20px;
 }
 
 .prof-text {
   padding-top: 4%;
   padding-bottom: 4%;
-}
-
-.prof-text div {
-  background-color: antiquewhite;
+  font-size: 20px;
+  align-self: center;
 }
 
 .profile-card img {
@@ -33,8 +31,8 @@
 }
 
 .prof-img {
-  width: 10rem;
-  height: 10rem;
+  width: 7rem;
+  height: 7rem;
   object-fit: cover;
 }
 
@@ -44,8 +42,25 @@
 }
 
 .posts-card {
-  margin-top: 5px;
-  margin-bottom: 5px;
+  width: 100%;
+}
+
+.posts-card p {
+  width: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-size: 14px;
+  text-align: left;
+}
+
+.posts-card a {
+  width: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .posts-img {
@@ -54,15 +69,45 @@
   width: 50%;
 }
 
-.posts-text {
-  font-size: 1em;
-}
-
 .fav-book-cards {
-  margin-left: 5px;
-  margin-right: 5px;
+  width: 10rem;
+  height: 10rem;
 }
 
+.fav-book-cards img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.edit {
+  font-size: 16px;
+  color: rgba(128, 128, 128, 0.75);
+  letter-spacing: 1px;
+  line-height: 15px;
+  border: 2px solid rgba(128, 128, 128, 0.75);
+  border-radius: 40px;
+  background: transparent;
+}
+
+.edit:hover {
+  color: #FFF;
+  background: rgba(128, 128, 128, 0.75);
+  border: 2px solid rgba(128, 128, 128, 0.75);
+}
+
+
+/*.card-block {
+  width: 90%;
+  height: 100%;
+}
+
+.card-block p {
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.5rem;
+}*/
 
 
 .rounded {
@@ -81,7 +126,7 @@ h3 {
 }
 
 body {
-  background-color: rgb(55, 71, 53);
+  background-color: rgb(250, 249, 246);
 }
 
 .another-btn {
@@ -97,11 +142,6 @@ body {
   font-size: 35px;
   opacity: .98;
   padding: 2% 0;
-}
-
-p {
-  font-family: Roboto;
-  font-size: 25px;
 }
 
 .book-card-img-top {
