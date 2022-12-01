@@ -7,7 +7,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book_object = models.ForeignKey(FavoriteBooks, on_delete=models.CASCADE)#added null = true to not have to redo migrations
+    book_object = models.ForeignKey(FavoriteBooks, on_delete=models.CASCADE) #one to one relationship
     # created_on = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 

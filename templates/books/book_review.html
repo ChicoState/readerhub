@@ -10,21 +10,42 @@
 </head>
 <body>
 
-<form method="POST" action = "" enctype="multipart/form-data" align = "center">
-  <table class = "text-white">
+<form method="POST" action = "/books/book_view/{{book_id}}/" enctype="multipart/form-data" align = "center">
+  <div class = "book_preview">
+    <div class = "cover">
+      {% if book_cover == 'no_book'%}
+        <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" class = "cover" alt="Book Cover">
+      {%else%}
+        <img class="cover" src="{{book_cover}}" alt="Book Cover">
+      {%endif%}
+    </div>
+      <div class = "title">
+        <b>{{book_title}}</b>
+      </div>
+  </div>
+  <br><br><br><br>
+
+  <p class = "write_review">
+    <i><b>Write your review!</b></i>
+  </p>
     {% csrf_token %}
     {{form_data.text_review}}
+  <br><br>
+  <p class = "rate_review">
+    <i>Rate your book out of 5</i>
+  </p>
 
-    {% for radio in form_data.star_review %}
+  <div class = "pick_rating">
+      {% for radio in form_data.star_review %}
 
-    <div class="rating_radio">
-      <img src="{%static 'permanent_images/star.png' %}" width="20" height="20" />
-        {{ radio }}
-    </div>
-    {% endfor %}
-
-    <input type="submit" class="btn btn-info" name="submit_review" value="Submit Review">
-  </table>
+      <div class="rating_radio">
+        <img src="{%static 'permanent_images/star.png' %}" width="20" height="20" />
+          {{ radio }}
+      </div>
+      {% endfor %}
+  </div>
+  <br><br><br>
+  <input type="submit" class="btn btn-info" name="submit_review" value = "Submit Review">
 </form>
 </body>
 </html>

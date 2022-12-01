@@ -58,3 +58,16 @@ body{
   top: 700px;
   font-size: 19px;
 }
+
+.btn_center {
+  text-align: center;
+}
+.my_review {
+  margin:auto;
+  width: 50%;
+  border:solid;
+  border-width: 1px;
+}
+.indent-text {
+  text-indent: 40px
+}

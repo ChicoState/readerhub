@@ -23,5 +23,6 @@ class FavoriteBooks(models.Model): #many to one relationship with User
 	favorite_title = models.CharField(max_length = 100)
 	favorite_cover = models.CharField(max_length = 100)
 
+	#need to return title when refrencing object to properly display on PostForm
 	def __str__(self):
 		return self.favorite_title
