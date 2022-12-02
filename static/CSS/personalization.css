@@ -71,7 +71,9 @@
 
 .fav-book-cards {
   width: 15rem;
-  height: 15rem;
+  max-width: 20%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .edit {
