@@ -18,11 +18,19 @@
     </div>
   </form>
   <div class = "aggregate_display">
-    &nbsp;&nbsp;&nbsp;&nbsp;
     <b>General Score</b>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <b>Follows Score</b><br>
-    {{general_aggregate}}/5
+    <b>Follows Score</b>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Critic Score</b>
+    <br>
+
+    &nbsp;&nbsp;
+    {% if general_available == 0%}
+      NA/5
+    {%else %}
+      {{general_aggregate}}/5
+    {%endif%}
     {% if general_icon == "low" %}
       <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
     {% elif general_icon == "mid" %}
@@ -32,13 +40,30 @@
     {% endif %}
 
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    {{follows_aggregate}}/5
-
+    {% if follows_available == 0%}
+      NA/5
+    {%else %}
+      {{follows_aggregate}}/5
+    {%endif%}
     {% if follows_icon == "low" %}
       <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
     {% elif follows_icon == "mid" %}
       <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
     {% elif follows_icon == "high" %}
+      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    {% endif %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+    {% if critic_available == 0%}
+      NA/5
+    {%else %}
+      {{critic_aggregate}}/5
+    {%endif%}
+    {% if critic_icon == "low" %}
+      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    {% elif critic_icon == "mid" %}
+      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    {% elif critic_icon == "high" %}
       <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
     {% endif %}
   </div>
@@ -52,24 +77,27 @@
      <b>{{book_title}}</b>
   </div>
   <br><br><br><br><br>
+
   <div class = "container">
     <p class = "paragraph">  {{book_description}} </p>
   </div>
+
   <div class = "container2">
       tags:
       {%for subject in book_subjects%}
       <b>  <i>{{subject}}, </i> </b>
       {%endfor%}
   </div>
+
   {% if author_image == "no_photo"%}
     <img class="author_photo" src="https://www.freeiconspng.com/uploads/no-image-icon-0.png" alt="Author Image">
   {%else%}
     <img class="author_photo" src="{{author_image}}" alt="Author Image">
   {%endif%}
-
   <div class = "name">
     Author: <u>{{author_name}}</u>
   </div>
+
   {% if my_review_exists == 0 %}
   <form method="POST" action="/books/book_review/">
     <div class = "btn_center">
@@ -78,42 +106,58 @@
     </div>
   </form>
   {% else %}
-  <div class="jumbotron my_review">
-  <p>
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1">
-      Your Review
-    </button>
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
-      Recent General Reviews
-    </button>
-    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample3" aria-expanded="false" aria-controls="collapseExample3">
-      Recent Critic Reviews
-    </button>
-  </p>
-    <div class="collapse" id="collapseExample1">
-      <div class = "text-center">
-        <b>Your Review</b> <br>
-        <i>Rating: {{my_star_review}}/5 </i><br><br>
-      </div>
-      <div class = "indent-text">
-        {{my_text_review}}
-      </div>
+  <div class = "review">
+    <div class = "text-center">
+      <i>Rating: {{my_review.star_review}}/5 </i><br><br>
     </div>
-    <div class="collapse" id="collapseExample2">
-      <div class = "text-center">
-        <b>Recent Review</b> <br>
-        <i>Rating: {{general_star_review}}/5 </i><br><br>
-      </div>
-      <div class = "indent-text">
-        {{general_text_review}}
-      </div>
-    </div>
-    <div class="collapse" id="collapseExample3">
-      <div class = "text-center">
-      Critic review placeholder
-    </div>
+    <div class = "indent-text">
+      {{my_review.text_review}}
     </div>
   </div>
   {% endif %}
+  <br><br><br><br><br>
+
+<div class = "grid_container">
+  <div class = "row reviews">
+    <div class = "col-5">
+      {%if general_reviews_exists == 1 %}
+      <div class = "review_type">
+        <b>General Reviews</b>
+      </div>
+      <div class = "scrollbar scrollbar-primary">
+      {% for review in general_reviews %}
+        <div class = "review">
+          <div class = "text-center">
+            <i>Rating: {{review.star_review}}/5 </i><br><br>
+          </div>
+          <div class = "indent-text">
+            {{review.text_review}}
+          </div>
+        </div>
+      {%endfor%}
+      </div>
+    {%endif%}
+  </div>
+  <div class = "col-5">
+    {%if follow_reviews_exist == 1 %}
+    <div class = "review_type">
+      <b>Follows Review</b>
+    </div>
+    <div class = "scrollbar scrollbar-primary">
+      {% for review in follow_reviews %}
+        <div class = "review">
+          <div class = "text-center">
+            <i>Rating: {{review.0}}/5 </i><br><br>
+          </div>
+          <div class = "indent-text">
+            {{review.1}}
+          </div>
+        </div>
+      {%endfor%}
+    </div>
+    {%endif%}
+  </div>
+</div>
+</div>
 </body>
 </html>

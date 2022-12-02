@@ -8,6 +8,10 @@ class PersonalInfo(models.Model):#one per user
 	about_user = models.CharField(max_length=65536, null = True)
 	personal_image = models.ImageField(null = True, blank = True)
 
+class Critic(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	is_critic = models.BooleanField()
+
 
 class Follows(models.Model):
     user = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)

@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from personalization.models import PersonalInfo
 from personalization.models import FavoriteBooks
 from personalization.models import Follows
+from personalization.models import Critic
 from books.forms import BooksForm
 from books.forms import BookReviewForm
 from books.models import BookReview
@@ -114,11 +115,40 @@ def book_view(request, info):
     else:
         my_review_exists = 0
 
-    #@@tempcode to get most recent general review@@@ add a general_review_exists bool
-    if BookReview.objects.last():
-        temp_review = BookReview.objects.last()
-        general_text_review = temp_review.text_review
-        general_star_review = temp_review.star_review
+    #general reviews for display
+    general_reviews = []
+    if BookReview.objects.filter(book_id = book_id).exists():
+        general_reviews = BookReview.objects.filter(book_id = book_id)
+        general_reviews_exists = 1
+    else:
+        general_reviews_exists = 0
+
+
+
+
+    #people followed reviews for display
+    follow_reviews = []
+    follow_star_review = []
+    follow_text_review = []
+
+    current_follows = Follows.objects.filter(user = request.user)
+    #filter reviews for people followed
+    for follows in current_follows:
+        print(follows.following_user)
+        if (BookReview.objects.filter(user = follows.following_user).exists() & BookReview.objects.filter(book_id = book_id).exists()):
+            follow_reviews.append(list(BookReview.objects.filter(user = follows.following_user)))
+    #check if list is empty
+    if follow_reviews:
+        follow_reviews_exist = 1
+    else:
+        follow_reviews_exist = 0
+
+    #the queryset became a list of lists so need a double for loop
+    for templist in follow_reviews:
+        for review in templist:
+            follow_star_review.append(review.star_review)
+            follow_text_review.append(review.text_review)
+    follow_reviews = zip(follow_star_review, follow_text_review)
 
 
     #intialize variables for review aggregates
@@ -126,6 +156,8 @@ def book_view(request, info):
     general_counter = 0
     follows_aggregate = 0
     follows_counter = 0
+    critic_aggregate = 0
+    critic_counter = 0
 
     #review aggregate for all people that user follows
     user_follows = Follows.objects.filter(user = request.user)
@@ -143,12 +175,42 @@ def book_view(request, info):
 
     follows_aggregate = float(follows_aggregate)
     #find which icon to display based on score
+    follows_available = 1
+    if follows_aggregate == 0.0:
+        follows_available = 0
+
     if follows_aggregate  < 3.0:
         follows_icon = "low"
     elif follows_aggregate < 3.9:
         follows_icon = "mid"
     else:
         follows_icon = "high"
+
+    #review aggregate for all critics
+    for object in Critic.objects.all():
+        critic_review = BookReview.objects.filter(user = object.user)
+        if critic_review.first():
+            critic_aggregate = critic_aggregate + critic_review.first().star_review
+        critic_counter = critic_counter + 1
+
+    #get average critic score
+    if critic_counter != 0:
+        critic_aggregate = critic_aggregate/critic_counter
+        critic_aggregate = str(round(critic_aggregate, 1))
+
+    critic_aggregate = float(critic_aggregate)
+    #find which icon to display based on score
+    critic_available = 1
+    if critic_aggregate == 0.0:
+        critic_available = 0
+
+    if critic_aggregate  < 3.0:
+        critic_icon = "low"
+    elif critic_aggregate < 3.9:
+        critic_icon = "mid"
+    else:
+        critic_icon = "high"
+
 
     #review aggregate for all users
     temp_general_reviews = BookReview.objects.filter(book_id = book_id)
@@ -161,6 +223,11 @@ def book_view(request, info):
         general_aggregate = str(round(general_aggregate, 1)) #rodun to two decimal places
 
     general_aggregate = float(general_aggregate)
+
+    general_available = 1
+    if general_aggregate == 0.0:
+        general_available = 0
+
     if general_aggregate  < 3.0:
         general_icon = "low"
     elif general_aggregate < 3.9:
@@ -205,6 +272,7 @@ def book_view(request, info):
     else:
         author_image = "https://covers.openlibrary.org/a/id/" + str(author_json["photos"][0]) + "-L.jpg"
 
+
     context = {
         "form_data": BooksForm(),
         "book_cover": book_cover,
@@ -216,13 +284,21 @@ def book_view(request, info):
         "author_image": author_image,
         "my_text_review": my_text_review,
         "my_star_review": my_star_review,
-        "general_text_review": general_text_review,
-        "general_star_review": general_star_review,
+        "general_reviews": general_reviews,
+        "follow_reviews": follow_reviews,
         "my_review_exists": my_review_exists,
+        "follow_reviews_exist": follow_reviews_exist,
+        "general_reviews_exists": general_reviews_exists,
+        "my_review": my_review,
         "follows_aggregate": follows_aggregate,
         "general_aggregate": general_aggregate,
+        "critic_aggregate": critic_aggregate,
+        "critic_icon": critic_icon,
         "follows_icon": follows_icon,
         "general_icon": general_icon,
+        "general_available": general_available,
+        "follows_available": follows_available,
+        "critic_available": critic_available,
     }
     return render(request, 'books/book_view.html', context)
 

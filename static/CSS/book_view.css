@@ -71,14 +71,21 @@ body{
 .btn_center {
   text-align: center;
 }
-.my_review {
+.review { /*previously my_review*/
   margin:auto;
   width: 50%;
   border:solid;
   border-width: 1px;
 }
+
+/*.my_review {
+  border: solid;
+  border-width: 5px;
+  display: inline-block;
+}*/
 .indent-text {
-  text-indent: 40px
+  text-indent: 40px;
+  margin-left:5%; margin-right:5%
 }
 
 .aggregate_display {
@@ -90,8 +97,30 @@ body{
   width: 3.5%;
 }
 
-.collapse { /*div for reviews*/
+
+
+.scrollbar {
+  overflow-y: scroll;
+  position: relative;
+  left: 200px;
+  height: 300px;
+}
+
+.review_type {
+  text-align: center;
+  position: relative;
+  font-size: 30px;
+  left: 170px;
+}
+
+
+
+
+/*div for reviews*/
+/*
+.collapse {
   border: solid;
   border-width: 1px;
   border-color: gray;
 }
+*/
