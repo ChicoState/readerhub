@@ -20,28 +20,43 @@ import json
 
 
 @login_required(login_url='/login/')
-def personalization(request):
+def personalization(request, name):
+	user = User.objects.get(username=name)
+	req_username = user.username
 	try: #display profile created with form
-		profile = PersonalInfo.objects.get(user=request.user) #the user personal info
-		posts = Post.objects.filter(user=request.user) #posts the user has made
-		following = request.user.following.all()
-		followers = request.user.followers.all()
-		if not FavoriteBooks.objects.filter(favorite_user=request.user):
+		if request.method == 'POST':
+			user = request.user
+			follow = User.objects.get(username = name)
+			Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
+			return redirect('/personalization/%s' % user.username )
+		profile = PersonalInfo.objects.get(user=user) #the user personal info
+		posts = Post.objects.filter(user=user) #posts the user has made
+		following = user.following.all()
+		followers = user.followers.all()
+		already_follows = False
+		try:
+			Follows.objects.get(user_id=request.user.id, following_user_id=user.id)
+			already_follows = True
+		except:
+			already_follows = False
+		if posts:
+			for post in posts:
+				post.book_object.favorite_id = post.book_object.favorite_id.replace("/", "%")
+		if not FavoriteBooks.objects.filter(favorite_user=user):
 			context = {
 				"profile": profile,
 				"posts": posts,
 				"following": following,
 				"followers": followers,
+				"req_user": req_username,
+				"al_fol": already_follows,
 			}
 			return render(request, 'personalization/personalization.html', context)
 		else:
-			favorite_books = FavoriteBooks.objects.filter(favorite_user	=request.user)
-			max_books = 0 #counting number of books being chosen to display
+			favorite_books = FavoriteBooks.objects.filter(favorite_user	= user)
 			favorite_covers = []
 			favorite_titles = []
 			for book in favorite_books:
-				if max_books == 4:
-					break
 				book_url = 'https://openlibrary.org{}.json'.format(book.favorite_id)
 				book_response = urlopen(book_url)
 				book_json = json.loads(book_response.read()) #store json object from url response
@@ -50,20 +65,20 @@ def personalization(request):
 				else:
 					favorite_covers.append("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 				favorite_titles.append(book_json["title"])
-				max_books = max_books+ 1
 
-			favorite_preview = zip(favorite_titles, favorite_covers)#combine for displaying in for loop in html
 			context = {
 				"profile": profile,
 				"posts": posts,
-				"favorite_preview": favorite_preview,
+				"favorite_books": favorite_books,
 				"following": following,
 				"followers": followers,
+				"req_user": req_username,
+				"al_fol": already_follows,
 			}
 			return render(request, 'personalization/personalization.html', context)
 	except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
-		PersonalInfo(user = request.user).save()
-		profile = PersonalInfo.objects.get(user=request.user)
+		PersonalInfo(user=user).save()
+		profile = PersonalInfo.objects.get(user=user)
 		context = {
 			"profile": profile,
 		}
@@ -98,7 +113,7 @@ def edit_profile(request, id):
 					if personalInfoTemp.personal_image: #an old image exists
 						os.remove(personalInfoTemp.personal_image.path) #removes old image file from images when image is changed
 				personalInfo.save()
-				return redirect("/personalization/")
+				return redirect('personalization', name=request.user.username)
 			else:
 				context = {
                     "form_data": form
@@ -106,7 +121,7 @@ def edit_profile(request, id):
 				return render(request, 'personalization/edit_profile.html', context)
 		else:
 			#Cancel
-			return redirect("/personalization/")
+			return redirect('personalization', name=request.user.username)
 
 def add_friend(request):
     if request.method == 'POST':
@@ -114,10 +129,12 @@ def add_friend(request):
         if form.is_valid():
             user = request.user
             follow = User.objects.get(username = form.cleaned_data['userName'])
-            Follows.objects.create(user_id=user.id, following_user_id=follow.id)
+            Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
             return redirect('/')
     context = { 'form': FollowForm() }
     return render(request, 'personalization/add_friend.html', context)
+
+
 
 def see_friends(request):
     user = request.user

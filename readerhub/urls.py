@@ -30,7 +30,7 @@ urlpatterns = [
     path('join/', app1_views.join),
     path('login/', app1_views.user_login),
     path('logout/', app1_views.user_logout),
-    path('personalization/', personalization_views.personalization),
+    path('personalization/<name>/', personalization_views.personalization, name='personalization'),
     path('personalization/edit_profile/<int:id>/', personalization_views.edit_profile),
     path('posts/', post_views.posts),
     path('posts/add_post/', post_views.add_post),
