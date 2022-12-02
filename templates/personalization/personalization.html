@@ -5,112 +5,138 @@
   <title>Profile</title>
   {% include "bootstrap.html" %}
   {% load static %}
-  <link rel="stylesheet" href="{%static 'CSS/personalization.css' %}"/>
+  <link rel="stylesheet" href="{%static 'CSS/personalization.css' %}" />
 </head>
+
 <body>
   {% include "nav.html" %}
+  {% if not profile.about_user%}
+  <!--If there is no user profile-->
   <div class="row">
     <div class="col-12">
-    {% if not profile.about_user%}
-    <div class = "container" align = "center">
-    <form method="GET" action="/personalization/edit_profile/{{ profile.id }}/">
-      <br><br><br><br><br><br><br><br><br><br>
-      <input type="submit" class="btn btn-success btn-lg first-btn" value="Create Profile">
-    </form>
-    </div>
+      <div class="container" align="center">
+        <form method="GET" action="/personalization/edit_profile/{{ profile.id }}/">
+          <br><br><br><br><br><br><br><br><br><br>
+          <input type="submit" class="btn btn-success btn-lg first-btn" value="Create Profile">
+        </form>
+      </div>
     </div>
   </div>
   {% else %}
-
-
-
-<div class = "container">
-  <br>
-  <div class="card-columns mx-auto d-flex justify-content-center col-12">
-    <div class="card text-center bg-dark text-white" style="width: 18rem;">
-      <h3 class="card-text">{{ profile.user }}</h3>
+  <!--If there is a user profile-->
+  <div class="container-fluid px-0 prof-container">
+    <div class="row text-center no-gutters">
+      <!--Display profile pic-->
+      <div class="col-md-3 profile-card">
         {% if profile.personal_image %}
-        <img class="card-img-top yes-img" src="{{profile.personal_image.url }}" alt="Card image cap">
+        <img class="prof-img rounded-circle" src="{{profile.personal_image.url }}" alt="Card image cap">
+        {% else %}
+        <img class="prof-img rounded-circle" src="{%static 'permanent_images/default_profile.png' %}"
+          alt="Card image cap">
+        {% endif %}
+        <h3 class="text-center prof-h3">{{ profile.user }}</h3>
+      </div>
+      <!--Display about user (need to fix line break issue, should show more than 1 line)-->
+      <div class="col prof-text">
+        <div class="d-flex p-2">
+          <p class="psteps" style="margin-bottom: 0;">{{ profile.about_user|linebreaksbr }}</p>
+        </div>
+      </div>
+      <!--Edit/follow button-->
+      <div class="col-sm-2 align-self-center">
+        {% if user.get_username == req_user %}
+          <td><a class="btn edit" href="/personalization/edit_profile/{{ profile.id }}/">Edit</a>
+        {% else %}
+          {% if al_fol %}
+            <td><a class="btn edit" href="/inbox/">Message</a>
           {% else %}
-        <img class="card-img-top no-img" src="{%static 'permanent_images/default_profile.png' %}" alt="Card image cap">
+            <form action="/personalization/{{ profile.user.username }}/" method="POST">
+              <button input type="submit" class="btn edit" value="{{ profile.user.username }}" name = "follow">Follow</button>
+              {% csrf_token %}
+            </form>
           {% endif %}
+        {% endif %}
+      </div>
     </div>
   </div>
-</div>
 
+  <div class="container-fluid px-0 prof-container">
+    <div class="row text-center no-gutters">
 
-
-<div class = "container">
-
-
-  <div class="jumbotron bg-dark text-white">
-    <p class="text-center title"><b>About me:</b></p>
-    <p class="psteps">{{ profile.about_user|linebreaksbr }}</p>
-  </div>
-  <div class="centering text-right">
-    <td><a class="btn btn-warning btn-lg " href="/personalization/edit_profile/{{ profile.id }}/">Edit</a><br><br>
-  </div>
-
-{% if favorite_preview%}
-  <div class="jumbotron bg-dark text-white">
-  <p class="text-center title"><b>Favorite books:</b></p>
-  <div class = "cards book-cards">
-    {%for book in favorite_preview%}
-      <div class="card bg-dark text-white book-card">
-        {% if book.1 == 'no_book'%}
-          <img class="card-img-top yes-img book-card-img-top" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" alt="Card image cap">
-        {%else%}
-          <img class="card-img-top yes-img book-card-img-top" src="{{book.1}}" alt="Card image cap">
-        {%endif%}
-      <div class = "card-body">
-        <p class = "card-text" >{{book.0}}</p>
+      <!--Dsiplay posts-->
+      <div class="col-4 posts-col">
+        <p class="text-center title"><b>Posts</b></p>
+        {% if posts %}
+        <!--"|slice":3" indicates only show 3-->
+        {% for row in posts|slice:":3" %}
+        <div class="card" style="margin-bottom: 5px;">
+          <div class="card-body posts-card">
+            <h5 class="card-title" style="text-align: left;">{{ row.title }}</h5>
+            <p class="card-text">{{ row.content }}</p>
+            <a href="/books/book_view/{{ row.book_object.favorite_id }}/" class="card-link">{{ row.book_object.favorite_title }}</a>
+          </div>
+        </div>
+        {% endfor %}
+        <!-- If using this card format, it goes inside the forloop -->
+        <!-- Keeping this here for now for covers -->
+        <!--<div class="card posts-card">
+          <div class="row no-gutters">
+            <div class="col-auto posts-img">
+              {% if row.book_object.favorite_cover == 'no_book' %}
+              <img class="" style="width: 50%" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png"
+                alt="Card image cap">
+              {%else%}
+              <img class="" style="width: 50%" src="{{ row.book_object.favorite_cover }}" alt="Card image cap">
+              {%endif%}
+            </div>
+            <div class="col" style="width: 50%;">
+              <div class="card-block">
+                <h4 class="card-title">{{ row.title }}</h4>
+                <p class="card-text text-truncate posts-text">{{ row.content }}</p>
+              </div>
+            </div>
+          </div>
+        </div>-->
+        {% endif %}
       </div>
+
+      <!--Dsiplay library (only favorites for now)-->
+      <div class="col">
+        <p class="text-center title"><b>{% if user.get_username == req_user %} Your {% else %} {{ profile.user }}'s {% endif %} favorites </b></p>
+        {% if favorite_books %}
+        {% for book in favorite_books %}
+        <figure class="figure fav-book-cards" style="float:left">
+          {% if book.favorite_cover == 'no_book' %}
+          <img class="card-img-top img-fluid" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png"
+            alt="Card image cap">
+          {%else%}
+          <img src="{{ book.favorite_cover }}" class="figure-img img-fluid rounded" alt="Card image cap">
+          {%endif%}
+          <figcaption class="figure-caption">{{ book.favorite_title }}</figcaption>
+        </figure>
+        {%endfor%}
+        {% endif %}
       </div>
-    {%endfor%}
-  </div>
-</div>
-{%endif%}
 
-{% if posts%}
+    </div>
+  </div>
+
+  <!--Display following and followers-->
+  <!--{% if following or followers %}
   <div class="jumbotron bg-dark text-white">
-  <p class="text-center title"><b>Posts:</b></p>
-  <table id="posts" class="table">
-      <thead class="thead-dark">
-          <tr>
-              <th>Title</th>
-              <th>Content</th>
-              <th>Last Modified</th>
-          </tr>
-      </thead>
-      {% for row in posts %}
-          <tr>
-              <td>{{ row.title }}</td>
-              <td>{{ row.content }}</td>
-              <td>{{ row.last_modified }}</td>
-          </tr>
-      {% endfor %}
-  </table>
-  </div>
-{% endif%}
-
-{% if following or followers %}
-    <div class="jumbotron bg-dark text-white">
     <p class="text-center title"><b>Following:</b></p>
     {% for usering in following %}
-        <li> {{ usering.following_user.username }}</li>
+    <li> <a href="/personalization/{{ usering.following_user.username }}/">{{ usering.following_user.username }}</a>
+    </li>
     {% endfor %}
     <p class="text-center title"><b>Followers:</b></p>
     {% for userer in followers %}
-        <li> {{ userer.user.username }}</li>
+    <li> {{ userer.user.username }}</li>
     {% endfor %}
-    </div>
-{% endif %}
+  </div>
+  {% endif %}-->
 
-
-</div>
-
-
-      {% endif %}
+  {% endif %}
 
 </body>
 
