@@ -124,8 +124,6 @@ def book_view(request, info):
         general_reviews_exists = 0
 
 
-
-
     #people followed reviews for display
     follow_reviews = []
     follow_star_review = []
@@ -134,7 +132,6 @@ def book_view(request, info):
     current_follows = Follows.objects.filter(user = request.user)
     #filter reviews for people followed
     for follows in current_follows:
-        print(follows.following_user)
         if (BookReview.objects.filter(user = follows.following_user).exists() & BookReview.objects.filter(book_id = book_id).exists()):
             follow_reviews.append(list(BookReview.objects.filter(user = follows.following_user)))
     #check if list is empty
