@@ -185,7 +185,7 @@ def book_view(request, info):
 
     #review aggregate for all critics
     for object in Critic.objects.all():
-        critic_review = BookReview.objects.filter(user = object.user)
+        critic_review = BookReview.objects.filter(user = object.user) & BookReview.objects.filter(book_id = book_id)
         if critic_review.first():
             critic_aggregate = critic_aggregate + critic_review.first().star_review
         critic_counter = critic_counter + 1
@@ -217,7 +217,7 @@ def book_view(request, info):
 
     if general_counter != 0: #protect from divide by zero error
         general_aggregate = general_aggregate/general_counter
-        general_aggregate = str(round(general_aggregate, 1)) #rodun to two decimal places
+        general_aggregate = str(round(general_aggregate, 1)) #round to two decimal places
 
     general_aggregate = float(general_aggregate)
 
@@ -249,20 +249,28 @@ def book_view(request, info):
     else:
         book_description = book_json["description"]
 
+    #get subjects of book for display
     book_subjects = []
-    i = 0
-    for subject in book_json["subjects"]: #getting the first 4 subjects listed on page
-        if i == 4:
-            break
-        book_subjects.append(subject)
-        i = i+1
+    if 'subjects' in book_json:
+        i = 0
+        for subject in book_json["subjects"]: #getting the first 4 subjects listed on page
+            if i == 4:
+                break
+            book_subjects.append(subject)
+            i = i+1
+    else:
+        book_subjects = "no_subjects"
 
     #getting author json object to get author information
     author_id = book_json["authors"][0]["author"]['key']
     author_url = 'https://openlibrary.org{}.json'.format(author_id)
     author_response = urlopen(author_url)
     author_json = json.loads(author_response.read()) #store json object from url response
-    author_name = author_json["personal_name"]
+
+    #check if json object has author name
+    author_name = "no_author"
+    if 'personal_name' in author_json:
+        author_name = author_json["personal_name"]
 
     if 'photos' not in author_json:
         author_image = "no_photo"

@@ -27,7 +27,7 @@
 
     &nbsp;&nbsp;
     {% if general_available == 0%}
-      NA/5
+      <i>NA</i>/5
     {%else %}
       {{general_aggregate}}/5
     {%endif%}
@@ -41,7 +41,7 @@
 
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     {% if follows_available == 0%}
-      NA/5
+      <i>NA</i>/5
     {%else %}
       {{follows_aggregate}}/5
     {%endif%}
@@ -55,7 +55,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
     {% if critic_available == 0%}
-      NA/5
+      <i>NA</i>/5
     {%else %}
       {{critic_aggregate}}/5
     {%endif%}
@@ -84,9 +84,13 @@
 
   <div class = "container2">
       tags:
-      {%for subject in book_subjects%}
-      <b>  <i>{{subject}}, </i> </b>
-      {%endfor%}
+      {% if book_subjects == "no_subjects" %}
+        <i>N/A</i>
+      {% else %}
+        {%for subject in book_subjects%}
+          <b>  <i>{{subject}}, </i> </b>
+        {%endfor%}
+      {% endif %}
   </div>
 
   {% if author_image == "no_photo"%}
@@ -95,7 +99,12 @@
     <img class="author_photo" src="{{author_image}}" alt="Author Image">
   {%endif%}
   <div class = "name">
-    Author: <u>{{author_name}}</u>
+    Author:
+    {% if author_name == "no_author" %}
+      <i>N/A</i>
+    {% else %}
+      <u>{{author_name}}</u>
+    {% endif %}
   </div>
 
   {% if my_review_exists == 0 %}
