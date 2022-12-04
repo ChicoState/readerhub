@@ -20,3 +20,9 @@ jobs:
     - name: Run tests
       run: |
         python manage.py test
+    - name: Coverage
+      uses: actions/python-django-coverage-gitHub-action@0.9
+      with: 
+        django-app: 'readerhub'
+        minimum-coverage: '0'
+
