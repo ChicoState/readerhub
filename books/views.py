@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from personalization.models import PersonalInfo
 from personalization.models import FavoriteBooks
+from personalization.models import Follows
+from personalization.models import Critic
 from books.forms import BooksForm
 from books.forms import BookReviewForm
 from books.models import BookReview
@@ -69,7 +71,6 @@ def books(request):
             else:
                 book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 
-
             FavoriteBooks(favorite_user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
@@ -82,69 +83,244 @@ def books(request):
         return render(request, 'books/books.html', context)
 
 def book_view(request, info):
-    if (request.method == "GET"):
-        #info is book id passed through url
-        info = info.replace("%", "/") #replace @ signs that were necessary to be passed in url back to backslashes
-        book_id = info
-        book_url = 'https://openlibrary.org{}.json'.format(info)
-        book_response = urlopen(book_url)
-        book_json = json.loads(book_response.read()) #store json object from url response
+    #replace % signs that were necessary to be  pass book id in url back to backslashes
+    info = info.replace("%", "/")
+    book_id = info
 
-
-        if 'covers' not in book_json:
-            book_cover = "no_book" #doesn't exist
-        else:
-            book_cover = "http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg"
-
-        book_title = book_json["title"]
-        if 'description' not in book_json:
-            book_description = "There is no description available."
-        else:
-            book_description = book_json["description"]
-
-        book_subjects = []
-        i = 0
-        for subject in book_json["subjects"]: #getting the first 4 subjects listed on page
-            if i == 4:
-                break
-            book_subjects.append(subject)
-            i = i+1
-
-        #getting author json object to get author information
-        author_id = book_json["authors"][0]["author"]['key']
-        author_url = 'https://openlibrary.org{}.json'.format(author_id)
-        author_response = urlopen(author_url)
-        author_json = json.loads(author_response.read()) #store json object from url response
-        author_name = author_json["personal_name"]
-
-        if 'photos' not in author_json:
-            author_image = "no_photo"
-        else:
-            author_image = "https://covers.openlibrary.org/a/id/" + str(author_json["photos"][0]) + "-L.jpg"
-
-
-        context = {
-            "form_data": BooksForm(),
-            "book_cover": book_cover,
-            "book_title": book_title,
-            "book_description": book_description,
-            "book_subjects": book_subjects,
-            "book_id": book_id,
-            "author_name": author_name,
-            "author_image": author_image,
-        }
-        return render(request, 'books/book_view.html', context)
-def book_review(request):
-    if("review" in request.POST):  #review button was clicked
-        context = {
-            "form_data": BookReviewForm(), #display form
-        }
-        return render(request, 'books/book_review.html', context)
-    elif("submit_review" in request.POST):
+    #save form data if a book was just reviewed
+    #make sure book doesn't already have review from user, important because the form always saves the first form data even if you come from any page
+    if not BookReview.objects.filter(user = request.user).exists():
         form = BookReviewForm(request.POST)
         if (form.is_valid()):
-            print(form.cleaned_data['star_review'])
-        #    new_review = form.save(commit=False)
-        #    new_review.user = request.user
-        #    new_review.book_id.save()
-        return render(request, 'books/book_review.html')
+            new_review = form.save(commit=False)
+            new_review.user = request.user
+            new_review.book_id = book_id
+            new_review.star_review = form.cleaned_data['star_review']
+            new_review.save()
+
+    #check for review of current book, need to see if review has book id and current user
+    #defalts to be able to pass into html
+    my_text_review = ""
+    my_star_review = 0
+    my_review = 0
+    if(BookReview.objects.filter(book_id = book_id).exists() & BookReview.objects.filter(user = request.user).exists()):
+        temp_review = BookReview.objects.filter(book_id = book_id) & BookReview.objects.filter(user = request.user)
+        #need to use loop to get the one review because filter returns queryset
+        for i in temp_review:
+            my_review = i
+        #store for display in html
+        my_text_review = my_review.text_review
+        my_star_review = my_review.star_review
+        my_review_exists = 1
+    else:
+        my_review_exists = 0
+
+    #general reviews for display
+    general_reviews = []
+    if BookReview.objects.filter(book_id = book_id).exists():
+        general_reviews = BookReview.objects.filter(book_id = book_id)
+        general_reviews_exists = 1
+    else:
+        general_reviews_exists = 0
+
+
+    #people followed reviews for display
+    follow_reviews = []
+    follow_star_review = []
+    follow_text_review = []
+
+    current_follows = Follows.objects.filter(user = request.user)
+    #filter reviews for people followed
+    for follows in current_follows:
+        if (BookReview.objects.filter(user = follows.following_user).exists() & BookReview.objects.filter(book_id = book_id).exists()):
+            follow_reviews.append(list(BookReview.objects.filter(user = follows.following_user)))
+    #check if list is empty
+    if follow_reviews:
+        follow_reviews_exist = 1
+    else:
+        follow_reviews_exist = 0
+
+    #the queryset became a list of lists so need a double for loop
+    for templist in follow_reviews:
+        for review in templist:
+            follow_star_review.append(review.star_review)
+            follow_text_review.append(review.text_review)
+    follow_reviews = zip(follow_star_review, follow_text_review)
+
+
+    #intialize variables for review aggregates
+    general_aggregate = 0
+    general_counter = 0
+    follows_aggregate = 0
+    follows_counter = 0
+    critic_aggregate = 0
+    critic_counter = 0
+
+    #review aggregate for all people that user follows
+    user_follows = Follows.objects.filter(user = request.user)
+    for cur_user in user_follows:
+        temp_follows_reviews = BookReview.objects.filter(book_id = book_id) & BookReview.objects.filter(user = cur_user.following_user)
+        #check if the user you are following has a review
+        if temp_follows_reviews.first():
+            follows_aggregate = follows_aggregate + temp_follows_reviews.first().star_review #can use first to grab from quertyset because users can only leave one review
+        follows_counter = follows_counter + 1
+
+    #get average score
+    if follows_counter != 0: #protect from divide by zero error
+        follows_aggregate = follows_aggregate/follows_counter
+        follows_aggregate = str(round(follows_aggregate, 1)) #round to two decimal places
+
+    follows_aggregate = float(follows_aggregate)
+    #find which icon to display based on score
+    follows_available = 1
+    if follows_aggregate == 0.0:
+        follows_available = 0
+
+    if follows_aggregate  < 3.0:
+        follows_icon = "low"
+    elif follows_aggregate < 3.9:
+        follows_icon = "mid"
+    else:
+        follows_icon = "high"
+
+    #review aggregate for all critics
+    for object in Critic.objects.all():
+        critic_review = BookReview.objects.filter(user = object.user)
+        if critic_review.first():
+            critic_aggregate = critic_aggregate + critic_review.first().star_review
+        critic_counter = critic_counter + 1
+
+    #get average critic score
+    if critic_counter != 0:
+        critic_aggregate = critic_aggregate/critic_counter
+        critic_aggregate = str(round(critic_aggregate, 1))
+
+    critic_aggregate = float(critic_aggregate)
+    #find which icon to display based on score
+    critic_available = 1
+    if critic_aggregate == 0.0:
+        critic_available = 0
+
+    if critic_aggregate  < 3.0:
+        critic_icon = "low"
+    elif critic_aggregate < 3.9:
+        critic_icon = "mid"
+    else:
+        critic_icon = "high"
+
+
+    #review aggregate for all users
+    temp_general_reviews = BookReview.objects.filter(book_id = book_id)
+    for review in temp_general_reviews:
+        general_aggregate = general_aggregate + review.star_review
+        general_counter = general_counter + 1
+
+    if general_counter != 0: #protect from divide by zero error
+        general_aggregate = general_aggregate/general_counter
+        general_aggregate = str(round(general_aggregate, 1)) #rodun to two decimal places
+
+    general_aggregate = float(general_aggregate)
+
+    general_available = 1
+    if general_aggregate == 0.0:
+        general_available = 0
+
+    if general_aggregate  < 3.0:
+        general_icon = "low"
+    elif general_aggregate < 3.9:
+        general_icon = "mid"
+    else:
+        general_icon = "high"
+
+    #query for book information
+    book_url = 'https://openlibrary.org{}.json'.format(info)
+    book_response = urlopen(book_url)
+    book_json = json.loads(book_response.read()) #store json object from url response
+
+    #check if default cover is needed
+    if 'covers' not in book_json:
+        book_cover = "no_book"
+    else:
+        book_cover = "http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg"
+
+    book_title = book_json["title"]
+    if 'description' not in book_json:
+        book_description = "There is no description available."
+    else:
+        book_description = book_json["description"]
+
+    book_subjects = []
+    i = 0
+    for subject in book_json["subjects"]: #getting the first 4 subjects listed on page
+        if i == 4:
+            break
+        book_subjects.append(subject)
+        i = i+1
+
+    #getting author json object to get author information
+    author_id = book_json["authors"][0]["author"]['key']
+    author_url = 'https://openlibrary.org{}.json'.format(author_id)
+    author_response = urlopen(author_url)
+    author_json = json.loads(author_response.read()) #store json object from url response
+    author_name = author_json["personal_name"]
+
+    if 'photos' not in author_json:
+        author_image = "no_photo"
+    else:
+        author_image = "https://covers.openlibrary.org/a/id/" + str(author_json["photos"][0]) + "-L.jpg"
+
+
+    context = {
+        "form_data": BooksForm(),
+        "book_cover": book_cover,
+        "book_title": book_title,
+        "book_description": book_description,
+        "book_subjects": book_subjects,
+        "book_id": book_id,
+        "author_name": author_name,
+        "author_image": author_image,
+        "my_text_review": my_text_review,
+        "my_star_review": my_star_review,
+        "general_reviews": general_reviews,
+        "follow_reviews": follow_reviews,
+        "my_review_exists": my_review_exists,
+        "follow_reviews_exist": follow_reviews_exist,
+        "general_reviews_exists": general_reviews_exists,
+        "my_review": my_review,
+        "follows_aggregate": follows_aggregate,
+        "general_aggregate": general_aggregate,
+        "critic_aggregate": critic_aggregate,
+        "critic_icon": critic_icon,
+        "follows_icon": follows_icon,
+        "general_icon": general_icon,
+        "general_available": general_available,
+        "follows_available": follows_available,
+        "critic_available": critic_available,
+    }
+    return render(request, 'books/book_view.html', context)
+
+def book_review(request):
+    if("review" in request.POST):  #review button was clicked
+        #passed in book id with review post request
+        book_id = request.POST.get("review")
+
+        #query for cover and title display
+        book_url = 'https://openlibrary.org{}.json'.format(book_id)
+        book_response = urlopen(book_url)
+        book_json = json.loads(book_response.read())
+        if 'covers' not in book_json:
+            book_cover = "no_book"
+        else:
+            book_cover = "http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg"
+        book_title = book_json["title"]
+
+        #get book_id in correct form to pass through url to view book page
+        book_id = book_id.replace("/", "%")
+        context = {
+            "form_data": BookReviewForm(),
+            #cover and title for display on review page
+            "book_cover": book_cover,
+            "book_title": book_title,
+            "book_id": book_id,
+        }
+        return render(request, 'books/book_review.html', context)
