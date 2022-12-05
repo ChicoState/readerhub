@@ -21,8 +21,7 @@ jobs:
       run: |
         python manage.py test
     - name: Coverage
-      uses: dc740/django-coveragepy-github-action@0.9
-      with: 
-        django-app: 'readerhub'
-        minimum-coverage: '0'
+      run: |
+        coverage run --source='.' manage.py test readerhub
+        coverage report
 
