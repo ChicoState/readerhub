@@ -61,6 +61,7 @@ def books(request):
                 return render(request,'books/books.html', context)
         elif("favorite" in request.POST): #can also use request.POST.get("favorite")
             cur_user = request.user
+            print(request.user)
             book_id = request.POST.get('favorite')
             book_url = 'https://openlibrary.org{}.json'.format(book_id)
             book_response = urlopen(book_url)
@@ -71,7 +72,7 @@ def books(request):
             else:
                 book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 
-            FavoriteBooks(favorite_user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
+            FavoriteBooks(user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
             }

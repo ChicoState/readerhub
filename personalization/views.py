@@ -42,7 +42,7 @@ def personalization(request, name):
 		if posts:
 			for post in posts:
 				post.book_object.favorite_id = post.book_object.favorite_id.replace("/", "%")
-		if not FavoriteBooks.objects.filter(favorite_user=user):
+		if not FavoriteBooks.objects.filter(user=user):
 			context = {
 				"profile": profile,
 				"posts": posts,
@@ -53,7 +53,7 @@ def personalization(request, name):
 			}
 			return render(request, 'personalization/personalization.html', context)
 		else:
-			favorite_books = FavoriteBooks.objects.filter(favorite_user	= user)
+			favorite_books = FavoriteBooks.objects.filter(user	= user)
 			favorite_covers = []
 			favorite_titles = []
 			for book in favorite_books:

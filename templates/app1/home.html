@@ -1,30 +1,79 @@
-{% include "bootstrap.html" %}
-{% include "nav.html" %}
-{% load static %}
-<link rel="stylesheet" href="{%static 'CSS/home.css' %}"/>
-{% for current_profile in allusers %}
-<div class = "wrap">
-  <div class="card bg-dark text-white" style="width: 25rem;">
-    {% if current_profile.personal_image %}
-    <img class="card-img-top yes-img" src="{{current_profile.personal_image.url }}" alt="Card image cap">
-    {% else %}
-    <img class="card-img-top no-img" src="{%static 'permanent_images/default_profile.png' %}" alt="Card image cap">
-    {% endif %}
-  <div class="card-body">
-    <h5 class="card-title text-center">{{current_profile.user}}</h5>
-    <p class="card-text"><i>{{current_profile.about_user}}</i></p>
-  </div>
-  <div class = "card-body">
-    <p class = "card-text" >{{current_profile.favorite_books}}</p>
-  </div>
-  <div class="card-body text-center">
-    <button type="button" class="btn btn-info">Follow</button>
-  </div>
-  </div>
-</div>
-{% endfor %}
+<html>
 
-<br><br>
-<form method="GET" action="/personalization/">
-  <input type="submit" class="btn btn-primary btn-lg first-btn" value="View My Profile">
-</form>
+<head>
+  <meta charset="utf-8">
+  <title>Home</title>
+  {% include "bootstrap.html" %}
+  {% include "nav.html" %}
+  {% load static %}
+  <link rel="stylesheet" href="{%static 'CSS/home.css' %}"/>
+</head>
+<body>
+  <div class = "grid_container">
+    <div class = "row h-100 info_row">
+      <div class = "col-2 basic_info">
+        <br>
+        {% if current_profile.personal_image %}
+          <img class="profile-card" src="{{current_profile.personal_image.url }}">
+        {% else %}
+          <img class="profile-card" src="{%static 'permanent_images/default_profile.png' %}">
+        {% endif %}
+        <br>
+        <h3>{{current_profile.user}}</h3>
+        <br>
+        <p class = "page-links">
+          <a  href="/personalization/{{ user.username }}"><img class = "profile-icon" src = "{%static 'permanent_images/profile_icon.png' %}" width = 60 height = 55>
+          View My Profile
+          </a>
+        </p>
+        <br>
+        <p class = "page-links">
+          <a href="/posts/"><img class = "posts-icon" src = "{%static 'permanent_images/posts_icon.png' %}" width = 60 height = 50>
+            Make a Post
+          </a>
+        </p>
+        <br>
+        <p class = "page-links">
+          <a href="/books/"><img class = "book-icon" src = "{%static 'permanent_images/book_icon.png' %}" width = 60 height = 50>
+            Search for a Book
+          </a>
+        </p>
+        <p class = "page-links">
+          <a href="/addFriends/"><img class = "follow-icon" src = "{%static 'permanent_images/follow_icon.png' %}" width = 60 height = 50>
+            Follow People
+          </a>
+        </p>
+        <p class = "page-links">
+          <a href="/inbox/"><img class = "inbox-icon" src = "{%static 'permanent_images/inbox_icon.png' %}" width = 60 height = 50>
+            Message Someone
+          </a>
+        </p>
+      </div>
+      <div class = "col">
+        <!-- Display the feed of posts, reviews, and favoriting books-->
+        {% for act in activity %}
+          <div class = "row activities">
+          {% if act.post%}
+            <div class = "col-1 post-cover">
+              <img src="{{act.post.book_object.favorite_cover}}" class="book-img">
+            </div>
+            <div class = "col-9 post-content">
+              <h3><b>{{act.post.title}}</b></h3>
+              {{act.post.content}}
+            </div>
+            <div class = "col-2 post-link">
+              <a  href="/personalization/{{ act.user }}">
+                <i>Posted By: {{act.user}}</i>
+              </a>
+            </div>
+          {% elif act.bookreview %}
+            {{act.user}} has left a review on {{act.bookreview.}}
+          {%elif act.favoritebooks%}
+            aside
+          {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
