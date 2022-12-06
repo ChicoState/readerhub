@@ -17,10 +17,16 @@ def about(request):
 
 @login_required(login_url='/login/')
 def home(request):
+    current_profile = ""
     activity = Activity.objects.all()
-    current_profile = PersonalInfo.objects.filter(user = request.user)
-    #get object from quertset with first
-    current_profile = current_profile.first()
+    if PersonalInfo.objects.filter(user= request.user):
+        current_profile = PersonalInfo.objects.filter(user = request.user)
+        #get object from quertset with first
+        current_profile = current_profile.first()
+    else:
+        PersonalInfo(user=request.user).save()
+        current_profile = PersonalInfo.objects.get(user=request.user)
+
     context = {
         "current_profile": current_profile,
         "activity": activity,

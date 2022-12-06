@@ -23,66 +23,62 @@ import json
 def personalization(request, name):
 	user = User.objects.get(username=name)
 	req_username = user.username
-	try: #display profile created with form
-		if request.method == 'POST':
-			user = request.user
-			follow = User.objects.get(username = name)
-			Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
-			return redirect('/personalization/%s' % user.username )
-		profile = PersonalInfo.objects.get(user=user) #the user personal info
-		posts = Post.objects.filter(user=user) #posts the user has made
-		following = user.following.all()
-		followers = user.followers.all()
+	if request.method == 'POST':
+		user = request.user
+		follow = User.objects.get(username = name)
+		Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
+		return redirect('/personalization/%s' % user.username )
+	#@@@@
+	print(PersonalInfo.objects.all())
+	#@@@@
+	profile = PersonalInfo.objects.get(user=user) #the user personal info
+	posts = Post.objects.filter(user=user) #posts the user has made
+	following = user.following.all()
+	followers = user.followers.all()
+	already_follows = False
+	try:
+		Follows.objects.get(user_id=request.user.id, following_user_id=user.id)
+		already_follows = True
+	except:
 		already_follows = False
-		try:
-			Follows.objects.get(user_id=request.user.id, following_user_id=user.id)
-			already_follows = True
-		except:
-			already_follows = False
-		if posts:
-			for post in posts:
-				post.book_object.favorite_id = post.book_object.favorite_id.replace("/", "%")
-		if not FavoriteBooks.objects.filter(user=user):
-			context = {
-				"profile": profile,
-				"posts": posts,
-				"following": following,
-				"followers": followers,
-				"req_user": req_username,
-				"al_fol": already_follows,
-			}
-			return render(request, 'personalization/personalization.html', context)
-		else:
-			favorite_books = FavoriteBooks.objects.filter(user	= user)
-			favorite_covers = []
-			favorite_titles = []
-			for book in favorite_books:
-				book_url = 'https://openlibrary.org{}.json'.format(book.favorite_id)
-				book_response = urlopen(book_url)
-				book_json = json.loads(book_response.read()) #store json object from url response
-				if 'covers' not in book_json:
-					favorite_covers.append("no_book") #doesn't exist
-				else:
-					favorite_covers.append("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
-				favorite_titles.append(book_json["title"])
-
-			context = {
-				"profile": profile,
-				"posts": posts,
-				"favorite_books": favorite_books,
-				"following": following,
-				"followers": followers,
-				"req_user": req_username,
-				"al_fol": already_follows,
-			}
-			return render(request, 'personalization/personalization.html', context)
-	except PersonalInfo.DoesNotExist: #making default profile if it doesnt exist
-		PersonalInfo(user=user).save()
-		profile = PersonalInfo.objects.get(user=user)
+	if posts:
+		for post in posts:
+			post.book_object.favorite_id = post.book_object.favorite_id.replace("/", "%")
+	if not FavoriteBooks.objects.filter(user=user):
 		context = {
 			"profile": profile,
+			"posts": posts,
+			"following": following,
+			"followers": followers,
+			"req_user": req_username,
+			"al_fol": already_follows,
 		}
 		return render(request, 'personalization/personalization.html', context)
+	else:
+		favorite_books = FavoriteBooks.objects.filter(user	= user)
+		favorite_covers = []
+		favorite_titles = []
+		for book in favorite_books:
+			book_url = 'https://openlibrary.org{}.json'.format(book.favorite_id)
+			book_response = urlopen(book_url)
+			book_json = json.loads(book_response.read()) #store json object from url response
+			if 'covers' not in book_json:
+				favorite_covers.append("no_book") #doesn't exist
+			else:
+				favorite_covers.append("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
+			favorite_titles.append(book_json["title"])
+
+		context = {
+			"profile": profile,
+			"posts": posts,
+			"favorite_books": favorite_books,
+			"following": following,
+			"followers": followers,
+			"req_user": req_username,
+			"al_fol": already_follows,
+		}
+		return render(request, 'personalization/personalization.html', context)
+
 
 
 
