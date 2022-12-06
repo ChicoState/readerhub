@@ -7,17 +7,15 @@ from posts.models import Post
 class PostTest(TestCase):
     def setUp(self):
         self.testUser = User.objects.create_user("John Doe", "johndoe@gmail.com", "johndoe")
-        FavoriteBooks.objects.create(favorite_user=self.testUser, favorite_id="testid", favorite_title="testtitle", favorite_cover="testcover")
-        self.testPost = Post.objects.create(title="post test", content="test content", user=self.testUser, book_object=FavoriteBooks.objects.get(favorite_id="testid"))
+        self.favBook = FavoriteBooks.objects.create(favorite_user=self.testUser, favorite_id="testid", favorite_title="testtitle", favorite_cover="testcover")
+        Post.objects.create(title="test post title", content="test post content", user=self.testUser, book_object=FavoriteBooks.objects.get(favorite_id="testid"))
 
     def tearDown(self):
+        self.favBook.delete()
         self.testUser.delete()
 
-    def test_post_create_title(self):
-        self.assertEqual(self.testPost.title, "post test")
-
-    def test_post_create_content(self):
-        self.assertEqual(self.testPost.content, "test content")
-
-    def test_post_create_user(self):
-        self.assertEqual(self.testPost.user, self.testUser)
+    def test_post_retrieve_by_user(self):
+        post = Post.objects.get(user=self.testUser)
+        self.assertEqual(post.title, "test post title")
+        self.assertEqual(post.content, "test post content")
+        self.assertEqual(post.book_object, self.favBook)
