@@ -7,11 +7,11 @@ class PersonalizationTest(TestCase):
     def setUp(self):
         self.testUser = User.objects.create_user("John Doe", "johndoe@gmail.com", "johndoe")
         self.testUser1 = User.objects.create_user("Jane Doe", "janedoe@gmail.com", "janedoe")
-        PersonalInfo.objects.create(user=self.testUser, about_user="testabout") # unsure about personal_image attr for testing
+        PersonalInfo.objects.create(user=self.testUser, about_user="test personal about") # unsure about personal_image attr for testing
         Critic.objects.create(user=self.testUser1, is_critic=True)
         Critic.objects.create(user=self.testUser, is_critic=False)
         Follows.objects.create(user=self.testUser, following_user=self.testUser1)
-        FavoriteBooks.objects.create(favorite_user=self.testUser, favorite_id="testid", favorite_title="testtitle", favorite_cover="testcover")
+        FavoriteBooks.objects.create(favorite_user=self.testUser, favorite_id="test fav book id", favorite_title="test fav book title", favorite_cover="test fav book cover")
 
     def tearDown(self):
         self.testUser.delete()
@@ -19,7 +19,7 @@ class PersonalizationTest(TestCase):
 
     def test_personal_info_retrieve_by_user(self):
         pInfo = PersonalInfo.objects.get(user=self.testUser)
-        self.assertEqual(pInfo.about_user, "testabout")
+        self.assertEqual(pInfo.about_user, "test personal about")
 
     def test_critic_retrieve_by_user_true(self):
         criticT = Critic.objects.get(user=self.testUser1)
@@ -39,7 +39,11 @@ class PersonalizationTest(TestCase):
 
     def test_favorite_books_retrieve_by_user(self):
         favBook = FavoriteBooks.objects.get(favorite_user=self.testUser)
-        self.assertEqual(favBook.favorite_id, "testid")
-        self.assertEqual(favBook.favorite_title, "testtitle")
-        self.assertEqual(favBook.favorite_cover, "testcover")
+        self.assertEqual(favBook.favorite_id, "test fav book id")
+        self.assertEqual(favBook.favorite_title, "test fav book title")
+        self.assertEqual(favBook.favorite_cover, "test fav book cover")
+
+    def test_favorite_books_string(self):
+        favBook = FavoriteBooks.objects.get(favorite_user=self.testUser)
+        self.assertEqual(str(favBook), "test fav book title")
         
