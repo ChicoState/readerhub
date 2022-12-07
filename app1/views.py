@@ -26,17 +26,15 @@ def home(request):
         temp_profile = PersonalInfo.objects.get(user = act.user)
         activity_profile_pic.append(temp_profile.personal_image)
 
-
     #needs to be zipepd togethor to go through two lists at once in template
     activity = zip(activity, activity_profile_pic)
 
-
+    #create a default profile on homepage if user has no profile
     if PersonalInfo.objects.filter(user= request.user):
         current_profile = PersonalInfo.objects.get(user = request.user)
     else:
         PersonalInfo(user=request.user).save()
         current_profile = PersonalInfo.objects.get(user=request.user)
-
 
     context = {
         "current_profile": current_profile,
