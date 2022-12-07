@@ -1,21 +1,82 @@
 body {
-  background-color: grey;
+  background-color: Gainsboro;
   }
   /*.card{
     border-style: solid;
     border-color: white;
   }*/
-  .card-body{
-    border: 2px solid white;
+  .profile-card {
+    border-radius: 10%;
+    width: 80%;
   }
 
-  .card-img-top{
-    border: 2px solid white;
+  .post-card {
+    border-radius: 10%;
+    width: 40%;
   }
-  .wrap{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
 
+  .basic_info {
+    border-right: double thick;
+    text-align: center;
+  }
+
+  .page-links {
+    font-size:20px;
+    float: left;
+    padding-left: 20px;
+  }
+
+  .activities {
+    border-style: solid;
+    border-width: 1px;
+
+  }
+
+  .book-img {
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width:110%;
+  }
+
+  .book-imgf {
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width:110%;
+  }
+
+  .book-imgr {
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width:60%;
+  }
+  .post-content {
+    text-align: center;
+  }
+
+  .post-link {
+    font-size: 25px;
+    text-align: center;
+    padding-top: 20px;
+  }
+
+  .favorite-content {
+    text-align:center;
+    font-size: 30px;
+    padding-top: 40px;
+
+  }
+
+  .favorite-card{
+    border-radius: 10%;
+    width: 10%;
+  }
+
+.star-img{
+  width:2%
+}
+  .review-content {
+    text-align: center;
   }

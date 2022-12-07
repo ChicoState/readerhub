@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from app1.models import Activity
 
 
 class PersonalInfo(models.Model):#one per user
@@ -21,11 +21,11 @@ class Follows(models.Model):
 	class Meta:
 		unique_together = ('user', 'following_user')
 
-class FavoriteBooks(models.Model): #many to one relationship with User
-	favorite_user = models.ForeignKey(User, on_delete=models.CASCADE, default = "")
+class FavoriteBooks(Activity): #many to one relationship with User
+	#user = models.ForeignKey(User, on_delete=models.CASCADE, default = "")
 	favorite_id = models.CharField(max_length = 100)
 	favorite_title = models.CharField(max_length = 100)
-	favorite_cover = models.CharField(max_length = 100)
+	favorite_cover = models.CharField(max_length = 100)		
 
 	#need to return title when refrencing object to properly display on PostForm
 	def __str__(self):

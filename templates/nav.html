@@ -5,24 +5,26 @@
   border-color: white;
 }
 </style>
+{% load static %}
+<link rel="stylesheet" href="{%static 'CSS/nav.css' %}" />
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="/">Home</a>
+  <a class="navbar-brand" href="/"><img class = "home-icon" src = "{%static 'permanent_images/home_icon.png' %}" width = 60 height = 50></a>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="/posts/">Posts</a>
+        <a class="nav-link" href="/personalization/{{ user.username }}"><img class = "profile-icon" src = "{%static 'permanent_images/profile_icon.png' %}" width = 33 height = 33></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/personalization/{{ user.username }}">Profile</a>
+        <a class="nav-link" href="/posts/"><img class = "posts-icon" src = "{%static 'permanent_images/posts_icon.png' %}" width = 40 height = 33></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/books/">Books</a>
+        <a class="nav-link" href="/books/"><img class = "magnify-icon" src = "{%static 'permanent_images/book_icon.png' %}" width = 40 height = 33></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/addFriends/">Follow Friends</a>
+        <a class="nav-link" href="/addFriends/"><img class = "follow-icon" src = "{%static 'permanent_images/follow_icon.png' %}" width = 33 height = 33></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/inbox/">Inbox</a>
+        <a class="nav-link" href="/inbox/"><img class = "inbox-icon" src = "{%static 'permanent_images/inbox_icon.png' %}" width = 40 height = 33></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/about/">About</a>
