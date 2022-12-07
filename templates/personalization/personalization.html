@@ -108,9 +108,9 @@
         <figure class="figure fav-book-cards" style="float:left">
           {% if book.favorite_cover == 'no_book' %}
           <img class="card-img-top img-fluid" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png"
-            alt="Card image cap">
+            alt="No book cover found">
           {%else%}
-          <img src="{{ book.favorite_cover }}" class="figure-img img-fluid rounded" alt="Card image cap">
+          <img src="{{ book.favorite_cover }}" class="img-fluid" style="max-width: 100%;" alt="{{ book.favorite_title }} book cover">
           {%endif%}
           <figcaption class="figure-caption">{{ book.favorite_title }}</figcaption>
         </figure>
