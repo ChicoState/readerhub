@@ -17,6 +17,56 @@
       <input type="submit" class="btn btn-info" name="search_books" value="Search">
     </div>
   </form>
+  <div class = "aggregate_display">
+    <b>General Score</b>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Follows Score</b>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Critic Score</b>
+    <br>
+
+    &nbsp;&nbsp;
+    {% if general_available == 0%}
+      <i>NA</i>/5
+    {%else %}
+      {{general_aggregate}}/5
+    {%endif%}
+    {% if general_icon == "low" %}
+      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    {% elif general_icon == "mid" %}
+      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    {% elif general_icon == "high" %}
+      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    {% endif %}
+
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    {% if follows_available == 0%}
+      <i>NA</i>/5
+    {%else %}
+      {{follows_aggregate}}/5
+    {%endif%}
+    {% if follows_icon == "low" %}
+      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    {% elif follows_icon == "mid" %}
+      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    {% elif follows_icon == "high" %}
+      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    {% endif %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+    {% if critic_available == 0%}
+      <i>NA</i>/5
+    {%else %}
+      {{critic_aggregate}}/5
+    {%endif%}
+    {% if critic_icon == "low" %}
+      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    {% elif critic_icon == "mid" %}
+      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    {% elif critic_icon == "high" %}
+      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    {% endif %}
+  </div>
 <br>
   {% if book_cover == 'no_book'%}
     <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" class = "cover" alt="Book Cover">
@@ -27,25 +77,36 @@
      <b>{{book_title}}</b>
   </div>
   <br><br><br><br><br>
+
   <div class = "container">
     <p class = "paragraph">  {{book_description}} </p>
   </div>
+
   <div class = "container2">
       tags:
-      {%for subject in book_subjects%}
-      <b>  <i>{{subject}}, </i> </b>
-      {%endfor%}
+      {% if book_subjects == "no_subjects" %}
+        <i>N/A</i>
+      {% else %}
+        {%for subject in book_subjects%}
+          <b>  <i>{{subject}}, </i> </b>
+        {%endfor%}
+      {% endif %}
   </div>
+
   {% if author_image == "no_photo"%}
     <img class="author_photo" src="https://www.freeiconspng.com/uploads/no-image-icon-0.png" alt="Author Image">
   {%else%}
     <img class="author_photo" src="{{author_image}}" alt="Author Image">
   {%endif%}
-
   <div class = "name">
-    Author: <u>{{author_name}}</u>
+    Author:
+    {% if author_name == "no_author" %}
+      <i>N/A</i>
+    {% else %}
+      <u>{{author_name}}</u>
+    {% endif %}
   </div>
-  <br><br><br><br><br><br><br><br><br><br>
+
   {% if my_review_exists == 0 %}
   <form method="POST" action="/books/book_review/">
     <div class = "btn_center">
@@ -54,15 +115,58 @@
     </div>
   </form>
   {% else %}
-  <div class="jumbotron my_review">
+  <div class = "review">
     <div class = "text-center">
-      <b>Your Review</b> <br>
-      <i>Rating: {{star_review}}/5 </i><br><br>
+      <i>Rating: {{my_review.star_review}}/5 </i><br><br>
     </div>
     <div class = "indent-text">
-      {{text_review}}
+      {{my_review.text_review}}
     </div>
   </div>
   {% endif %}
+  <br><br><br><br><br>
+
+<div class = "grid_container">
+  <div class = "row reviews">
+    <div class = "col-5">
+      {%if general_reviews_exists == 1 %}
+      <div class = "review_type">
+        <b>General Reviews</b>
+      </div>
+      <div class = "scrollbar scrollbar-primary">
+      {% for review in general_reviews %}
+        <div class = "review">
+          <div class = "text-center">
+            <i>Rating: {{review.star_review}}/5 </i><br><br>
+          </div>
+          <div class = "indent-text">
+            {{review.text_review}}
+          </div>
+        </div>
+      {%endfor%}
+      </div>
+    {%endif%}
+  </div>
+  <div class = "col-5">
+    {%if follow_reviews_exist == 1 %}
+    <div class = "review_type">
+      <b>Follows Review</b>
+    </div>
+    <div class = "scrollbar scrollbar-primary">
+      {% for review in follow_reviews %}
+        <div class = "review">
+          <div class = "text-center">
+            <i>Rating: {{review.0}}/5 </i><br><br>
+          </div>
+          <div class = "indent-text">
+            {{review.1}}
+          </div>
+        </div>
+      {%endfor%}
+    </div>
+    {%endif%}
+  </div>
+</div>
+</div>
 </body>
 </html>
