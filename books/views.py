@@ -71,7 +71,7 @@ def books(request):
             else:
                 book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 
-            FavoriteBooks(favorite_user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
+            FavoriteBooks(user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
             }
@@ -87,6 +87,35 @@ def book_view(request, info):
     info = info.replace("%", "/")
     book_id = info
 
+    #query for book information
+    book_url = 'https://openlibrary.org{}.json'.format(info)
+    book_response = urlopen(book_url)
+    book_json = json.loads(book_response.read()) #store json object from url response
+
+    #check if default cover is needed
+    if 'covers' not in book_json:
+        book_cover = "no_book"
+    else:
+        book_cover = "http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg"
+
+    book_title = book_json["title"]
+    if 'description' not in book_json:
+        book_description = "There is no description available."
+    else:
+        book_description = book_json["description"]
+
+    #get subjects of book for display
+    book_subjects = []
+    if 'subjects' in book_json:
+        i = 0
+        for subject in book_json["subjects"]: #getting the first 4 subjects listed on page
+            if i == 4:
+                break
+            book_subjects.append(subject)
+            i = i+1
+    else:
+        book_subjects = "no_subjects"
+
     #save form data if a book was just reviewed
     #make sure book doesn't already have review from user, important because the form always saves the first form data even if you come from any page
     if not BookReview.objects.filter(user = request.user).exists():
@@ -96,6 +125,8 @@ def book_view(request, info):
             new_review.user = request.user
             new_review.book_id = book_id
             new_review.star_review = form.cleaned_data['star_review']
+            new_review.book_title = book_title
+            new_review.book_cover = book_cover
             new_review.save()
 
     #check for review of current book, need to see if review has book id and current user
@@ -103,7 +134,8 @@ def book_view(request, info):
     my_text_review = ""
     my_star_review = 0
     my_review = 0
-    if(BookReview.objects.filter(book_id = book_id).exists() & BookReview.objects.filter(user = request.user).exists()):
+    myreview_query = BookReview.objects.filter(book_id = book_id) & BookReview.objects.filter(user = request.user)
+    if myreview_query:
         temp_review = BookReview.objects.filter(book_id = book_id) & BookReview.objects.filter(user = request.user)
         #need to use loop to get the one review because filter returns queryset
         for i in temp_review:
@@ -132,7 +164,8 @@ def book_view(request, info):
     current_follows = Follows.objects.filter(user = request.user)
     #filter reviews for people followed
     for follows in current_follows:
-        if (BookReview.objects.filter(user = follows.following_user).exists() & BookReview.objects.filter(book_id = book_id).exists()):
+        follow_review_query = BookReview.objects.filter(user = follows.following_user) & BookReview.objects.filter(book_id = book_id)
+        if (follow_review_query):
             follow_reviews.append(list(BookReview.objects.filter(user = follows.following_user)))
     #check if list is empty
     if follow_reviews:
@@ -232,34 +265,6 @@ def book_view(request, info):
     else:
         general_icon = "high"
 
-    #query for book information
-    book_url = 'https://openlibrary.org{}.json'.format(info)
-    book_response = urlopen(book_url)
-    book_json = json.loads(book_response.read()) #store json object from url response
-
-    #check if default cover is needed
-    if 'covers' not in book_json:
-        book_cover = "no_book"
-    else:
-        book_cover = "http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg"
-
-    book_title = book_json["title"]
-    if 'description' not in book_json:
-        book_description = "There is no description available."
-    else:
-        book_description = book_json["description"]
-
-    #get subjects of book for display
-    book_subjects = []
-    if 'subjects' in book_json:
-        i = 0
-        for subject in book_json["subjects"]: #getting the first 4 subjects listed on page
-            if i == 4:
-                break
-            book_subjects.append(subject)
-            i = i+1
-    else:
-        book_subjects = "no_subjects"
 
     #getting author json object to get author information
     author_id = book_json["authors"][0]["author"]['key']

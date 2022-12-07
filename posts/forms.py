@@ -12,7 +12,7 @@ class PostForm(forms.ModelForm):
     #everytime PostForm is referenced you need to pass it request.user even if it doesnt need because of this init
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
-        favorite_queryset = FavoriteBooks.objects.filter(favorite_user = self.user)
+        favorite_queryset = FavoriteBooks.objects.filter(user = self.user)
         super(PostForm, self).__init__(*args, **kwargs)
         self.fields['book_object'] = forms.ModelChoiceField(queryset=favorite_queryset)
 
