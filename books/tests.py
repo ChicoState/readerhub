@@ -47,3 +47,36 @@ class BooksURLtoViewTest(TestCase):
         self.assertEqual(res.view_name, "book_review")
 
 # Testing books views
+class BooksViewTest(TestCase):
+    def setUp(self):
+        self.info = {
+            "first_name": "John",
+            "last_name": "Doe",
+            "username": "johnd",
+            "email": "johndoe@gmail.com",
+            "password": "johndoe"
+        }
+        self.login = {
+            "username": "johnd",
+            "password": "johndoe"
+        }
+        self.searchHP = {
+            "book_search": "harry potter",
+            "search_books": "Search"
+        }
+        self.searchEmpty = {
+            "book_search": " ",
+            "search_books": "Search"
+        }
+        User.objects.create_user(**self.info)
+    
+    def test_book_search(self):
+        self.client.post("/login/", self.login)
+        resp = self.client.post("/books/", self.searchHP, follow=True)
+        self.assertTrue(resp.context["book_preview"])
+
+    def test_book_search(self):
+        self.client.post("/login/", self.login)
+        resp = self.client.post("/books/", self.searchEmpty, follow=True)
+        with self.assertRaises(KeyError):
+            resp.context["book_preview"]

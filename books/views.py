@@ -59,6 +59,11 @@ def books(request):
                     "book_preview": book_preview,
                 }
                 return render(request,'books/books.html', context)
+            else:
+                context = {
+                    "form_data": BooksForm(), #display form
+                }
+                return render(request, 'books/books.html', context)
         elif("favorite" in request.POST): #can also use request.POST.get("favorite")
             cur_user = request.user
             book_id = request.POST.get('favorite')
