@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse, resolve
 
 # Testing app1 URLs
-class URLTest(TestCase):
+class App1URLTest(TestCase):
     def test_home_url(self):
         url = reverse("home")
         self.assertEqual(url, "/")
@@ -25,7 +25,7 @@ class URLTest(TestCase):
         self.assertEqual(url, "/logout/")
 
 # Testing URLs connect to correct view
-class URLtoViewTest(TestCase):
+class App1URLtoViewTest(TestCase):
     def test_home_url_to_view(self):
         res = resolve("/")
         self.assertEqual(res.view_name, "home")
