@@ -7,7 +7,7 @@ from posts.models import Post
 class PostTest(TestCase):
     def setUp(self):
         self.testUser = User.objects.create_user("John Doe", "johndoe@gmail.com", "johndoe")
-        self.favBook = FavoriteBooks.objects.create(favorite_user=self.testUser, favorite_id="testid", favorite_title="testtitle", favorite_cover="testcover")
+        self.favBook = FavoriteBooks.objects.create(user=self.testUser, favorite_id="testid", favorite_title="testtitle", favorite_cover="testcover")
         Post.objects.create(title="test post title", content="test post content", user=self.testUser, book_object=FavoriteBooks.objects.get(favorite_id="testid"))
 
     def tearDown(self):

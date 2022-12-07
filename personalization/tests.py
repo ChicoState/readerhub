@@ -11,7 +11,7 @@ class PersonalizationTest(TestCase):
         Critic.objects.create(user=self.testUser1, is_critic=True)
         Critic.objects.create(user=self.testUser, is_critic=False)
         Follows.objects.create(user=self.testUser, following_user=self.testUser1)
-        FavoriteBooks.objects.create(favorite_user=self.testUser, favorite_id="test fav book id", favorite_title="test fav book title", favorite_cover="test fav book cover")
+        FavoriteBooks.objects.create(user=self.testUser, favorite_id="test fav book id", favorite_title="test fav book title", favorite_cover="test fav book cover")
 
     def tearDown(self):
         self.testUser.delete()
@@ -38,12 +38,12 @@ class PersonalizationTest(TestCase):
         self.assertEqual(follow.user, self.testUser)
 
     def test_favorite_books_retrieve_by_user(self):
-        favBook = FavoriteBooks.objects.get(favorite_user=self.testUser)
+        favBook = FavoriteBooks.objects.get(user=self.testUser)
         self.assertEqual(favBook.favorite_id, "test fav book id")
         self.assertEqual(favBook.favorite_title, "test fav book title")
         self.assertEqual(favBook.favorite_cover, "test fav book cover")
 
     def test_favorite_books_string(self):
-        favBook = FavoriteBooks.objects.get(favorite_user=self.testUser)
+        favBook = FavoriteBooks.objects.get(user=self.testUser)
         self.assertEqual(str(favBook), "test fav book title")
         
