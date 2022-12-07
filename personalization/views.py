@@ -28,9 +28,7 @@ def personalization(request, name):
 		follow = User.objects.get(username = name)
 		Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
 		return redirect('/personalization/%s' % user.username )
-	#@@@@
-	print(PersonalInfo.objects.all())
-	#@@@@
+
 	profile = PersonalInfo.objects.get(user=user) #the user personal info
 	posts = Post.objects.filter(user=user) #posts the user has made
 	following = user.following.all()

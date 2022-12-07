@@ -51,7 +51,7 @@
       </div>
       <div class = "col">
         <!-- Display the feed of posts, reviews, and favoriting books-->
-        {% for act in activity %}
+        {% for act, act_pic in activity %}
           <div class = "row activities">
           {% if act.post%}
             <div class = "col-1 post-cover">
@@ -63,13 +63,63 @@
             </div>
             <div class = "col-2 post-link">
               <a  href="/personalization/{{ act.user }}">
+                {% if act_pic %}
+                  <img class="post-card" src="{{act_pic.url }}">
+                {% else %}
+                  <img class="post-card" src="{%static 'permanent_images/default_profile.png' %}">
+                {% endif %}
+                <br>
                 <i>Posted By: {{act.user}}</i>
               </a>
             </div>
           {% elif act.bookreview %}
-            {{act.user}} has left a review on {{act.bookreview.}}
+            <div class = "col-2 review-cover">
+              <img src="{{act.bookreview.book_cover}}" class="book-imgr">
+            </div>
+            <div class = "col-10 review-content">
+              <h3><b>{{act.user}} has left a review on <i>{{act.bookreview.book_title}}</i></b></h3>
+              <div class = "review-star">
+                {%if act.bookreview.star_review == 1 %}
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                {%elif act.bookreview.star_review == 2%}
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                {%elif act.bookreview.star_review == 3%}
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                {%elif act.bookreview.star_review == 4%}
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                {%elif act.bookreview.star_review == 5%}
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                  <img class="star-img" src="{%static 'permanent_images/star.png' %}">
+                {%endif%}
+              </div>
+              <br>
+              {{act.bookreview.text_review}}
+            </div>
+
           {%elif act.favoritebooks%}
-            aside
+            <div class = "favorite-content col-11">
+            <i>
+              {% if act_pic %}
+                <img class="favorite-card" src="{{act_pic.url }}">
+              {% else %}
+                <img class="favorite-card" src="{%static 'permanent_images/default_profile.png' %}">
+              {% endif %}
+              has favorited the book {{act.favoritebooks.favorite_title}}!</i>
+            <br>
+            </div>
+            <!--
+            <div class = "favorite-cover col-1">
+              <img src="{{act.favoritebooks.favorite_cover}}" class="book-imgf">
+            </div>
+          -->
           {% endif %}
           </div>
         {% endfor %}

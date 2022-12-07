@@ -19,13 +19,25 @@ def about(request):
 def home(request):
     current_profile = ""
     activity = Activity.objects.all()
+    activity_profile_pic = []
+
+    #only display 5 most recent activities on homepage
+    activity_count = 0
+    for act in Activity.objects.all()[:5]:
+        temp_profile = PersonalInfo.objects.get(user = act.user)
+        activity_profile_pic.append(temp_profile.personal_image)
+
+
+    #needs to be zipepd togethor to go through two lists at once in template
+    activity = zip(activity, activity_profile_pic)
+
+
     if PersonalInfo.objects.filter(user= request.user):
-        current_profile = PersonalInfo.objects.filter(user = request.user)
-        #get object from quertset with first
-        current_profile = current_profile.first()
+        current_profile = PersonalInfo.objects.get(user = request.user)
     else:
         PersonalInfo(user=request.user).save()
         current_profile = PersonalInfo.objects.get(user=request.user)
+
 
     context = {
         "current_profile": current_profile,

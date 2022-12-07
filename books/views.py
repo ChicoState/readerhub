@@ -125,6 +125,8 @@ def book_view(request, info):
             new_review.user = request.user
             new_review.book_id = book_id
             new_review.star_review = form.cleaned_data['star_review']
+            new_review.book_title = book_title
+            new_review.book_cover = book_cover
             new_review.save()
 
     #check for review of current book, need to see if review has book id and current user
