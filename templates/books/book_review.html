@@ -11,6 +11,7 @@
 <body>
 
 <form method="POST" action = "/books/book_view/{{book_id}}/" enctype="multipart/form-data" align = "center">
+  <!--Display book cover and title with the review form -->
   <div class = "book_preview">
     <div class = "cover">
       {% if book_cover == 'no_book'%}
@@ -35,9 +36,9 @@
     <i>Rate your book out of 5</i>
   </p>
 
+  <!--Rating is done through radio with star images-->
   <div class = "pick_rating">
       {% for radio in form_data.star_review %}
-
       <div class="rating_radio">
         <img src="{%static 'permanent_images/star.png' %}" width="20" height="20" />
           {{ radio }}

@@ -3,7 +3,7 @@ from .models import Follows
 from .models import Critic
 from .models import PersonalInfo
 
-# Register your models here.
+#need models to be able to change values, currently only way to asign a user to be a critic
 admin.site.register(Follows)
 admin.site.register(Critic)
 admin.site.register(PersonalInfo)
