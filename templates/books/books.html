@@ -18,6 +18,10 @@
       </div>
     </form>
   <br>
+  {% if favorited_title %}
+  <br><br><br>
+    <center><h1><i>You have favorited the book {{favorited_title}}!</i></h1></center>
+  {%endif%}
 
   <div class = "cards">
     {%for book in book_preview%}
