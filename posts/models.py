@@ -7,9 +7,6 @@ class Post(Activity):
     content = models.TextField()
     book_object = models.ForeignKey(FavoriteBooks, on_delete=models.CASCADE) #one to one relationship
 
-    def get_x(self):
-        return self.content
-
     class Meta:
         ordering = ["-last_modified"]
 
