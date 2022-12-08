@@ -21,8 +21,8 @@ def home(request):
     activity = Activity.objects.all()
     activity_profile_pic = []
 
-    #only display 5 most recent activities on homepage
-    for act in Activity.objects.all()[:5]:
+    #display activities ordered by when object was created
+    for act in Activity.objects.all()[:5]: #show most recent 5 activities
         temp_profile = PersonalInfo.objects.get(user = act.user)
         activity_profile_pic.append(temp_profile.personal_image)
 
