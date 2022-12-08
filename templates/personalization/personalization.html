@@ -10,20 +10,6 @@
 
 <body>
   {% include "nav.html" %}
-  {% if not profile.about_user%}
-  <!--If there is no user profile-->
-  <div class="row">
-    <div class="col-12">
-      <div class="container" align="center">
-        <form method="GET" action="/personalization/edit_profile/{{ profile.id }}/">
-          <br><br><br><br><br><br><br><br><br><br>
-          <input type="submit" class="btn btn-success btn-lg first-btn" value="Create Profile">
-        </form>
-      </div>
-    </div>
-  </div>
-  {% else %}
-  <!--If there is a user profile-->
   <div class="container-fluid px-0 prof-container">
     <div class="row text-center no-gutters">
       <!--Display profile pic-->
@@ -136,7 +122,6 @@
   </div>
   {% endif %}-->
 
-  {% endif %}
 
 </body>
 
