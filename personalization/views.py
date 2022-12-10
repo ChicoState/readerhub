@@ -124,27 +124,26 @@ def add_friend(request):
 		form = FollowForm(request.POST)
 		if form.is_valid():
 			user = request.user
+			following = user.following.all()
+			followers = user.followers.all()
 			try:
 				follow = User.objects.get(username = form.cleaned_data['userName'])
 			except User.DoesNotExist:
 				context = {
 					"form": form,
 					"dne": form.cleaned_data["userName"],
+					'following': following,
+					'followers': followers,
 				}
 				return render(request, "personalization/add_friend.html", context)
 			Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
 			return redirect("/addFriends/")
-	context = { 'form': FollowForm() }
+	user = request.user
+	following = user.following.all()
+	followers = user.followers.all()
+	context = {
+		'form': FollowForm() ,
+		'following': following,
+		'followers': followers,
+	}
 	return render(request, 'personalization/add_friend.html', context)
-
-
-
-def see_friends(request):
-    user = request.user
-    following = user.following.all()
-    followers = user.followers.all()
-    context = {
-        'following': following,
-        'followers': followers,
-    }
-    return render(request, 'personalization/follows.html', context)
