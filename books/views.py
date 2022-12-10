@@ -123,7 +123,7 @@ def book_view(request, info):
 
     #save form data if a book was just reviewed
     #make sure book doesn't already have review from user, important because the form always saves the first form data even if you come from any page
-    if not BookReview.objects.filter(user = request.user).exists():
+    if not BookReview.objects.filter(user = request.user) & BookReview.objects.filter(book_id = book_id):
         form = BookReviewForm(request.POST)
         if (form.is_valid()):
             new_review = form.save(commit=False)
@@ -304,6 +304,13 @@ def book_view(request, info):
         author_image = "no_photo"
     else:
         author_image = "https://covers.openlibrary.org/a/id/" + str(author_json["photos"][0]) + "-L.jpg"
+
+    favorited = False
+    try:
+        FavoriteBooks.objects.get(favorite_user=request.user, favorite_id=book_id)
+        favorited = True
+    except:
+        favorited = False
 
     #book information and review information needed for display
     context = {
