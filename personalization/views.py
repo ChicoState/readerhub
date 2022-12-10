@@ -13,6 +13,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from readerhub import settings
 import requests
 import os
+from django.urls import reverse
 #imports needed for favorite books on profile page
 from urllib.request import urlopen
 import json
@@ -119,15 +120,22 @@ def edit_profile(request, id):
 			return redirect('personalization', name=request.user.username)
 
 def add_friend(request):
-    if request.method == 'POST':
-        form = FollowForm(request.POST)
-        if form.is_valid():
-            user = request.user
-            follow = User.objects.get(username = form.cleaned_data['userName'])
-            Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
-            return redirect('/')
-    context = { 'form': FollowForm() }
-    return render(request, 'personalization/add_friend.html', context)
+	if request.method == 'POST':
+		form = FollowForm(request.POST)
+		if form.is_valid():
+			user = request.user
+			try:
+				follow = User.objects.get(username = form.cleaned_data['userName'])
+			except User.DoesNotExist:
+				context = {
+					"form": form,
+					"dne": form.cleaned_data["userName"],
+				}
+				return render(request, "personalization/add_friend.html", context)
+			Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
+			return redirect("/addFriends/")
+	context = { 'form': FollowForm() }
+	return render(request, 'personalization/add_friend.html', context)
 
 
 
