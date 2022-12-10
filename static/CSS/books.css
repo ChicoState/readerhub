@@ -1,5 +1,5 @@
 body {
-  background-color: grey;
+  background-color: rgb(250, 249, 246);
   }
 .card-img-top{
   display: block;
@@ -15,8 +15,11 @@ body {
   flex-direction: row;
 }
 .card {
+  background-color: slategrey;
   width: 25rem;
   border:solid;
+  border-color: black;
+  border-width: 2px;
 }
 
 .search{

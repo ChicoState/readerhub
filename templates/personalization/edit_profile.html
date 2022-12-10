@@ -11,11 +11,11 @@
         <div class="row justify-content-left b">
         <div class="col-auto">
           <br>
-        <div class="jumbotron bg-dark text-white">
+        <div class="jumbotron">
             <h1><b>Enter <i>{{user}}<i> Profile</b></h1>
             <form method="POST" action = "" enctype="multipart/form-data">
                 {% csrf_token %}
-                <table class = "text-white">
+                <table class = "formtable">
                     {{ form_data.as_table }}
                     <tr>
                         <td></td>
