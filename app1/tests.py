@@ -8,10 +8,6 @@ class App1URLTest(TestCase):
         url = reverse("home")
         self.assertEqual(url, "/")
 
-    def test_about_url(self):
-        url = reverse("about")
-        self.assertEqual(url, "/about/")
-
     def test_join_url(self):
         url = reverse("join")
         self.assertEqual(url, "/join/")
@@ -29,10 +25,6 @@ class App1URLtoViewTest(TestCase):
     def test_home_url_to_view(self):
         res = resolve("/")
         self.assertEqual(res.view_name, "home")
-
-    def test_about_url_to_view(self):
-        res = resolve("/about/")
-        self.assertEqual(res.view_name, "about")
 
     def test_join_url_to_view(self):
         res = resolve("/join/")
