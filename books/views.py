@@ -75,6 +75,8 @@ def books(request):
             else:
                 book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 
+            if FavoriteBooks.objects.filter(favorite_id = book_id) & FavoriteBooks.objects.filter(user = cur_user):
+                return redirect('/books/')
             FavoriteBooks(user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
@@ -152,6 +154,8 @@ def book_view(request, info):
             else:
                 book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 
+            if FavoriteBooks.objects.filter(favorite = book_id) & FavoriteBooks.objects.filter(user = cur_user):
+                return redirect('/books/')
             FavoriteBooks(favorite_user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
