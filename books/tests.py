@@ -60,23 +60,39 @@ class BooksViewTest(TestCase):
             "username": "johnd",
             "password": "johndoe"
         }
-        self.searchHP = {
-            "book_search": "harry potter",
-            "search_books": "Search"
-        }
-        self.searchEmpty = {
-            "book_search": " ",
-            "search_books": "Search"
-        }
         User.objects.create_user(**self.info)
     
-    def test_book_search(self):
+    def test_book_search_get_request(self):
         self.client.post("/login/", self.login)
-        resp = self.client.post("/books/", self.searchHP, follow=True)
+        resp = self.client.get("/books/", {
+            "book_search": "harry potter",
+            "search_books": "Search"
+        }, follow=True)
+        self.assertTrue(resp.context["form_data"])
+        with self.assertRaises(KeyError):
+            resp.context["book_preview"]
+
+    def test_book_search_populated(self):
+        self.client.post("/login/", self.login)
+        resp = self.client.post("/books/", {
+            "book_search": "harry potter",
+            "search_books": "Search"
+        }, follow=True)
         self.assertTrue(resp.context["book_preview"])
 
-    def test_book_search(self):
+    def test_book_search_empty(self):
         self.client.post("/login/", self.login)
-        resp = self.client.post("/books/", self.searchEmpty, follow=True)
+        resp = self.client.post("/books/", {
+            "book_search": " ",
+            "search_books": "Search"
+        }, follow=True)
+        with self.assertRaises(KeyError):
+            resp.context["book_preview"]
+
+    def test_book_search_no_search_books_keyword(self):
+        self.client.post("/login/", self.login)
+        resp = self.client.post("/books/", {
+            "book_search": "harry potter",
+        }, follow=True)
         with self.assertRaises(KeyError):
             resp.context["book_preview"]
