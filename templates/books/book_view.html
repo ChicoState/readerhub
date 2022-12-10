@@ -39,6 +39,7 @@
         </div>
 
         <!-- Author picture/name -->
+
         <div class="row" style="margin-bottom: 2em;">
           <div class="col cover-col">
             {% if author_image == "no_photo"%}
@@ -47,7 +48,7 @@
             {%else%}
             <img src="{{author_image}}" class="img-fluid author" alt="Author Image">
             {%endif%}
-            <h3 class="text-center">Author: {{ author_name }}</h3>
+            <h3 class="text-center">Author: {% if author_name == "no_author" %} No author {% else %} {{ author_name }} {% endif %}</h3>
           </div>
         </div>
 
