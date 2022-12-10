@@ -13,6 +13,7 @@
     <div class = "row h-100 info_row">
       <div class = "col-2 basic_info">
         <br>
+        <!--Links to different pages -->
         {% if current_profile.personal_image %}
           <img class="profile-card" src="{{current_profile.personal_image.url }}">
         {% else %}
@@ -103,7 +104,6 @@
               <br>
               {{act.bookreview.text_review}}
             </div>
-
           {%elif act.favoritebooks%}
             <div class = "favorite-content col-11">
             <i>
@@ -114,12 +114,8 @@
               {% endif %}
               has favorited the book {{act.favoritebooks.favorite_title}}!</i>
             <br>
+            <br>
             </div>
-            <!--
-            <div class = "favorite-cover col-1">
-              <img src="{{act.favoritebooks.favorite_cover}}" class="book-imgf">
-            </div>
-          -->
           {% endif %}
           </div>
         {% endfor %}

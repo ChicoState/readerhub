@@ -17,6 +17,11 @@
                 {{ form }}
                 <input type='submit' value='Submit'>
             </form>
+            {% if dne %}
+            <div class="alert alert-danger" role="alert">
+                Error: The username "{{ dne }}" does not exist.
+            </div>
+            {% endif %}
         </div>
       </div>
     </div>

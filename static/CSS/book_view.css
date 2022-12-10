@@ -1,11 +1,79 @@
 
 body{
-  background-color: Gainsboro;
+  background-color: rgb(250, 249, 246);
 }
+
 .search{
   align-items: center;
-  margin-right: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
+
+.cover-col{
+  text-align: center;
+}
+.cover-col h3{
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+.cover{
+  margin-top: 2rem;
+  width: 80%;
+}
+.author{
+  margin-top: 1rem;
+  border:solid;
+  border-color: dimgray;
+  border-radius: 50%;
+  width: 50%;
+}
+.score_icon{
+  height: 2rem;
+}
+
+.review-col{
+  padding: 0;
+  text-align: center;
+  width: 11rem;
+}
+.review-col h3{
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.book-title{
+  margin-top: 2.5rem;
+  margin-left: 0;
+}
+.book-title-col{
+  padding-left: 0;
+}
+.book-title-col h3{
+  width: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 1.1rem;
+  text-align: left;
+}
+
+.better-btn{
+  font-size: 0.9rem;
+  color: rgba(128, 128, 128, 0.75);
+  letter-spacing: 1px;
+  line-height: 15px;
+  border: 2px solid rgba(128, 128, 128, 0.75);
+  border-radius: 40px;
+  background: transparent;
+}
+.better-btn:hover {
+  color: #FFF;
+  background: rgba(128, 128, 128, 0.75);
+  border: 2px solid rgba(128, 128, 128, 0.75);
+}
+
+
 
 .paragraph{
   font-size:17px;
@@ -14,7 +82,7 @@ body{
 }
 
 /*description*/
-.container{
+.container1{
   margin:auto;
   position:relative;
   right:170px;
@@ -35,17 +103,6 @@ body{
   left:120px;
   top: 50px;
   font-size: 30px;
-}
-
-.cover{
-  margin:auto;
-  border:solid;
-  border-color: dimgray;
-  float:left;
-  position:relative;
-  left:100px;
-  top: 50px;
-  width: 10%
 }
 
 .author_photo {
@@ -92,12 +149,6 @@ body{
   text-align: center;
   font-size: 30px;
 }
-
-.score_icon{
-  width: 3.5%;
-}
-
-
 
 .scrollbar {
   overflow-y: scroll;
