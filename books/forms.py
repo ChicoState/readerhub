@@ -8,7 +8,7 @@ class BooksForm(forms.Form):
 
 class BookReviewForm(forms.ModelForm):
     text_review = forms.CharField(widget=forms.Textarea(attrs={'rows': '9' , 'cols': '80'}))
-    CHOICES = [(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5')] #'star2', 'star3', 'star4', 'star5')]
+    CHOICES = [(1, '1'),(2, '2'),(3, '3'),(4, '4'),(5, '5')] #star rating out of 5
     star_review = forms.ChoiceField(choices = CHOICES, widget=forms.RadioSelect())
 
     class Meta():

@@ -1,5 +1,5 @@
-body {
-  background-color: Gainsboro;
+  body {
+    background-color: rgb(250, 249, 246);
   }
   /*.card{
     border-style: solid;
@@ -74,9 +74,14 @@ body {
     width: 10%;
   }
 
-.star-img{
-  width:2%
-}
+  .star-img{
+    width:2%
+  }
+
   .review-content {
     text-align: center;
+  }
+
+  .activity-links {
+    color: green;
   }

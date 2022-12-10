@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from messaging.models import Message
 from messaging.forms import MessageForm
 
-# Create your views here.
 
 @login_required(login_url='/login/')
 def inbox(request):

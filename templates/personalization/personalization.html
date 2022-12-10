@@ -10,20 +10,6 @@
 
 <body>
   {% include "nav.html" %}
-  {% if not profile.about_user%}
-  <!--If there is no user profile-->
-  <div class="row">
-    <div class="col-12">
-      <div class="container" align="center">
-        <form method="GET" action="/personalization/edit_profile/{{ profile.id }}/">
-          <br><br><br><br><br><br><br><br><br><br>
-          <input type="submit" class="btn btn-success btn-lg first-btn" value="Create Profile">
-        </form>
-      </div>
-    </div>
-  </div>
-  {% else %}
-  <!--If there is a user profile-->
   <div class="container-fluid px-0 prof-container">
     <div class="row text-center no-gutters">
       <!--Display profile pic-->
@@ -77,26 +63,6 @@
           </div>
         </div>
         {% endfor %}
-        <!-- If using this card format, it goes inside the forloop -->
-        <!-- Keeping this here for now for covers -->
-        <!--<div class="card posts-card">
-          <div class="row no-gutters">
-            <div class="col-auto posts-img">
-              {% if row.book_object.favorite_cover == 'no_book' %}
-              <img class="" style="width: 50%" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png"
-                alt="Card image cap">
-              {%else%}
-              <img class="" style="width: 50%" src="{{ row.book_object.favorite_cover }}" alt="Card image cap">
-              {%endif%}
-            </div>
-            <div class="col" style="width: 50%;">
-              <div class="card-block">
-                <h4 class="card-title">{{ row.title }}</h4>
-                <p class="card-text posts-text text-wrap">{{ row.content }}</p>
-              </div>
-            </div>
-          </div>
-        </div>-->
         {% endif %}
       </div>
 
@@ -113,31 +79,13 @@
           <img src="{{ book.favorite_cover }}" class="img-fluid" style="max-width: 100%;" alt="{{ book.favorite_title }} book cover">
           {%endif%}
           <figcaption class="figure-caption">{{ book.favorite_title }}</figcaption>
-          <!--<a href="/books/book_view/{{ book.favorite_id }}/" class="card-link">{{ book.favorite_title }}</a>--> <!-- link to book page -->
-        </figure>
+          </figure>
         {%endfor%}
         {% endif %}
       </div>
 
     </div>
   </div>
-
-  <!--Display following and followers-->
-  <!--{% if following or followers %}
-  <div class="jumbotron bg-dark text-white">
-    <p class="text-center title"><b>Following:</b></p>
-    {% for usering in following %}
-    <li> <a href="/personalization/{{ usering.following_user.username }}/">{{ usering.following_user.username }}</a>
-    </li>
-    {% endfor %}
-    <p class="text-center title"><b>Followers:</b></p>
-    {% for userer in followers %}
-    <li> {{ userer.user.username }}</li>
-    {% endfor %}
-  </div>
-  {% endif %}-->
-
-  {% endif %}
 
 </body>
 

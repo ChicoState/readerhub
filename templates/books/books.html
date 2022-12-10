@@ -1,5 +1,4 @@
 <html>
-
 <head>
   <meta charset="utf-8">
   <title>Books</title>
@@ -10,6 +9,7 @@
 </head>
 <body>
   <br>
+  <!--search bar form -->
     <form method="POST" action = "" enctype="multipart/form-data" align = "center">
       <div class = "search">
         {% csrf_token %}
@@ -18,10 +18,16 @@
       </div>
     </form>
   <br>
+  <!--success message if user favorited book-->
+  {% if favorited_title %}
+  <br><br><br>
+    <center><h1><i>You have favorited the book {{favorited_title}}!</i></h1></center>
+  {%endif%}
 
+  <!--search results display-->
   <div class = "cards">
     {%for book in book_preview%}
-      <div class="card bg-dark text-white">
+      <div class="card">
         <img class="card-img-top yes-img" src="{{book.1}}" alt="Card image cap">
       <div class = "card-body">
         <p class = "card-text" >{{book.0}}</p>
@@ -38,6 +44,4 @@
     {%endfor%}
   </div>
 </body>
-
-
 </html>

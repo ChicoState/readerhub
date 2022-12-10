@@ -1,9 +1,8 @@
 # pylint: disable=E5142, C0209
 """ profile, edit profile, add friend, see friends """
-#imports needed for favorite books on profile page
+#imports needed for favorite books on profile page (urlopen and json)
 from urllib.request import urlopen
 import json
-
 import os
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -109,24 +108,30 @@ def edit_profile(request, id):
     #### Should return error here ####
 
 def add_friend(request):
-    """ not used """
-    if request.method == 'POST':
-        form = FollowForm(request.POST)
-        if form.is_valid():
-            user = request.user
-            follow = User.objects.get(username = form.cleaned_data['userName'])
-            Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
-            return redirect('/')
-    context = { 'form': FollowForm() }
-    return render(request, 'personalization/add_friend.html', context)
-
-def see_friends(request):
-    """ not used """
-    user = request.user
-    following = user.following.all()
-    followers = user.followers.all()
-    context = {
-        'following': following,
-        'followers': followers,
-    }
-    return render(request, 'personalization/follows.html', context)
+	if request.method == 'POST':
+		form = FollowForm(request.POST)
+		if form.is_valid():
+			user = request.user
+			following = user.following.all()
+			followers = user.followers.all()
+			try:
+				follow = User.objects.get(username = form.cleaned_data['userName'])
+			except User.DoesNotExist:
+				context = {
+					"form": form,
+					"dne": form.cleaned_data["userName"],
+					'following': following,
+					'followers': followers,
+				}
+				return render(request, "personalization/add_friend.html", context)
+			Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
+			return redirect("/addFriends/")
+	user = request.user
+	following = user.following.all()
+	followers = user.followers.all()
+	context = {
+		'form': FollowForm() ,
+		'following': following,
+		'followers': followers,
+	}
+	return render(request, 'personalization/add_friend.html', context)

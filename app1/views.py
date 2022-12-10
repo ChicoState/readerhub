@@ -16,8 +16,8 @@ def home(request):
     activity = Activity.objects.all()
     activity_profile_pic = []
 
-    #only display 5 most recent activities on homepage
-    for act in Activity.objects.all()[:5]:
+    #display activities ordered by when object was created
+    for act in Activity.objects.all()[:5]: #show most recent 5 activities
         temp_profile = PersonalInfo.objects.get(user = act.user)
         activity_profile_pic.append(temp_profile.personal_image)
 
@@ -75,9 +75,11 @@ def user_login(request):
                     return redirect("/")
                 # If account is not active:
                 return HttpResponse("Your account is not active.")
-            print("Someone tried to login and failed.")
-            print("They used username: {} and password: {}".format(username,password))
+            # NOTE: Commenting out below lines for demo
+            # print("Someone tried to login and failed.")
+            # print("They used username: {} and password: {}".format(username,password))
             return render(request, 'app1/login.html', {"login_form": LoginForm})
+        return render(request, 'app1/login.html', {"login_form": LoginForm})
     #Nothing has been provided for username or password.
     return render(request, 'app1/login.html', {"login_form": LoginForm})
 
