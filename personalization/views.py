@@ -105,33 +105,33 @@ def edit_profile(request, id):
             return render(request, 'personalization/edit_profile.html', context)
         #Cancel
         return redirect('personalization', name=request.user.username)
-    #### Should return error here ####
+    #### Should return something here ####
 
 def add_friend(request):
-	if request.method == 'POST':
-		form = FollowForm(request.POST)
-		if form.is_valid():
-			user = request.user
-			following = user.following.all()
-			followers = user.followers.all()
-			try:
-				follow = User.objects.get(username = form.cleaned_data['userName'])
-			except User.DoesNotExist:
-				context = {
-					"form": form,
-					"dne": form.cleaned_data["userName"],
-					'following': following,
-					'followers': followers,
-				}
-				return render(request, "personalization/add_friend.html", context)
-			Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
-			return redirect("/addFriends/")
-	user = request.user
-	following = user.following.all()
-	followers = user.followers.all()
-	context = {
-		'form': FollowForm() ,
-		'following': following,
-		'followers': followers,
-	}
-	return render(request, 'personalization/add_friend.html', context)
+    if request.method == 'POST':
+        form = FollowForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            following = user.following.all()
+            followers = user.followers.all()
+            try:
+                follow = User.objects.get(username = form.cleaned_data['userName'])
+            except User.DoesNotExist:
+                context = {
+                    "form": form,
+                    "dne": form.cleaned_data["userName"],
+                    'following': following,
+                    'followers': followers,
+                }
+                return render(request, "personalization/add_friend.html", context)
+            Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
+            return redirect("/addFriends/")
+    user = request.user
+    following = user.following.all()
+    followers = user.followers.all()
+    context = {
+        'form': FollowForm() ,
+        'following': following,
+        'followers': followers,
+    }
+    return render(request, 'personalization/add_friend.html', context)

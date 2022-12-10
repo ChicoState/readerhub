@@ -1,9 +1,9 @@
-# pylint: disable=C0114, W0611
+# pylint: disable=C0114, C0115, C0116, E5142, W4902
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.urls import reverse, resolve
 from personalization.models import PersonalInfo, Critic, Follows, FavoriteBooks
 from posts.models import Post
-from django.urls import reverse, resolve
 
 # Model Unit Tests
 class PersonalizationTest(TestCase):
