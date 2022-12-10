@@ -165,6 +165,7 @@ def book_view(request, info):
             FavoriteBooks(favorite_user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
+                "favorited_title": book_title,
             }
             return render(request,'books/books.html', context)
 
