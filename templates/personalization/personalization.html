@@ -22,7 +22,7 @@
         {% endif %}
         <h3 class="text-center prof-h3">{{ profile.user }}</h3>
       </div>
-      <!--Display about user (need to fix line break issue, should show more than 1 line)-->
+      <!--Display about user -->
       <div class="col prof-text">
         <div class="d-flex p-2">
           <p class="psteps" style="margin-bottom: 0;">{{ profile.about_user|linebreaksbr }}</p>
@@ -78,7 +78,7 @@
             <div class="col" style="width: 50%;">
               <div class="card-block">
                 <h4 class="card-title">{{ row.title }}</h4>
-                <p class="card-text text-truncate posts-text">{{ row.content }}</p>
+                <p class="card-text posts-text text-wrap">{{ row.content }}</p>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@
         {% endif %}
       </div>
 
-      <!--Dsiplay library (only favorites for now)-->
+      <!--Dsiplay library -->
       <div class="col">
         <p class="text-center title"><b>{% if user.get_username == req_user %} Your {% else %} {{ profile.user }}'s {% endif %} favorites </b></p>
         {% if favorite_books %}
@@ -94,11 +94,12 @@
         <figure class="figure fav-book-cards" style="float:left">
           {% if book.favorite_cover == 'no_book' %}
           <img class="card-img-top img-fluid" src="https://www.freeiconspng.com/uploads/no-image-icon-6.png"
-            alt="Card image cap">
+            alt="No book cover found">
           {%else%}
-          <img src="{{ book.favorite_cover }}" class="figure-img img-fluid rounded" alt="Card image cap">
+          <img src="{{ book.favorite_cover }}" class="img-fluid" style="max-width: 100%;" alt="{{ book.favorite_title }} book cover">
           {%endif%}
           <figcaption class="figure-caption">{{ book.favorite_title }}</figcaption>
+          <!--<a href="/books/book_view/{{ book.favorite_id }}/" class="card-link">{{ book.favorite_title }}</a>--> <!-- link to book page -->
         </figure>
         {%endfor%}
         {% endif %}
