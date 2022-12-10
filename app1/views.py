@@ -8,17 +8,39 @@ from app1.forms import JoinForm, LoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from personalization.models import PersonalInfo
+from app1.models import Activity
+from books.models import BookReview
+from personalization.models import FavoriteBooks
 
 def about(request):
     return render(request, 'app1/about.html')
 
 @login_required(login_url='/login/')
-def home(request): #homepage for mvp displaying all people
-    allusers = PersonalInfo.objects.all()
+def home(request):
+    current_profile = ""
+    activity = Activity.objects.all()
+    activity_profile_pic = []
+
+    #only display 5 most recent activities on homepage
+    for act in Activity.objects.all()[:5]:
+        temp_profile = PersonalInfo.objects.get(user = act.user)
+        activity_profile_pic.append(temp_profile.personal_image)
+
+    #needs to be zipepd togethor to go through two lists at once in template
+    activity = zip(activity, activity_profile_pic)
+
+    #create a default profile on homepage if user has no profile
+    if PersonalInfo.objects.filter(user= request.user):
+        current_profile = PersonalInfo.objects.get(user = request.user)
+    else:
+        PersonalInfo(user=request.user).save()
+        current_profile = PersonalInfo.objects.get(user=request.user)
+
     context = {
-        "allusers": allusers,
+        "current_profile": current_profile,
+        "activity": activity,
     }
-    return render(request, "app1/home.html", context);
+    return render(request, "app1/home.html", context)
 
 def join(request):
     if (request.method == "POST"):

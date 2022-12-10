@@ -1,15 +1,14 @@
 from django.db import models
-from django.contrib.auth.models import User
 from personalization.models import FavoriteBooks
-# Create your models here.
+from app1.models import Activity
 
-class Post(models.Model):
+class Post(Activity):
     title = models.CharField(max_length=200)
     content = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_object = models.ForeignKey(FavoriteBooks, on_delete=models.CASCADE) #one to one relationship
-    # created_on = models.DateTimeField(auto_now_add=True)
-    last_modified = models.DateTimeField(auto_now=True)
+
+    def get_x(self):
+        return self.content
 
     class Meta:
         ordering = ["-last_modified"]
