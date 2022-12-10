@@ -101,7 +101,13 @@ def book_view(request, info):
 
     #query for book information
     book_url = 'https://openlibrary.org{}.json'.format(info)
-    book_response = urlopen(book_url)
+    try:
+        book_response = urlopen(book_url)
+    except:
+        context = {
+            "form_data": BooksForm(), #display search bar form
+        }
+        return render(request, 'books/books.html', context)
     book_json = json.loads(book_response.read()) #store json object from url response
 
     #check if default cover is needed
