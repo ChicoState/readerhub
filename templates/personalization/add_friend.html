@@ -33,7 +33,8 @@
       <div class = "col-4">
       </div>
       <div class = "col-4">
-        <div class="jumbotron text-center bg-dark text-white">
+        {% if following or followers%}
+        <div class="jumbotron text-center">
             {% if following %}
               <h1>Following:</h1>
             {% endif %}
@@ -47,6 +48,7 @@
                 <li>{{ userer.user.username }}</li>
             {% endfor %}
         </div>
+      {%endif%}
       </div>
       <div class = "col-4">
       </div>
