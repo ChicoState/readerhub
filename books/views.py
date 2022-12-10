@@ -81,6 +81,11 @@ def books(request):
                 "favorited_title": book_title,
             }
             return render(request,'books/books.html', context)
+        else:
+            context = {
+                    "form_data": BooksForm(), #display form
+            }
+            return render(request, 'books/books.html', context)
     else:
         context = {
             "form_data": BooksForm(), #display search bar form
