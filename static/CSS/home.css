@@ -74,9 +74,10 @@ body {
     width: 10%;
   }
 
-.star-img{
-  width:2%
-}
+  .star-img{
+    width:2%
+  }
+
   .review-content {
     text-align: center;
   }

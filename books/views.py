@@ -14,13 +14,10 @@ from personalization.models import Critic
 from books.forms import BooksForm
 from books.forms import BookReviewForm
 from books.models import BookReview
-
 #import urllib library
 from urllib.request import urlopen
-
 # import json
 import json
-
 
 @login_required(login_url='/login/')
 def books(request):
@@ -29,13 +26,15 @@ def books(request):
             books_form = BooksForm(request.POST)
             if (books_form.is_valid()):
                 book_search = books_form.cleaned_data["book_search"]
-                book_search = book_search.replace(" ", "+") #replace spaces with + for query
+                #replace spaces with + for query
+                book_search = book_search.replace(" ", "+")
                 json_url = ".json"
                 mode = "mode=ebooks" #make sure it has an ebook to filter out garbage submitted books on open library
                 text = "has_fulltext=true" #also helps filter out incomplete books
                 url = 'https://openlibrary.org/search{}?q={}&{}&{}'.format(json_url, book_search, mode, text )
                 response = urlopen(url)
-                book_json = json.loads(response.read()) #store json object from url response
+                #store json object from url response
+                book_json = json.loads(response.read())
                 book_cover = []
                 book_title = []
                 book_id = []
@@ -59,7 +58,12 @@ def books(request):
                     "book_preview": book_preview,
                 }
                 return render(request,'books/books.html', context)
-        elif("favorite" in request.POST): #can also use request.POST.get("favorite")
+            else:
+                context = {
+                    "form_data": BooksForm(), #display form
+                }
+                return render(request, 'books/books.html', context)
+        elif("favorite" in request.POST): #user favorited book
             cur_user = request.user
             book_id = request.POST.get('favorite')
             book_url = 'https://openlibrary.org{}.json'.format(book_id)
@@ -67,23 +71,24 @@ def books(request):
             book_json = json.loads(book_response.read()) #query to store title in FavoriteBooks
             book_title = book_json["title"]
             if 'covers' not in book_json:
-                book_cover = "no_book" #doesn't exist
+                book_cover = "no_book"
             else:
                 book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 
             FavoriteBooks(user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
+                "favorited_title": book_title,
             }
             return render(request,'books/books.html', context)
     else:
         context = {
-            "form_data": BooksForm(), #display form
+            "form_data": BooksForm(), #display search bar form
         }
         return render(request, 'books/books.html', context)
 
 def book_view(request, info):
-    #replace % signs that were necessary to be  pass book id in url back to backslashes
+    #replace % signs that were necessary to pass book id in url back to backslashes
     info = info.replace("%", "/")
     book_id = info
 
@@ -118,7 +123,7 @@ def book_view(request, info):
 
     #save form data if a book was just reviewed
     #make sure book doesn't already have review from user, important because the form always saves the first form data even if you come from any page
-    if not BookReview.objects.filter(user = request.user).exists():
+    if not BookReview.objects.filter(user = request.user) & BookReview.objects.filter(book_id = book_id):
         form = BookReviewForm(request.POST)
         if (form.is_valid()):
             new_review = form.save(commit=False)
@@ -149,10 +154,10 @@ def book_view(request, info):
             return render(request,'books/books.html', context)
 
     #check for review of current book, need to see if review has book id and current user
-    #defalts to be able to pass into html
     my_text_review = ""
     my_star_review = 0
     my_review = 0
+
     myreview_query = BookReview.objects.filter(book_id = book_id) & BookReview.objects.filter(user = request.user)
     if myreview_query:
         temp_review = BookReview.objects.filter(book_id = book_id) & BookReview.objects.filter(user = request.user)
@@ -173,7 +178,6 @@ def book_view(request, info):
         general_reviews_exists = 1
     else:
         general_reviews_exists = 0
-
 
     #people followed reviews for display
     follow_reviews = []
@@ -308,6 +312,7 @@ def book_view(request, info):
     except:
         favorited = False
 
+    #book information and review information needed for display
     context = {
         "form_data": BooksForm(),
         "book_cover": book_cover,
@@ -339,7 +344,8 @@ def book_view(request, info):
     return render(request, 'books/book_view.html', context)
 
 def book_review(request):
-    if("review" in request.POST):  #review button was clicked
+    #review button was clicked
+    if("review" in request.POST):
         #passed in book id with review post request
         book_id = request.POST.get("review")
 
@@ -357,7 +363,6 @@ def book_review(request):
         book_id = book_id.replace("/", "%")
         context = {
             "form_data": BookReviewForm(),
-            #cover and title for display on review page
             "book_cover": book_cover,
             "book_title": book_title,
             "book_id": book_id,
