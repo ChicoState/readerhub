@@ -36,7 +36,7 @@
         {% endif %}
         <h3 class="text-center prof-h3">{{ profile.user }}</h3>
       </div>
-      <!--Display about user (need to fix line break issue, should show more than 1 line)-->
+      <!--Display about user -->
       <div class="col prof-text">
         <div class="d-flex p-2">
           <p class="psteps" style="margin-bottom: 0;">{{ profile.about_user|linebreaksbr }}</p>
@@ -100,7 +100,7 @@
         {% endif %}
       </div>
 
-      <!--Dsiplay library (only favorites for now)-->
+      <!--Dsiplay library -->
       <div class="col">
         <p class="text-center title"><b>{% if user.get_username == req_user %} Your {% else %} {{ profile.user }}'s {% endif %} favorites </b></p>
         {% if favorite_books %}
@@ -113,6 +113,7 @@
           <img src="{{ book.favorite_cover }}" class="img-fluid" style="max-width: 100%;" alt="{{ book.favorite_title }} book cover">
           {%endif%}
           <figcaption class="figure-caption">{{ book.favorite_title }}</figcaption>
+          <!--<a href="/books/book_view/{{ book.favorite_id }}/" class="card-link">{{ book.favorite_title }}</a>--> <!-- link to book page -->
         </figure>
         {%endfor%}
         {% endif %}

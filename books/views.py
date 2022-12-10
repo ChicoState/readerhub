@@ -129,6 +129,25 @@ def book_view(request, info):
             new_review.book_cover = book_cover
             new_review.save()
 
+    if (request.method == "POST"):
+        if ("favorite" in request.POST):
+            cur_user = request.user
+            book_id = request.POST.get('favorite')
+            book_url = 'https://openlibrary.org{}.json'.format(book_id)
+            book_response = urlopen(book_url)
+            book_json = json.loads(book_response.read()) #query to store title in FavoriteBooks
+            book_title = book_json["title"]
+            if 'covers' not in book_json:
+                book_cover = "no_book" #doesn't exist
+            else:
+                book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
+
+            FavoriteBooks(favorite_user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
+            context = {
+                "form_data": BooksForm(), #continue displaying form
+            }
+            return render(request,'books/books.html', context)
+
     #check for review of current book, need to see if review has book id and current user
     #defalts to be able to pass into html
     my_text_review = ""
@@ -282,6 +301,12 @@ def book_view(request, info):
     else:
         author_image = "https://covers.openlibrary.org/a/id/" + str(author_json["photos"][0]) + "-L.jpg"
 
+    favorited = False
+    try:
+        FavoriteBooks.objects.get(favorite_user=request.user, favorite_id=book_id)
+        favorited = True
+    except:
+        favorited = False
 
     context = {
         "form_data": BooksForm(),
@@ -309,6 +334,7 @@ def book_view(request, info):
         "general_available": general_available,
         "follows_available": follows_available,
         "critic_available": critic_available,
+        "favorited": favorited,
     }
     return render(request, 'books/book_view.html', context)
 

@@ -5,19 +5,223 @@
   <title>Books</title>
   {% include "bootstrap.html" %}
   {% load static %}
-  <link rel="stylesheet" href="{%static 'CSS/book_view.css' %}"/>
-    {% include "nav.html" %}
+  <link rel="stylesheet" href="{%static 'CSS/book_view.css' %}" />
+  {% include "nav.html" %}
 </head>
+
 <body>
-<br>
-  <form method="POST" action = "/books/" enctype="multipart/form-data" align = "center">
-    <div class = "search">
-      {% csrf_token %}
-        {{form_data}}
-      <input type="submit" class="btn btn-info" name="search_books" value="Search">
+  <div class="container-fluid">
+    <!--<div class="row">
+      <div class="col">
+        <form method="POST" action="/books/" enctype="multipart/form-data" align="center">
+          <div class="search">
+            {% csrf_token %}
+            {{form_data}}
+            <input type="submit" class="btn btn-info" name="search_books" value="Search">
+          </div>
+        </form>
+      </div>
+    </div>-->
+    <div class="row">
+
+      <!-- Cover/author/ratings -->
+      <div class="col-md-3">
+        <!-- Book cover -->
+        <div class="row">
+          <div class="col cover-col">
+            {% if book_cover == 'no_book'%}
+            <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" class="img-fluid cover"
+              alt="Book Cover">
+            {%else%}
+            <img src="{{book_cover}}" class="img-fluid cover" alt="Book Cover">
+            {%endif%}
+          </div>
+        </div>
+
+        <!-- Author picture/name -->
+
+        <div class="row" style="margin-bottom: 2em;">
+          <div class="col cover-col">
+            {% if author_image == "no_photo"%}
+            <img src="https://www.freeiconspng.com/uploads/no-image-icon-0.png" class="img-fluid author"
+              alt="Author Image">
+            {%else%}
+            <img src="{{author_image}}" class="img-fluid author" alt="Author Image">
+            {%endif%}
+            <h3 class="text-center">Author: {% if author_name == "no_author" %} No author {% else %} {{ author_name }} {% endif %}</h3>
+          </div>
+        </div>
+
+        <!-- Ratings -->
+        <!-- General -->
+        <div class="row">
+          {% if general_available == 0 %}
+            <div class="col review-col">
+              <h3 class="text-left">General: </h3>
+            </div>
+            <div class="col review-col">
+              <h3 class="text-center">NA/5</h3>
+            </div>
+          {% else %}
+            <div class="col review-col">
+              <h3 class="text-left">Overall: </h3>
+            </div>
+            <div class="col review-col">
+              <h3 class="text-center">{{ general_aggregate }}/5</h3>
+            </div>
+            <div class="col review-col">
+              {% if general_icon == "low" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+              {% elif general_icon == "mid" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+              {% elif general_icon == "high" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+        <!-- Follows -->
+        <div class="row">
+          {% if follows_available == 0 %}
+            <div class="col review-col">
+              <h3 class="text-left">Followers: </h3>
+            </div>
+            <div class="col review-col">
+              <h3 class="text-center">NA/5</h3>
+            </div>
+          {% else %}
+            <div class="col review-col">
+              <h3 class="text-left">Followers: </h3>
+            </div>
+            <div class="col review-col">
+              <h3 class="text-center">{{ follows_aggregate }}/5</h3>
+            </div>
+            <div class="col review-col">
+              {% if follows_icon == "low" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+              {% elif follows_icon == "mid" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+              {% elif follows_icon == "high" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+        <!-- Critics -->
+        <div class="row">
+          {% if critic_available == 0 %}
+            <div class="col review-col">
+              <h3 class="text-left">Critics: </h3>
+            </div>
+            <div class="col review-col">
+              <h3 class="text-center">NA/5</h3>
+            </div>
+          {% else %}
+            <div class="col review-col">
+              <h3 class="text-left">Critics: </h3>
+            </div>
+            <div class="col review-col">
+              <h3 class="text-center">{{ critic_aggregate }}/5</h3>
+            </div>
+            <div class="col review-col">
+              {% if critic_icon == "low" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+              {% elif critic_icon == "mid" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+              {% elif critic_icon == "high" %}
+                <img class="img-fluid score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- CHANGE -->
+      <div class="col" style="padding-left: 0;">
+        <div class="row book-title">
+          <!-- Book name -->
+          <div class="col-md-4 book-title-col">
+            <h3 class="text-left">{{ book_title }}</h3>
+          </div>
+
+          <!-- Leave review btn -->
+          {% if my_review_exists == 0 %}
+            <div class="col" style="padding-left: 0;">
+              <form action="/books/book_review/" method="POST">
+                  <button input type="submit" class="btn better-btn" value="{{ book_id }}" name="review">Leave a Review!</button>
+                  {% csrf_token %}
+              </form>
+            </div>
+          {% endif %}
+          <!-- Favorite btn -->
+          {% if favorited == False %}
+            <div class="col" style="padding-left: 0;">
+              <form action="/books/" method="POST">
+                <button input type="submit" class="btn better-btn" value="{{ book_id }}" name="favorite">Favorite</button>
+                {% csrf_token %}
+              </form>
+            </div>
+          {% endif %}
+
+        </div> <!--row-->
+
+        <!-- Tags -->
+        <div class="row">
+          <div class="col">
+            <h3 class="text-left" style="font-size: 0.9rem;">Tags: {% for subject in book_subjects %}{{ subject }}, {% endfor %}</h3>
+          </div>
+        </div> <!--row-->
+
+        <!-- About book -->
+        <div class="row">
+          <div class="col">
+            <p class="text-left" style="font-size: 1rem;">{{ book_description }}</p>
+          </div>
+        </div> <!--row-->
+
+        <!-- Reviews -->
+        <div class="row">
+          <!-- General reviews -->
+          {% if general_reviews_exists == 1 %}
+            <div class="col">
+              {% for review in general_reviews %}
+                <div class="card" style="margin-bottom: 5px;">
+                  <div class="card-body">
+                    <h5 class="card-title" style="text-align: left;">{{ review.user.username }}: {{ review.star_review }}/5</h5>
+                    <p class="card-text">{{ review.text_review }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <!-- Followers reviews -->
+          {% if follow_reviews_exists == 1 %}
+            <div class="col">
+              {% for review in follow_reviews %}
+                <div class="card" style="margin-bottom: 5px;">
+                  <div class="card-body">
+                    <h5 class="card-title" style="text-align: left;">{{ review.user.username }}: {{ review.star_review }}/5</h5>
+                    <p class="card-text">{{ review.text_review }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <!-- Critics reviews -->
+          <div class="overflow-auto">
+            <div class="col">
+            </div>
+          </div>
+        </div> <!--row-->
+
+      </div> <!-- col CHANGE -->
+
     </div>
-  </form>
-  <div class = "aggregate_display">
+  </div>
+
+  <br><br>
+
+  <!--<div class="aggregate_display">
     <b>General Score</b>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <b>Follows Score</b>
@@ -27,59 +231,59 @@
 
     &nbsp;&nbsp;
     {% if general_available == 0%}
-      <i>NA</i>/5
+    NA/5
     {%else %}
-      {{general_aggregate}}/5
+    {{general_aggregate}}/5
     {%endif%}
     {% if general_icon == "low" %}
-      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
     {% elif general_icon == "mid" %}
-      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
     {% elif general_icon == "high" %}
-      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
     {% endif %}
 
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     {% if follows_available == 0%}
-      <i>NA</i>/5
+    NA/5
     {%else %}
-      {{follows_aggregate}}/5
+    {{follows_aggregate}}/5
     {%endif%}
     {% if follows_icon == "low" %}
-      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
     {% elif follows_icon == "mid" %}
-      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
     {% elif follows_icon == "high" %}
-      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
     {% endif %}
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
     {% if critic_available == 0%}
-      <i>NA</i>/5
+    NA/5
     {%else %}
-      {{critic_aggregate}}/5
+    {{critic_aggregate}}/5
     {%endif%}
     {% if critic_icon == "low" %}
-      <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/broken_heart.png' %}">
     {% elif critic_icon == "mid" %}
-      <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/half_heart.png' %}">
     {% elif critic_icon == "high" %}
-      <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
+    <img class="score_icon" src="{%static 'permanent_images/full_heart.png' %}">
     {% endif %}
   </div>
-<br>
+  <br>
   {% if book_cover == 'no_book'%}
-    <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" class = "cover" alt="Book Cover">
+  <img src="https://www.freeiconspng.com/uploads/no-image-icon-6.png" class="cover" alt="Book Cover">
   {%else%}
-    <img class="cover" src="{{book_cover}}" alt="Book Cover">
+  <img class="cover" src="{{book_cover}}" alt="Book Cover">
   {%endif%}
-  <div class = "title">
-     <b>{{book_title}}</b>
+  <div class="title">
+    <b>{{book_title}}</b>
   </div>
   <br><br><br><br><br>
 
-  <div class = "container">
-    <p class = "paragraph">  {{book_description}} </p>
+  <div class="container1">
+    <p class="paragraph"> {{book_description}} </p>
   </div>
 
   <div class = "container2">
@@ -94,9 +298,9 @@
   </div>
 
   {% if author_image == "no_photo"%}
-    <img class="author_photo" src="https://www.freeiconspng.com/uploads/no-image-icon-0.png" alt="Author Image">
+  <img class="author_photo" src="https://www.freeiconspng.com/uploads/no-image-icon-0.png" alt="Author Image">
   {%else%}
-    <img class="author_photo" src="{{author_image}}" alt="Author Image">
+  <img class="author_photo" src="{{author_image}}" alt="Author Image">
   {%endif%}
   <div class = "name">
     Author:
@@ -109,64 +313,65 @@
 
   {% if my_review_exists == 0 %}
   <form method="POST" action="/books/book_review/">
-    <div class = "btn_center">
-      <button input type="submit" class="btn btn-warning" value="{{book_id}}" name = "review">Leave a Review!</button>
+    <div class="btn_center">
+      <button input type="submit" class="btn btn-warning" value="{{book_id}}" name="review">Leave a Review!</button>
       {% csrf_token %}
     </div>
   </form>
   {% else %}
-  <div class = "review">
-    <div class = "text-center">
+  <div class="review">
+    <div class="text-center">
       <i>Rating: {{my_review.star_review}}/5 </i><br><br>
     </div>
-    <div class = "indent-text">
+    <div class="indent-text">
       {{my_review.text_review}}
     </div>
   </div>
   {% endif %}
   <br><br><br><br><br>
 
-<div class = "grid_container">
-  <div class = "row reviews">
-    <div class = "col-5">
-      {%if general_reviews_exists == 1 %}
-      <div class = "review_type">
-        <b>General Reviews</b>
-      </div>
-      <div class = "scrollbar scrollbar-primary">
-      {% for review in general_reviews %}
-        <div class = "review">
-          <div class = "text-center">
-            <i>Rating: {{review.star_review}}/5 </i><br><br>
-          </div>
-          <div class = "indent-text">
-            {{review.text_review}}
-          </div>
+  <div class="grid_container">
+    <div class="row reviews">
+      <div class="col-5">
+        {%if general_reviews_exists == 1 %}
+        <div class="review_type">
+          <b>General Reviews</b>
         </div>
-      {%endfor%}
-      </div>
-    {%endif%}
-  </div>
-  <div class = "col-5">
-    {%if follow_reviews_exist == 1 %}
-    <div class = "review_type">
-      <b>Follows Review</b>
-    </div>
-    <div class = "scrollbar scrollbar-primary">
-      {% for review in follow_reviews %}
-        <div class = "review">
-          <div class = "text-center">
-            <i>Rating: {{review.0}}/5 </i><br><br>
+        <div class="scrollbar scrollbar-primary">
+          {% for review in general_reviews %}
+          <div class="review">
+            <div class="text-center">
+              <i>Rating: {{review.star_review}}/5 </i><br><br>
+            </div>
+            <div class="indent-text">
+              {{review.text_review}}
+            </div>
           </div>
-          <div class = "indent-text">
-            {{review.1}}
-          </div>
+          {%endfor%}
         </div>
-      {%endfor%}
+        {%endif%}
+      </div>
+      <div class="col-5">
+        {%if follow_reviews_exist == 1 %}
+        <div class="review_type">
+          <b>Follows Review</b>
+        </div>
+        <div class="scrollbar scrollbar-primary">
+          {% for review in follow_reviews %}
+          <div class="review">
+            <div class="text-center">
+              <i>Rating: {{review.0}}/5 </i><br><br>
+            </div>
+            <div class="indent-text">
+              {{review.1}}
+            </div>
+          </div>
+          {%endfor%}
+        </div>
+        {%endif%}
+      </div>
     </div>
-    {%endif%}
-  </div>
-</div>
-</div>
+  </div>-->
 </body>
+
 </html>
