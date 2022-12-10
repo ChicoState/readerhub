@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+# pylint: disable=C0114, E5142, C0116, W0611
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -13,58 +13,54 @@ def posts(request):
         id = request.GET["delete"]
         Post.objects.filter(id=id).delete()
         return redirect("/posts/")
-    else:
-        posts = Post.objects.filter(user=request.user)
-        context = {
-            "posts": posts,
-        }
+    posts = Post.objects.filter(user=request.user)
+    context = {
+        "posts": posts,
+    }
     return render(request, 'posts/posts.html', context)
 
 @login_required(login_url='/login/')
 def add_post(request):
-    if (request.method == "POST"):
-        if ("add" in request.POST):
+    if request.method == "POST":
+        if "add" in request.POST:
             form = PostForm(request.POST, user = request.user)
-            if (form.is_valid()):
+            if form.is_valid():
                 newPost = form.save(commit=False)
                 newPost.user = request.user
                 newPost.save()
                 return redirect("/posts/")
-            else:
-                context = {
-                    "form_data": form
-                }
-                return render(request, "posts/add_post.html", context)
-        else:
-            return redirect("/posts/")
-    else:
-        context = {
-            "form_data": PostForm(user=request.user)
-        }
-        return render(request, "posts/add_post.html", context)
+            context = {
+                "form_data": form
+            }
+            return render(request, "posts/add_post.html", context)
+        return redirect("/posts/")
+
+    context = {
+        "form_data": PostForm(user=request.user)
+    }
+    return render(request, "posts/add_post.html", context)
 
 @login_required(login_url="/login/")
 def edit_post(request, id):
-    if (request.method == "GET"):
+    if request.method == "GET":
         item = Post.objects.get(id=id)
         form = PostForm(instance=item, user = request.user)
         context = {
             "form_data": form
         }
         return render(request, "posts/edit_post.html", context)
-    elif (request.method == "POST"):
-        if ("edit" in request.POST):
+    elif request.method == "POST":
+        if "edit" in request.POST:
             form = PostForm(request.POST, user = request.user)
-            if (form.is_valid()):
+            if form.is_valid():
                 post = form.save(commit=False)
                 post.user = request.user
                 post.id = id
                 post.save()
                 return redirect("/posts/")
-            else:
-                context = {
-                    "form_data": form
-                }
-                return render(request, "posts/add_post.html", context)
-        else:
-            return redirect("/posts/")
+            context = {
+                "form_data": form
+            }
+            return render(request, "posts/add_post.html", context)
+        return redirect("/posts/")
+    #### Should return error here ####

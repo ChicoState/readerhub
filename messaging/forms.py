@@ -1,3 +1,4 @@
+# pylint: disable=C0415, C0114, C0115
 from django import forms
 from messaging.models import Message
 

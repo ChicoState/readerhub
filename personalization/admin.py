@@ -1,3 +1,4 @@
+# pylint: disable=C0114
 from django.contrib import admin
 from .models import Follows
 from .models import Critic

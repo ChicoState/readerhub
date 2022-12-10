@@ -1,5 +1,5 @@
+# pylint: disable=C0114, C0115, E5142
 from django.db import models
-from django.contrib.auth.models import User
 from app1.models import Activity
 
 class BookReview(Activity):#one per book
