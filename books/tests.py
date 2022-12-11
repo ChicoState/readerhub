@@ -75,6 +75,7 @@ class BooksViewTest(TestCase):
 
     def tearDown(self):
         self.testUser.delete()
+        self.guestUser.delete()
     
     # books
     def test_book_search_get_request(self):
@@ -164,96 +165,96 @@ class BooksViewTest(TestCase):
         self.client.post("/login/", self.login)
         BookReview.objects.create(user=self.testUser, book_id=self.testBookID, text_review="this is my review", star_review=3, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["my_review_exists"] == 1)
+        self.assertEquals(resp.context["my_review_exists"], 1)
 
     def test_book_view_without_my_review(self):
         self.client.post("/login/", self.login)
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["my_review_exists"] == 0)
+        self.assertEquals(resp.context["my_review_exists"], 0)
 
     def test_book_view_with_general_reviews(self):
         self.client.post("/login/", self.login)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["general_reviews_exists"] == 1)
+        self.assertEquals(resp.context["general_reviews_exists"], 1)
 
     def test_book_view_without_general_reviews(self):
         self.client.post("/login/", self.login)
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["general_reviews_exists"] == 0)
+        self.assertEquals(resp.context["general_reviews_exists"], 0)
 
     def test_book_view_with_follower_review(self):
         self.client.post("/login/", self.login)
         Follows.objects.create(user=self.testUser, following_user=self.guestUser)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["follow_reviews_exist"] == 1)
+        self.assertEquals(resp.context["follow_reviews_exist"], 1)
 
     def test_book_view_without_follower_review(self):
         self.client.post("/login/", self.login)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["follow_reviews_exist"] == 0)
+        self.assertEquals(resp.context["follow_reviews_exist"], 0)
 
     def test_book_view_low_follower_aggregate(self):
         self.client.post("/login/", self.login)
         Follows.objects.create(user=self.testUser, following_user=self.guestUser)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=2, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["follows_icon"] == "low")
+        self.assertEquals(resp.context["follows_icon"], "low")
 
     def test_book_view_mid_follower_aggregate(self):
         self.client.post("/login/", self.login)
         Follows.objects.create(user=self.testUser, following_user=self.guestUser)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3.5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["follows_icon"] == "mid")
+        self.assertEquals(resp.context["follows_icon"], "mid")
     
     def test_book_view_high_follower_aggregate(self):
         self.client.post("/login/", self.login)
         Follows.objects.create(user=self.testUser, following_user=self.guestUser)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["follows_icon"] == "high")
+        self.assertEquals(resp.context["follows_icon"], "high")
 
     def test_book_view_low_critic_aggregate(self):
         self.client.post("/login/", self.login)
         Critic.objects.create(user=self.guestUser, is_critic=True)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=2, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["critic_icon"] == "low")
+        self.assertEquals(resp.context["critic_icon"], "low")
 
     def test_book_view_mid_critic_aggregate(self):
         self.client.post("/login/", self.login)
         Critic.objects.create(user=self.guestUser, is_critic=True)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3.5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["critic_icon"] == "mid")
+        self.assertEquals(resp.context["critic_icon"], "mid")
     
     def test_book_view_high_critic_aggregate(self):
         self.client.post("/login/", self.login)
         Critic.objects.create(user=self.guestUser, is_critic=True)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["critic_icon"] == "high")
+        self.assertEquals(resp.context["critic_icon"], "high")
 
     def test_book_view_low_general_aggregate(self):
         self.client.post("/login/", self.login)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=2, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["general_icon"] == "low")
+        self.assertEquals(resp.context["general_icon"], "low")
 
     def test_book_view_mid_general_aggregate(self):
         self.client.post("/login/", self.login)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3.5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["general_icon"] == "mid")
+        self.assertEquals(resp.context["general_icon"], "mid")
     
     def test_book_view_high_general_aggregate(self):
         self.client.post("/login/", self.login)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
-        self.assertTrue(resp.context["general_icon"] == "high")
+        self.assertEquals(resp.context["general_icon"], "high")
 
     # book_review
     def test_book_review_valid(self):
