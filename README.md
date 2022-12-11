@@ -1,3 +1,5 @@
+[![ReaderHub_CI](https://github.com/ChicoState/readerhub/actions/workflows/actions.yml/badge.svg)](https://github.com/ChicoState/readerhub/actions/workflows/actions.yml)
+
 # ReaderHub
 
 ## Dependencies
