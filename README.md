@@ -8,6 +8,7 @@
 - sqlparse==0.2.4
 - pillow == 7.0.0
 - requests == 2.22.0
+- coverage == 7.0.0b1
 
 ## Running Django project locally
 
@@ -23,3 +24,19 @@
 - To close the containers, either use `docker-compose down` in another terminal or interrupt using `CTRL + C`
 
 NOTE: Replace `python` with `python3` if needed
+
+## Running tests with Django
+
+- Django allows the use of `python manage.py test` to run tests
+- Append the above command with the specific app name to run app-specific tests (Ex: `python manage.py test posts`)
+
+## Running tests with coverage.py (PREFERRED)
+
+- Use the command `coverage run --source='.' manage.py test` to run tests
+- Append the above command with the specific app name to run app-specific tests (Ex: `coverage run --source='.' manage.py test posts`)
+
+## Retrieve coverage report
+
+- Use the command `coverage report` to print a full report of coverage to the terminal
+
+NOTE: The coverage report is generated based on the last test run performed
