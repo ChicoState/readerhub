@@ -15,7 +15,7 @@ body {
   flex-direction: row;
 }
 .card {
-  background-color: slategrey;
+  background-color: limegreen;
   width: 25rem;
   border:solid;
   border-color: black;
