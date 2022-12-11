@@ -384,3 +384,8 @@ def book_review(request):
             "book_id": book_id,
         }
         return render(request, 'books/book_review.html', context)
+    else:
+        context = {
+            "form_data": BooksForm(), #display search bar form
+        }
+        return render(request, 'books/books.html', context)
