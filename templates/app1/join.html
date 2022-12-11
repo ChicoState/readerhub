@@ -7,10 +7,10 @@
   <body>
     <div class="container">
       <br>
-      <div class = "jumbotron bg-dark text-white">
+      <div class = "jumbotron ">
         <h1>Join</h1>
         <form method="POST">{% csrf_token %}
-          <table class = "text-white">
+          <table class = "join-table">
             <p>First Name:<br>
               {{ join_form.first_name }}</p>
               <p></p>

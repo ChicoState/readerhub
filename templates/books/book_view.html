@@ -72,14 +72,14 @@
         <div class="row">
           {% if follows_available == 0 %}
             <div class="col review-col">
-              <h3 class="text-left">Followers: </h3>
+              <h3 class="text-left">Follows: </h3>
             </div>
             <div class="col review-col">
               <h3 class="text-center">NA/5</h3>
             </div>
           {% else %}
             <div class="col review-col">
-              <h3 class="text-left">Followers: </h3>
+              <h3 class="text-left">Follows: </h3>
             </div>
             <div class="col review-col">
               <h3 class="text-center">{{ follows_aggregate }}/5</h3>
@@ -182,24 +182,6 @@
               {% endfor %}
             </div>
           {% endif %}
-          <!-- Followers reviews -->
-          {% if follow_reviews_exists == 1 %}
-            <div class="col">
-              {% for review in follow_reviews %}
-                <div class="card" style="margin-bottom: 5px;">
-                  <div class="card-body">
-                    <h5 class="card-title" style="text-align: left;">{{ review.user.username }}: {{ review.star_review }}/5</h5>
-                    <p class="card-text">{{ review.text_review }}</p>
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-          {% endif %}
-          <!-- Critics reviews -->
-          <div class="overflow-auto">
-            <div class="col">
-            </div>
-          </div>
         </div> <!--row-->
 
       </div> <!-- col CHANGE -->
