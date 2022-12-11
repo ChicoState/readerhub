@@ -83,6 +83,11 @@ def books(request):
                 "favorited_title": book_title,
             }
             return render(request,'books/books.html', context)
+        else:
+            context = {
+                    "form_data": BooksForm(), #display form
+            }
+            return render(request, 'books/books.html', context)
     else:
         context = {
             "form_data": BooksForm(), #display search bar form
@@ -96,7 +101,13 @@ def book_view(request, info):
 
     #query for book information
     book_url = 'https://openlibrary.org{}.json'.format(info)
-    book_response = urlopen(book_url)
+    try:
+        book_response = urlopen(book_url)
+    except:
+        context = {
+            "form_data": BooksForm(), #display search bar form
+        }
+        return render(request, 'books/books.html', context)
     book_json = json.loads(book_response.read()) #store json object from url response
 
     #check if default cover is needed
@@ -149,11 +160,12 @@ def book_view(request, info):
             else:
                 book_cover = ("http://covers.openlibrary.org/b/id/"+str(book_json["covers"][0])+"-L.jpg")
 
-            if FavoriteBooks.objects.filter(favorite = book_id) & FavoriteBooks.objects.filter(user = cur_user):
+            if FavoriteBooks.objects.filter(favorite_id = book_id) & FavoriteBooks.objects.filter(user = cur_user):
                 return redirect('/books/')
-            FavoriteBooks(favorite_user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
+            FavoriteBooks(user = cur_user, favorite_id = book_id, favorite_title = book_title, favorite_cover = book_cover).save()
             context = {
                 "form_data": BooksForm(), #continue displaying form
+                "favorited_title": book_title,
             }
             return render(request,'books/books.html', context)
 
@@ -372,3 +384,8 @@ def book_review(request):
             "book_id": book_id,
         }
         return render(request, 'books/book_review.html', context)
+    else:
+        context = {
+            "form_data": BooksForm(), #display search bar form
+        }
+        return render(request, 'books/books.html', context)

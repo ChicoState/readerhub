@@ -28,7 +28,7 @@ def personalization(request, name):
 		user = request.user
 		follow = User.objects.get(username = name)
 		Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
-		return redirect('/personalization/%s' % user.username )
+		return redirect('/personalization/%s' % follow.username)
 
 	#the user's personal info
 	profile = PersonalInfo.objects.get(user=user)
@@ -138,6 +138,16 @@ def add_friend(request):
 				return render(request, "personalization/add_friend.html", context)
 			Follows.objects.get_or_create(user_id=user.id, following_user_id=follow.id)
 			return redirect("/addFriends/")
+		else:
+			user = request.user
+			following = user.following.all()
+			followers = user.followers.all()
+			context = {
+				'form': FollowForm() ,
+				'following': following,
+				'followers': followers,
+			}
+			return render(request, 'personalization/add_friend.html', context)
 	user = request.user
 	following = user.following.all()
 	followers = user.followers.all()
