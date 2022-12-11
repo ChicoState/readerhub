@@ -63,7 +63,7 @@
               {{act.post.content}}
             </div>
             <div class = "col-2 post-link">
-              <a  href="/personalization/{{ act.user }}">
+              <a class = "activity-links" href="/personalization/{{ act.user }}">
                 {% if act_pic %}
                   <img class="post-card" src="{{act_pic.url }}">
                 {% else %}
@@ -78,7 +78,9 @@
               <img src="{{act.bookreview.book_cover}}" class="book-imgr">
             </div>
             <div class = "col-10 review-content">
-              <h3><b>{{act.user}} has left a review on <i>{{act.bookreview.book_title}}</i></b></h3>
+              <h3><b>
+              <a class = "activity-links" href="/personalization/{{ act.user }}">  {{act.user}} </a>
+                has left a review on <i>{{act.bookreview.book_title}}</i></b></h3>
               <div class = "review-star">
                 {%if act.bookreview.star_review == 1 %}
                   <img class="star-img" src="{%static 'permanent_images/star.png' %}">
@@ -107,11 +109,14 @@
           {%elif act.favoritebooks%}
             <div class = "favorite-content col-11">
             <i>
+              <a  class = "activity-links" href="/personalization/{{ act.user }}">
               {% if act_pic %}
                 <img class="favorite-card" src="{{act_pic.url }}">
               {% else %}
                 <img class="favorite-card" src="{%static 'permanent_images/default_profile.png' %}">
               {% endif %}
+                {{act.user}}
+              </a>
               has favorited the book {{act.favoritebooks.favorite_title}}!</i>
             <br>
             <br>
