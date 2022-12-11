@@ -10,9 +10,8 @@
   <body>
     <div class="container">
       <br>
-      <div class = "jumbotron bg-dark text-white">
+      <div class = "jumbotron text-center">
         <h1>Login</h1>
-        <div style="text-align: center;">No account? Click <a href="/join">here</a> to join.</div>
         <form action="/login/" method="POST">{% csrf_token %}
             <p>Username:<br>
             {{ login_form.username }}</p>
@@ -23,6 +22,7 @@
               <input type="submit" class="btn btn-primary" value = "Login"/>
             </p>
         </form>
+        <div style="text-align: center;">No account? Click <a href="/join">here</a> to join.</div>
       </div>
     </div>
   </body>
