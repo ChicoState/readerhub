@@ -200,19 +200,19 @@ def book_view(request, info):
     follow_star_review = []
     follow_text_review = []
 
-#@@folloing reviews not currenty being displayed so code not needed @@
-    #current_follows = Follows.objects.filter(user = request.user)
+    current_follows = Follows.objects.filter(user = request.user)
     #filter reviews for people followed
-#    for follows in current_follows:
-#        follow_review_query = BookReview.objects.filter(user = follows.following_user) & BookReview.objects.filter(book_id = book_id)
-#        if (follow_review_query):
-#            follow_reviews.append(list(BookReview.objects.filter(user = follows.following_user)))
+    for follows in current_follows:
+        follow_review_query = BookReview.objects.filter(user = follows.following_user) & BookReview.objects.filter(book_id = book_id)
+        if (follow_review_query):
+            follow_reviews.append(list(BookReview.objects.filter(user = follows.following_user)))
     #check if list is empty
     if follow_reviews:
         follow_reviews_exist = 1
     else:
         follow_reviews_exist = 0
 
+    #@@folloing reviews not currenty being displayed so code not needed @@
     #the queryset became a list of lists so need a double for loop
     #for templist in follow_reviews:
     #    for review in templist:
