@@ -195,6 +195,30 @@ def book_view(request, info):
     else:
         general_reviews_exists = 0
 
+    #people followed reviews for display
+    follow_reviews = []
+    follow_star_review = []
+    follow_text_review = []
+
+    current_follows = Follows.objects.filter(user = request.user)
+    #filter reviews for people followed
+    for follows in current_follows:
+        follow_review_query = BookReview.objects.filter(user = follows.following_user) & BookReview.objects.filter(book_id = book_id)
+        if (follow_review_query):
+            follow_reviews.append(list(BookReview.objects.filter(user = follows.following_user)))
+    #check if list is empty
+    if follow_reviews:
+        follow_reviews_exist = 1
+    else:
+        follow_reviews_exist = 0
+
+    #the queryset became a list of lists so need a double for loop
+    for templist in follow_reviews:
+        for review in templist:
+            follow_star_review.append(review.star_review)
+            follow_text_review.append(review.text_review)
+    follow_reviews = zip(follow_star_review, follow_text_review)
+
 
     #intialize variables for review aggregates
     general_aggregate = 0
@@ -211,12 +235,11 @@ def book_view(request, info):
         #check if the user you are following has a review
         if temp_follows_reviews.first():
             follows_aggregate = follows_aggregate + temp_follows_reviews.first().star_review #can use first to grab from quertyset because users can only leave one review
-            follows_counter = follows_counter + 1
+        follows_counter = follows_counter + 1
 
     #get average score
     if follows_counter != 0: #protect from divide by zero error
         follows_aggregate = follows_aggregate/follows_counter
-
         follows_aggregate = str(round(follows_aggregate, 1)) #round to two decimal places
 
     follows_aggregate = float(follows_aggregate)
@@ -318,7 +341,9 @@ def book_view(request, info):
         "my_text_review": my_text_review,
         "my_star_review": my_star_review,
         "general_reviews": general_reviews,
+        "follow_reviews": follow_reviews,
         "my_review_exists": my_review_exists,
+        "follow_reviews_exist": follow_reviews_exist,
         "general_reviews_exists": general_reviews_exists,
         "my_review": my_review,
         "follows_aggregate": follows_aggregate,
