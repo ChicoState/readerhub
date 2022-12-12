@@ -1,7 +1,8 @@
+# pylint: disable=C0114, C0115, C0116, E5142
 from django.test import TestCase
 from django.contrib.auth.models import User
-from personalization.models import PersonalInfo, FavoriteBooks
 from django.urls import reverse, resolve
+from personalization.models import PersonalInfo, FavoriteBooks
 
 # Testing app1 URLs
 class App1URLTest(TestCase):
@@ -56,7 +57,7 @@ class JoinTest(TestCase):
             "email": "janedoe.com",
             "password": "janedoe"
         }
-    
+
     def test_join_valid(self):
         self.client.post("/join/", self.infoGood, follow=True)
         self.assertTrue(User.objects.get(username=self.infoGood["username"]))

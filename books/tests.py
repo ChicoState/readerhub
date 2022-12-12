@@ -1,15 +1,16 @@
+# pylint: disable=C0114, C0115, C0116, E5142, W0104, W4902
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.urls import reverse, resolve
 from books.models import BookReview
 from personalization.models import Follows, Critic
-from django.urls import reverse, resolve
 
 # Model Unit Tests
 class BooksTest(TestCase):
     def setUp(self):
         self.testUser = User.objects.create_user("John Doe", "johndoe@gmail.com", "johndoe")
         BookReview.objects.create(user=self.testUser, book_id="test book id", text_review="test book review", star_review=5)
-    
+
     def tearDown(self):
         self.testUser.delete()
 
@@ -32,7 +33,7 @@ class BooksURLTest(TestCase):
     def test_book_review_url(self):
         url = reverse("book_review")
         self.assertEqual(url, "/books/book_review/")
-        
+
 # Testing URLs connect to correct view
 class BooksURLtoViewTest(TestCase):
     def test_books_url_to_view(self):
@@ -76,7 +77,7 @@ class BooksViewTest(TestCase):
     def tearDown(self):
         self.testUser.delete()
         self.guestUser.delete()
-    
+
     # books
     def test_book_search_get_request(self):
         self.client.post("/login/", self.login)
@@ -142,7 +143,7 @@ class BooksViewTest(TestCase):
         resp = self.client.post("/books/book_view/invalid/", follow=True)
         with self.assertRaises(KeyError):
             resp.context["book_id"]
-    
+
     def test_book_view_favorite(self):
         self.client.post("/login/", self.login)
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", {
@@ -209,7 +210,7 @@ class BooksViewTest(TestCase):
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3.5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
         self.assertEquals(resp.context["follows_icon"], "mid")
-    
+
     def test_book_view_high_follower_aggregate(self):
         self.client.post("/login/", self.login)
         Follows.objects.create(user=self.testUser, following_user=self.guestUser)
@@ -230,7 +231,7 @@ class BooksViewTest(TestCase):
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3.5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
         self.assertEquals(resp.context["critic_icon"], "mid")
-    
+
     def test_book_view_high_critic_aggregate(self):
         self.client.post("/login/", self.login)
         Critic.objects.create(user=self.guestUser, is_critic=True)
@@ -249,7 +250,7 @@ class BooksViewTest(TestCase):
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=3.5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")
         resp = self.client.post("/books/book_view/" + self.testBookIDURL + "/", follow=True)
         self.assertEquals(resp.context["general_icon"], "mid")
-    
+
     def test_book_view_high_general_aggregate(self):
         self.client.post("/login/", self.login)
         BookReview.objects.create(user=self.guestUser, book_id=self.testBookID, text_review="this is my review", star_review=5, book_title="Harry Potter and the Philosopher's Stone", book_cover="cover here")

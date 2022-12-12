@@ -1,30 +1,23 @@
-from django.http import HttpResponse
+# pylint: disable=C0301, C0114, C0116, C0209
+# import json
+import json
+# import urllib library
+from urllib.request import urlopen
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from app1.forms import JoinForm, LoginForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from personalization.models import PersonalInfo
 from personalization.models import FavoriteBooks
 from personalization.models import Follows
 from personalization.models import Critic
 from books.forms import BooksForm
 from books.forms import BookReviewForm
 from books.models import BookReview
-#import urllib library
-from urllib.request import urlopen
-# import json
-import json
 
 @login_required(login_url='/login/')
 def books(request):
-    if (request.method == "POST"):
-        if ("search_books" in request.POST):
+    if request.method == "POST":
+        if "search_books" in request.POST:
             books_form = BooksForm(request.POST)
-            if (books_form.is_valid()):
+            if books_form.is_valid():
                 book_search = books_form.cleaned_data["book_search"]
                 #replace spaces with + for query
                 book_search = book_search.replace(" ", "+")
@@ -58,12 +51,11 @@ def books(request):
                     "book_preview": book_preview,
                 }
                 return render(request,'books/books.html', context)
-            else:
-                context = {
-                    "form_data": BooksForm(), #display form
-                }
-                return render(request, 'books/books.html', context)
-        elif("favorite" in request.POST): #user favorited book
+            context = {
+                "form_data": BooksForm(), #display form
+            }
+            return render(request, 'books/books.html', context)
+        elif "favorite" in request.POST: #can also use request.POST.get("favorite")
             cur_user = request.user
             book_id = request.POST.get('favorite')
             book_url = 'https://openlibrary.org{}.json'.format(book_id)
@@ -83,16 +75,14 @@ def books(request):
                 "favorited_title": book_title,
             }
             return render(request,'books/books.html', context)
-        else:
-            context = {
-                    "form_data": BooksForm(), #display form
-            }
-            return render(request, 'books/books.html', context)
-    else:
         context = {
-            "form_data": BooksForm(), #display search bar form
+                "form_data": BooksForm(), #display form
         }
         return render(request, 'books/books.html', context)
+    context = {
+        "form_data": BooksForm(), #display search bar form
+    }
+    return render(request, 'books/books.html', context)
 
 def book_view(request, info):
     #replace % signs that were necessary to pass book id in url back to backslashes
@@ -138,7 +128,7 @@ def book_view(request, info):
     #make sure book doesn't already have review from user, important because the form always saves the first form data even if you come from any page
     if not BookReview.objects.filter(user = request.user) & BookReview.objects.filter(book_id = book_id):
         form = BookReviewForm(request.POST)
-        if (form.is_valid()):
+        if form.is_valid():
             new_review = form.save(commit=False)
             new_review.user = request.user
             new_review.book_id = book_id
@@ -147,8 +137,8 @@ def book_view(request, info):
             new_review.book_cover = book_cover
             new_review.save()
 
-    if (request.method == "POST"):
-        if ("favorite" in request.POST):
+    if request.method == "POST":
+        if "favorite" in request.POST:
             cur_user = request.user
             book_id = request.POST.get('favorite')
             book_url = 'https://openlibrary.org{}.json'.format(book_id)
@@ -204,7 +194,7 @@ def book_view(request, info):
     #filter reviews for people followed
     for follows in current_follows:
         follow_review_query = BookReview.objects.filter(user = follows.following_user) & BookReview.objects.filter(book_id = book_id)
-        if (follow_review_query):
+        if follow_review_query:
             follow_reviews.append(list(BookReview.objects.filter(user = follows.following_user)))
     #check if list is empty
     if follow_reviews:
@@ -257,8 +247,8 @@ def book_view(request, info):
         follows_icon = "high"
 
     #review aggregate for all critics
-    for object in Critic.objects.all():
-        critic_review = BookReview.objects.filter(user = object.user) & BookReview.objects.filter(book_id = book_id)
+    for cobject in Critic.objects.all():
+        critic_review = BookReview.objects.filter(user = cobject.user) & BookReview.objects.filter(book_id = book_id)
         if critic_review.first():
             critic_aggregate = critic_aggregate + critic_review.first().star_review
             critic_counter = critic_counter + 1
@@ -361,8 +351,7 @@ def book_view(request, info):
     return render(request, 'books/book_view.html', context)
 
 def book_review(request):
-    #review button was clicked
-    if("review" in request.POST):
+    if "review" in request.POST:  #review button was clicked
         #passed in book id with review post request
         book_id = request.POST.get("review")
 
@@ -385,8 +374,7 @@ def book_review(request):
             "book_id": book_id,
         }
         return render(request, 'books/book_review.html', context)
-    else:
-        context = {
-            "form_data": BooksForm(), #display search bar form
-        }
-        return render(request, 'books/books.html', context)
+    context = {
+        "form_data": BooksForm(), #display search bar form
+    }
+    return render(request, 'books/books.html', context)

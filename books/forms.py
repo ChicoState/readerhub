@@ -1,6 +1,5 @@
+# pylint: disable=C0114, C0115, E5142
 from django import forms
-from django.core import validators
-from django.contrib.auth.models import User
 from books.models import BookReview
 
 

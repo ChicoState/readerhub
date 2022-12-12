@@ -1,3 +1,4 @@
+# pylint: disable=C0114, C0115, C0116
 from django.db import models
 from personalization.models import FavoriteBooks
 from app1.models import Activity

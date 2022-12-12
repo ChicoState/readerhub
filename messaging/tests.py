@@ -1,7 +1,8 @@
+# pylint: disable=C0114, C0115, C0116, E5142, W4902
 from django.test import TestCase
 from django.contrib.auth.models import User
-from messaging.models import Message
 from django.urls import reverse, resolve
+from messaging.models import Message
 
 # Model Unit Tests
 class MessageTest(TestCase):
@@ -9,7 +10,7 @@ class MessageTest(TestCase):
         self.testUser = User.objects.create_user("John Doe", "johndoe@gmail.com", "johndoe")
         self.testUser1 = User.objects.create_user("Jane Doe", "janedoe@gmail.com", "janedoe")
         Message.objects.create(sender=self.testUser, receiver=self.testUser1, content="test message content")
-    
+
     def tearDown(self):
         self.testUser.delete()
         self.testUser1.delete()

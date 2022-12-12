@@ -1,7 +1,7 @@
+# pylint: disable=C0114, C0115
 from django import forms
 from posts.models import Post
 from personalization.models import FavoriteBooks
-import requests
 #from django.contrib.auth.models import User
 
 class PostForm(forms.ModelForm):
