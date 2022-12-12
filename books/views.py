@@ -212,12 +212,6 @@ def book_view(request, info):
     else:
         follow_reviews_exist = 0
 
-    #the queryset became a list of lists so need a double for loop
-    for templist in follow_reviews:
-        for review in templist:
-            follow_star_review.append(review.star_review)
-            follow_text_review.append(review.text_review)
-    follow_reviews = zip(follow_star_review, follow_text_review)
 
 
     #intialize variables for review aggregates
