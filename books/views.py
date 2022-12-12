@@ -260,7 +260,7 @@ def book_view(request, info):
         critic_review = BookReview.objects.filter(user = object.user) & BookReview.objects.filter(book_id = book_id)
         if critic_review.first():
             critic_aggregate = critic_aggregate + critic_review.first().star_review
-        critic_counter = critic_counter + 1
+            critic_counter = critic_counter + 1
 
     #get average critic score
     if critic_counter != 0:
