@@ -235,7 +235,7 @@ def book_view(request, info):
         #check if the user you are following has a review
         if temp_follows_reviews.first():
             follows_aggregate = follows_aggregate + temp_follows_reviews.first().star_review #can use first to grab from quertyset because users can only leave one review
-        follows_counter = follows_counter + 1
+            follows_counter = follows_counter + 1
 
     #get average score
     if follows_counter != 0: #protect from divide by zero error
